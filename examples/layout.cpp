@@ -303,10 +303,15 @@ int main()
 	expand_child_1l1->Set_view(&expander_view);
 	expand_child_1l1->Set_text("Child 1L1");
 
+	Expander* expand_child_2l1 = new Expander;
+	expand_child_2l1->Set_view(&expander_view);
+	expand_child_2l1->Set_text("Child 2L1");
+
 	Expander* expander = new Expander;
 	expander->Set_view(&expander_view);
 	expander->Set_text("Expander");
 	expander->Add(expand_child_1l1);
+	expander->Add(expand_child_2l1);
 
 
 	Horizontal_paned* hpaned = new Horizontal_paned;
@@ -324,16 +329,14 @@ int main()
 	vbox->Add(fix_child);
 
 	Vertical_paned* root = new Vertical_paned;
+	root->Set_pane_fraction(0.5);
 	root->Set_position(Vector2(10, 10));
 	root->Set_size(Vector2(620, 460));
-	root->Set_pane_fraction(0.5);
 	Vertical_paned_view root_view;
 	root->Set_view(&root_view);
 	root->Set_top(dyn_child);
 	root->Set_bottom(vbox);
 	root->Organise();
-	hpaned->Set_pane_fraction(0.5);
-
 
 //	double last_time = al_current_time();
 	bool quit = false;

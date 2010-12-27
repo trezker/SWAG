@@ -41,7 +41,8 @@ void Horizontal_paned::Set_pane_position(float p)
 void Horizontal_paned::Set_pane_fraction(float p)
 {
 	float max_x = Get_size().x-7;
-	Set_pane_position(p*max_x);
+	float pp = p*max_x;
+	pane_position = pp<0?0:pp>max_x?max_x:pp;
 	pane_reference = p;
 }
 
@@ -90,7 +91,8 @@ void Horizontal_paned::Event(const ALLEGRO_EVENT& event)
 		if(holding_pane != -1)
 		{
 			float new_x = (event.mouse.x - p.x) - holding_pane;
-			Set_pane_position(new_x);
+			float max_x = Get_size().x-7;
+			Set_pane_fraction(new_x/max_x);
 			Organise();
 		}
 	}
@@ -102,7 +104,6 @@ void Horizontal_paned::Event(const ALLEGRO_EVENT& event)
 
 void Horizontal_paned::Resized()
 {
-	float max_x = Get_size().x-7;
-	Set_pane_position(pane_reference*max_x);
+	Set_pane_fraction(pane_reference);
 	Organise();
 }

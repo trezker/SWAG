@@ -41,7 +41,8 @@ void Vertical_paned::Set_pane_position(float p)
 void Vertical_paned::Set_pane_fraction(float p)
 {
 	float max_y = Get_size().y-7;
-	Set_pane_position(p*max_y);
+	float pp = p*max_y;
+	pane_position = pp<0?0:pp>max_y?max_y:pp;
 	pane_reference = p;
 }
 
@@ -90,7 +91,8 @@ void Vertical_paned::Event(const ALLEGRO_EVENT& event)
 		if(holding_pane != -1)
 		{
 			float new_y = (event.mouse.y - p.y) - holding_pane;
-			Set_pane_position(new_y);
+			float max_y = Get_size().y-7;
+			Set_pane_fraction(new_y/max_y);
 			Organise();
 		}
 	}
@@ -102,7 +104,6 @@ void Vertical_paned::Event(const ALLEGRO_EVENT& event)
 
 void Vertical_paned::Resized()
 {
-	float max_y = Get_size().y-7;
-	Set_pane_position(pane_reference*max_y);
+	Set_pane_fraction(pane_reference);
 	Organise();
 }
