@@ -69,7 +69,7 @@ void Vertical_paned::Organise()
 	}
 }
 
-void Vertical_paned::Event(const ALLEGRO_EVENT& event)
+void Vertical_paned::Handle_event(const ALLEGRO_EVENT& event)
 {
 	Vector2 p = Get_position();
 	Vector2 s = Get_size();
@@ -97,9 +97,9 @@ void Vertical_paned::Event(const ALLEGRO_EVENT& event)
 		}
 	}
 	if(top)
-		top->Event(event);
+		top->Handle_event(event);
 	if(bottom)
-		bottom->Event(event);
+		bottom->Handle_event(event);
 }
 
 void Vertical_paned::Resized()

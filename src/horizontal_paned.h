@@ -15,7 +15,7 @@ public:
 	void Set_pane_fraction(float p);
 	float Get_pane_position() const;
 	void Organise();
-	virtual void Event(const ALLEGRO_EVENT& event);
+	virtual void Handle_event(const ALLEGRO_EVENT& event);
 private:
 	virtual void Resized();
 	Widget* left;

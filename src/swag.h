@@ -6,5 +6,6 @@
 #include "vertical_paned.h"
 #include "horizontal_paned.h"
 #include "expander.h"
+#include "button.h"
 
 #endif

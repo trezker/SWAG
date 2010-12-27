@@ -15,10 +15,10 @@ void Layout::Resized()
 	Organise();
 }
 
-void Layout::Event(const ALLEGRO_EVENT& event)
+void Layout::Handle_event(const ALLEGRO_EVENT& event)
 {
 	for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
 	{
-		(*i)->Event(event);
+		(*i)->Handle_event(event);
 	}
 }

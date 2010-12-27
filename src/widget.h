@@ -6,6 +6,8 @@
 #include <allegro5/allegro.h>
 #include "vector2.h"
 class Widget_view;
+class Event_queue;
+class Event;
 
 class Widget
 {
@@ -13,7 +15,7 @@ public:
 	Widget();
 	virtual ~Widget();
 
-	virtual void Event(const ALLEGRO_EVENT& event);
+	virtual void Handle_event(const ALLEGRO_EVENT& event);
 
 	void Set_view(Widget_view* view);
 //	Widget_view* Get_view() const;
@@ -31,7 +33,12 @@ public:
 	void Disable_fixed_width();
 	bool Has_fixed_height() const;
 	bool Has_fixed_width() const;
-	
+
+	void Set_event_queue(Event_queue* event_queue);
+	void Set_parent(Widget* parent);
+
+protected:	
+	void Push_event(const Event& event);
 private:
 	virtual void Resized();
 	Vector2 position;
@@ -39,6 +46,8 @@ private:
 	bool fixed_height;
 	bool fixed_width;
 	Widget_view* view;
+	Widget* parent;
+	Event_queue* event_queue;
 };
 
 typedef std::vector<Widget*> Widgets;

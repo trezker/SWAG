@@ -1,10 +1,13 @@
 #include "widget.h"
 #include "widget_view.h"
+#include "event_queue.h"
 
 Widget::Widget()
 :view(NULL)
 ,fixed_width(false)
 ,fixed_height(false)
+,parent(NULL)
+,event_queue(NULL)
 {
 }
 
@@ -12,7 +15,7 @@ Widget::~Widget()
 {
 }
 
-void Widget::Event(const ALLEGRO_EVENT& event)
+void Widget::Handle_event(const ALLEGRO_EVENT& event)
 {
 }
 
@@ -93,4 +96,26 @@ bool Widget::Has_fixed_width() const
 
 void Widget::Resized()
 {
+}
+
+void Widget::Push_event(const Event& event)
+{
+	if(event_queue)
+	{
+		event_queue->Push(event);
+	}
+	if(parent)
+	{
+		parent->Push_event(event);
+	}
+}
+
+void Widget::Set_event_queue(Event_queue* e)
+{
+	event_queue = e;
+}
+
+void Widget::Set_parent(Widget* p)
+{
+	parent = p;
 }

@@ -268,12 +268,15 @@ int main()
 	al_init_ttf_addon();
 	al_init_primitives_addon();
 	
-	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
-	display = al_create_display(640, 480);
+	ALLEGRO_DISPLAY *display = al_create_display(640, 480);
+	ALLEGRO_DISPLAY *tooldisplay = al_create_display(200, 480);
+
+	ALLEGRO_DISPLAY *current_display = tooldisplay;
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
+	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)tooldisplay);
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
@@ -296,29 +299,13 @@ int main()
 	Widget* dyn_child2 = new Widget();
 	dyn_child2->Set_view(&size_mode_view);
 
-	Expander_view expander_view;
-	expander_view.font = font;
-
-	Expander* expand_child_1l1 = new Expander;
-	expand_child_1l1->Set_view(&expander_view);
-	expand_child_1l1->Set_text("Child 1L1");
-
-	Expander* expand_child_2l1 = new Expander;
-	expand_child_2l1->Set_view(&expander_view);
-	expand_child_2l1->Set_text("Child 2L1");
-
-	Expander* expander = new Expander;
-	expander->Set_view(&expander_view);
-	expander->Set_text("Expander");
-	expander->Add(expand_child_1l1);
-	expander->Add(expand_child_2l1);
 
 
 	Horizontal_paned* hpaned = new Horizontal_paned;
 	Horizontal_paned_view hpaned_view;
 	hpaned->Set_view(&hpaned_view);
 	hpaned->Set_left(dyn_child2);
-	hpaned->Set_right(expander);
+	hpaned->Set_right(NULL);
 	hpaned->Set_pane_fraction(0.5);
 
 
@@ -337,6 +324,28 @@ int main()
 	root->Set_top(dyn_child);
 	root->Set_bottom(vbox);
 	root->Organise();
+
+	Expander_view expander_view;
+	expander_view.font = font;
+
+	Expander* expand_child_1l1 = new Expander;
+	expand_child_1l1->Set_view(&expander_view);
+	expand_child_1l1->Set_text("Child 1L1");
+
+	Expander* expand_child_2l1 = new Expander;
+	expand_child_2l1->Set_view(&expander_view);
+	expand_child_2l1->Set_text("Child 2L1");
+
+	Expander* widget_tree = new Expander;
+	widget_tree->Set_view(&expander_view);
+	widget_tree->Set_text("Expander");
+	widget_tree->Add(expand_child_1l1);
+	widget_tree->Add(expand_child_2l1);
+
+	Vertical_box* toolroot = new Vertical_box;
+	toolroot->Set_view(&layout_view);
+	toolroot->Add(widget_tree);
+	toolroot->Organise();
 
 //	double last_time = al_current_time();
 	bool quit = false;
@@ -359,19 +368,37 @@ int main()
 			if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
 			{
 				al_acknowledge_resize(event.display.source);
-				root->Set_size(Vector2(event.display.width-20, event.display.height-20));
+				if(event.display.source == display)
+					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
 			}
-
-			root->Event(event);
+			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
+			{
+				current_display = event.display.source;
+			}
+			if(current_display == tooldisplay)
+			{
+				toolroot->Handle_event(event);
+			}
+			if(current_display == display)
+			{
+				root->Handle_event(event);
+			}
 		}
 
 /*		double current_time = al_current_time();
 		double dt = current_time - last_time;
 		last_time = current_time;
 */
+		al_set_target_backbuffer(display);
 		root->Render();
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
+
+		al_set_target_backbuffer(tooldisplay);
+		toolroot->Render();
+		al_flip_display();
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+
 		al_rest(0.001);
 	}
 

@@ -69,7 +69,7 @@ void Horizontal_paned::Organise()
 	}
 }
 
-void Horizontal_paned::Event(const ALLEGRO_EVENT& event)
+void Horizontal_paned::Handle_event(const ALLEGRO_EVENT& event)
 {
 	Vector2 p = Get_position();
 	Vector2 s = Get_size();
@@ -97,9 +97,9 @@ void Horizontal_paned::Event(const ALLEGRO_EVENT& event)
 		}
 	}
 	if(left)
-		left->Event(event);
+		left->Handle_event(event);
 	if(right)
-		right->Event(event);
+		right->Handle_event(event);
 }
 
 void Horizontal_paned::Resized()

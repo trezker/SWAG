@@ -1,23 +1,19 @@
-#ifndef swag_expander_h
-#define swag_expander_h
+#ifndef swag_button_h
+#define swag_button_h
 
-#include "layout.h"
+#include "widget.h"
 #include <string>
 
-class Expander: public Layout
+class Button: public Widget
 {
 public:
-	Expander();
-	bool Is_open() const;
-	void Open();
-	void Close();
 	void Set_text(const std::string& t);
 	const std::string& Get_text() const;
-	virtual void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 private:
-	bool open;
 	std::string text;
+	bool pressed;
+	bool mouse_over;
 };
 
 #endif

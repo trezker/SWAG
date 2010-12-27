@@ -55,13 +55,13 @@ void Expander::Organise()
 	}
 }
 
-void Expander::Event(const ALLEGRO_EVENT& event)
+void Expander::Handle_event(const ALLEGRO_EVENT& event)
 {
 	if(Is_open())
 	{
 		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
 		{
-			(*i)->Event(event);
+			(*i)->Handle_event(event);
 		}
 	}
 
