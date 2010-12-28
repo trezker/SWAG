@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "widget_view.h"
 #include "event_queue.h"
+#include "container.h"
 
 Widget::Widget()
 :view(NULL)
@@ -115,7 +116,13 @@ void Widget::Set_event_queue(Event_queue* e)
 	event_queue = e;
 }
 
-void Widget::Set_parent(Widget* p)
+void Widget::Set_parent(Container* p)
 {
 	parent = p;
+}
+
+void Widget::Child_resized()
+{
+	if(parent)
+		parent->Handle_child_resize();
 }

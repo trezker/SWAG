@@ -82,11 +82,13 @@ public:
 		const std::string& text = expander.Get_text();
 		size.x = al_get_text_width(font, text.c_str()) + 6;
 		size.y = al_get_font_line_height(font) + 6;
-		size.x += size.y/2;
+
+		Expanders children = expander.Get_children();
+		if(!children.empty())
+			size.x += size.y/2;
 		if(expander.Is_open())
 		{
-			Widgets widgets = expander.Get_widgets();
-			for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+			for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 			{
 				Vector2 ws = (*i)->Get_size();
 				size.y += ws.y;
@@ -101,10 +103,10 @@ public:
 	{
 		const Expander& expander = dynamic_cast<const Expander&>(widget);
 
+		Expanders children = expander.Get_children();
 		if(expander.Is_open())
 		{
-			Widgets widgets = expander.Get_widgets();
-			for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+			for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 			{
 				(*i)->Render();
 			}
@@ -114,14 +116,19 @@ public:
 		ALLEGRO_COLOR text_color = al_map_rgb_f(1, 1, 1);
 		ALLEGRO_COLOR tri_color = al_map_rgb_f(1, 1, 1);
 		ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
-		float h = al_get_font_line_height(font);
-		float top = h*0.25;
-		float bottom = h*0.75;
+
 
 		const std::string& text = expander.Get_text();
+		float h = al_get_font_line_height(font);
 		al_draw_text(font, text_color, p.x+6+h/2, p.y+3, 0, text.c_str());
-		al_draw_filled_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, tri_color);
-		al_draw_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, edge_color, 0);
+		if(!children.empty())
+		{
+			float top = h*0.25;
+			float bottom = h*0.75;
+
+			al_draw_filled_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, tri_color);
+			al_draw_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, edge_color, 0);
+		}
 	}
 public:
 	ALLEGRO_FONT* font;
@@ -318,9 +325,9 @@ int main()
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
-	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 20, 0);
+	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
 	if(!font)
-		font = al_load_font("examples/data/times.ttf", 20, 0);
+		font = al_load_font("examples/data/times.ttf", 12, 0);
 
 
 	Size_mode_view size_mode_view;
@@ -366,19 +373,45 @@ int main()
 	Expander_view expander_view;
 	expander_view.font = font;
 
-	Expander* expand_child_1l1 = new Expander;
-	expand_child_1l1->Set_view(&expander_view);
-	expand_child_1l1->Set_text("Child 1L1");
+	Expander* expand_child_1_1_1 = new Expander;
+	expand_child_1_1_1->Set_view(&expander_view);
+	expand_child_1_1_1->Set_text("Child 1_1_1");
 
-	Expander* expand_child_2l1 = new Expander;
-	expand_child_2l1->Set_view(&expander_view);
-	expand_child_2l1->Set_text("Child 2L1");
+	Expander* expand_child_1_1 = new Expander;
+	expand_child_1_1->Set_view(&expander_view);
+	expand_child_1_1->Set_text("Child 1_1");
+	expand_child_1_1->Add_child(expand_child_1_1_1);
+
+	Expander* expand_child_1_2 = new Expander;
+	expand_child_1_2->Set_view(&expander_view);
+	expand_child_1_2->Set_text("Child 1_2");
+
+	Expander* expand_child_1 = new Expander;
+	expand_child_1->Set_view(&expander_view);
+	expand_child_1->Set_text("Child 1");
+	expand_child_1->Add_child(expand_child_1_1);
+	expand_child_1->Add_child(expand_child_1_2);
+
+	Expander* expand_child_2_1 = new Expander;
+	expand_child_2_1->Set_view(&expander_view);
+	expand_child_2_1->Set_text("Child 2_1");
+
+	Expander* expand_child_2_2 = new Expander;
+	expand_child_2_2->Set_view(&expander_view);
+	expand_child_2_2->Set_text("Child 2_2");
+
+	Expander* expand_child_2 = new Expander;
+	expand_child_2->Set_view(&expander_view);
+	expand_child_2->Set_text("Child 2");
+	expand_child_2->Add_child(expand_child_2_1);
+	expand_child_2->Add_child(expand_child_2_2);
+
 
 	Expander* widget_tree = new Expander;
 	widget_tree->Set_view(&expander_view);
 	widget_tree->Set_text("Expander");
-	widget_tree->Add(expand_child_1l1);
-	widget_tree->Add(expand_child_2l1);
+	widget_tree->Add_child(expand_child_1);
+	widget_tree->Add_child(expand_child_2);
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 
@@ -394,8 +427,8 @@ int main()
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Set_view(&layout_view);
-	toolroot->Add(widget_tree);
 	toolroot->Add(button);
+	toolroot->Add(widget_tree);
 	toolroot->Organise();
 
 	Event_queue gui_events;

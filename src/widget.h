@@ -8,6 +8,7 @@
 class Widget_view;
 class Event_queue;
 class Event;
+class Container;
 
 class Widget
 {
@@ -35,10 +36,10 @@ public:
 	bool Has_fixed_width() const;
 
 	void Set_event_queue(Event_queue* event_queue);
-	void Set_parent(Widget* parent);
-
+	void Set_parent(Container* parent);
 protected:	
 	void Push_event(const Event& event);
+	void Child_resized();
 private:
 	virtual void Resized();
 	Vector2 position;
@@ -46,7 +47,7 @@ private:
 	bool fixed_height;
 	bool fixed_width;
 	Widget_view* view;
-	Widget* parent;
+	Container* parent;
 	Event_queue* event_queue;
 };
 

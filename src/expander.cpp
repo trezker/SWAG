@@ -31,6 +31,18 @@ const std::string& Expander::Get_text() const
 	return text;
 }
 
+void Expander::Add_child(Expander* c)
+{
+	if(!c)
+		return;
+	children.push_back(c);
+	c->Set_parent(this);
+}
+
+const Expanders& Expander::Get_children() const
+{
+	return children;
+}
 
 void Expander::Organise()
 {
@@ -44,7 +56,7 @@ void Expander::Organise()
 	float x = Get_position().x + selfsize.y/4 + 6;
 	y += selfsize.y;
 
-	for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 	{
 		Vector2 size = (*i)->Request_size();
 		if(!(*i)->Has_fixed_width())
@@ -59,7 +71,7 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 {
 	if(Is_open())
 	{
-		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+		for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 		{
 			(*i)->Handle_event(event);
 		}
@@ -81,6 +93,18 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 				Close();
 			else
 				Open();
+			Child_resized();
 		}
 	}
+}
+
+void Expander::Resized()
+{
+	Organise();
+}
+
+void Expander::Handle_child_resize()
+{
+	Resized();
+	Child_resized();
 }

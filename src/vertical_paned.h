@@ -1,9 +1,9 @@
 #ifndef swag_vertical_paned_h
 #define swag_vertical_paned_h
 
-#include "widget.h"
+#include "container.h"
 
-class Vertical_paned: public Widget
+class Vertical_paned: public Container
 {
 public:
 	Vertical_paned();

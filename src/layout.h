@@ -1,9 +1,9 @@
 #ifndef swag_layout_h
 #define swag_layout_h
 
-#include "widget.h"
+#include "container.h"
 
-class Layout: public Widget
+class Layout: public Container
 {
 public:
 	void Add(Widget* widget);
