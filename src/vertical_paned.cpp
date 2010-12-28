@@ -12,11 +12,19 @@ Vertical_paned::Vertical_paned()
 
 void Vertical_paned::Set_top(Widget* widget)
 {
+	if(widget)
+		widget->Set_parent(this);
+	else if(top)
+		top->Set_parent(NULL);
 	top = widget;
 }
 
 void Vertical_paned::Set_bottom(Widget* widget)
 {
+	if(widget)
+		widget->Set_parent(this);
+	else if(bottom)
+		bottom->Set_parent(NULL);
 	bottom = widget;
 }
 

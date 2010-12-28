@@ -258,6 +258,44 @@ public:
 	}
 };
 
+class Button_view: public Widget_view
+{
+public:
+	virtual Vector2 Request_size(const Widget& widget) const
+	{
+		const Button& button = dynamic_cast<const Button&>(widget);
+		const std::string& text = button.Get_text();
+		Vector2 size;
+		size.x = al_get_text_width(font, text.c_str()) + 6;
+		size.y = al_get_font_line_height(font) + 6;
+		std::cout<<size.x<<" "<<size.y<<std::endl;
+		return size;
+	}
+	
+	virtual void Render(const Widget& widget) const
+	{
+		const Button& button = dynamic_cast<const Button&>(widget);
+
+		Vector2 p = widget.Get_position();
+		Vector2 s = widget.Get_size();
+		ALLEGRO_COLOR text_color = al_map_rgb_f(0, 0, 0);
+		ALLEGRO_COLOR bg_color = al_map_rgb_f(1, 1, 1);
+		ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
+		float h = al_get_font_line_height(font);
+
+		al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
+		al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color, 0);
+
+		int font_h = al_get_font_line_height(font);
+		int y = p.y + (s.y - font_h)/2;
+		int x = p.x + s.x/2;
+		const std::string& text = button.Get_text();
+		al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, text.c_str());
+	}
+public:
+	ALLEGRO_FONT* font;
+};
+
 int main()
 {
 	al_init();
@@ -341,11 +379,27 @@ int main()
 	widget_tree->Set_text("Expander");
 	widget_tree->Add(expand_child_1l1);
 	widget_tree->Add(expand_child_2l1);
+	widget_tree->Enable_fixed_height();
+	widget_tree->Enable_fixed_width();
+
+	Button_view button_view;
+	button_view.font = font;
+	
+	Button* button = new Button;
+	button->Set_text("Create");
+	button->Set_view(&button_view);
+	button->Enable_fixed_height();
 
 	Vertical_box* toolroot = new Vertical_box;
+	toolroot->Set_position(Vector2(10, 10));
+	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Set_view(&layout_view);
 	toolroot->Add(widget_tree);
+	toolroot->Add(button);
 	toolroot->Organise();
+
+	Event_queue gui_events;
+	toolroot->Set_event_queue(&gui_events);
 
 //	double last_time = al_current_time();
 	bool quit = false;
@@ -370,6 +424,8 @@ int main()
 				al_acknowledge_resize(event.display.source);
 				if(event.display.source == display)
 					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
+				if(event.display.source == tooldisplay)
+					toolroot->Set_size(Vector2(event.display.width-20, event.display.height-20));
 			}
 			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
 			{
@@ -383,6 +439,13 @@ int main()
 			{
 				root->Handle_event(event);
 			}
+		}
+
+		while(!gui_events.Empty())
+		{
+			const Event& gui_event = gui_events.Front();
+			std::cout<<gui_event.type<<std::endl;
+			gui_events.Pop();
 		}
 
 /*		double current_time = al_current_time();

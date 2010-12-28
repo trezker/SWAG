@@ -12,11 +12,19 @@ Horizontal_paned::Horizontal_paned()
 
 void Horizontal_paned::Set_left(Widget* widget)
 {
+	if(widget)
+		widget->Set_parent(this);
+	else if(left)
+		left->Set_parent(NULL);
 	left = widget;
 }
 
 void Horizontal_paned::Set_right(Widget* widget)
 {
+	if(widget)
+		widget->Set_parent(this);
+	else if(right)
+		right->Set_parent(NULL);
 	right = widget;
 }
 

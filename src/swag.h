@@ -7,5 +7,6 @@
 #include "horizontal_paned.h"
 #include "expander.h"
 #include "button.h"
+#include "event_queue.h"
 
 #endif

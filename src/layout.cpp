@@ -2,7 +2,10 @@
 
 void Layout::Add(Widget* widget)
 {
+	if(widget==NULL)
+		return;
 	widgets.push_back(widget);
+	widget->Set_parent(this);
 }
 
 const Widgets& Layout::Get_widgets() const
