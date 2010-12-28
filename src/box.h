@@ -1,9 +1,9 @@
-#ifndef swag_layout_h
-#define swag_layout_h
+#ifndef swag_box_h
+#define swag_box_h
 
 #include "container.h"
 
-class Layout: public Container
+class Box: public Container
 {
 public:
 	void Add(Widget* widget);
@@ -13,6 +13,7 @@ public:
 protected:
 	Widgets widgets;
 private:
+	virtual void Handle_child_resize();
 	virtual void Resized();
 };
 

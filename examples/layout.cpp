@@ -43,14 +43,14 @@ public:
 	ALLEGRO_FONT* font;
 };
 
-class Layout_view: public Widget_view
+class Box_view: public Widget_view
 {
 public:
 	virtual Vector2 Request_size(const Widget& widget) const
 	{
 		Vector2 size;
-		const Layout& layout = dynamic_cast<const Layout&>(widget);
-		Widgets widgets = layout.Get_widgets();
+		const Box& box = dynamic_cast<const Box&>(widget);
+		Widgets widgets = box.Get_widgets();
 		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
 		{
 			Vector2 ws = (*i)->Request_size();
@@ -63,8 +63,8 @@ public:
 	
 	virtual void Render(const Widget& widget) const
 	{
-		const Layout& layout = dynamic_cast<const Layout&>(widget);
-		Widgets widgets = layout.Get_widgets();
+		const Box& box = dynamic_cast<const Box&>(widget);
+		Widgets widgets = box.Get_widgets();
 		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
 		{
 			(*i)->Render();
@@ -275,7 +275,6 @@ public:
 		Vector2 size;
 		size.x = al_get_text_width(font, text.c_str()) + 6;
 		size.y = al_get_font_line_height(font) + 6;
-		std::cout<<size.x<<" "<<size.y<<std::endl;
 		return size;
 	}
 	
@@ -355,8 +354,8 @@ int main()
 
 
 	Vertical_box* vbox = new Vertical_box;
-	Layout_view layout_view;
-	vbox->Set_view(&layout_view);
+	Box_view box_view;
+	vbox->Set_view(&box_view);
 	vbox->Add(hpaned);
 	vbox->Add(fix_child);
 
@@ -426,9 +425,9 @@ int main()
 	Vertical_box* toolroot = new Vertical_box;
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
-	toolroot->Set_view(&layout_view);
-	toolroot->Add(button);
+	toolroot->Set_view(&box_view);
 	toolroot->Add(widget_tree);
+	toolroot->Add(button);
 	toolroot->Organise();
 
 	Event_queue gui_events;
