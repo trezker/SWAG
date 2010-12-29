@@ -1,6 +1,12 @@
 #include "button.h"
 #include "event_queue.h"
 
+Button::Button()
+:pressed(false)
+,mouse_over(false)
+{
+}
+
 void Button::Set_text(const std::string& t)
 {
 	text = t;

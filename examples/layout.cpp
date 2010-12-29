@@ -437,21 +437,23 @@ int main()
 	Button_view button_view;
 	button_view.font = font;
 	
-	Button* button = new Button;
-	button->Set_text("Create");
-	button->Set_view(&button_view);
-	button->Enable_fixed_height();
+	Button* createbutton = new Button;
+	createbutton->Set_text("Create");
+	createbutton->Set_view(&button_view);
+	createbutton->Enable_fixed_height();
 
 	Vertical_box* toolroot = new Vertical_box;
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Set_view(&box_view);
 	toolroot->Add(widget_tree);
-	toolroot->Add(button);
+	toolroot->Add(createbutton);
 	toolroot->Organise();
 
 	Event_queue gui_events;
 	toolroot->Set_event_queue(&gui_events);
+
+	Expander* selected_expander = NULL;
 
 //	double last_time = al_current_time();
 	bool quit = false;
@@ -497,6 +499,30 @@ int main()
 		{
 			const Event& gui_event = gui_events.Front();
 			std::cout<<gui_event.type<<std::endl;
+			if(gui_event.type == "selected")
+			{
+				Expander* newsel = dynamic_cast<Expander*>(gui_event.source);
+				if(newsel)
+				{
+					selected_expander = newsel;
+					std::cout<<"Selected expander "<<newsel<<std::endl;
+				}
+			}
+			else if(gui_event.type == "clicked")
+			{
+				if(gui_event.source == createbutton)
+				{
+					std::cout<<"Creating"<<std::endl;
+					if(selected_expander)
+					{
+						Expander* expand_child = new Expander;
+						expand_child->Set_view(&expander_view);
+						expand_child->Set_text("Created child");
+						selected_expander->Add_child(expand_child);
+						toolroot->Organise();
+					}
+				}
+			}
 			gui_events.Pop();
 		}
 

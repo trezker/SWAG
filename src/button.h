@@ -7,6 +7,7 @@
 class Button: public Widget
 {
 public:
+	Button();
 	void Set_text(const std::string& t);
 	const std::string& Get_text() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);

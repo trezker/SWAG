@@ -4,6 +4,7 @@
 
 Expander::Expander()
 :open(false)
+,selected(false)
 {
 }
 
@@ -38,6 +39,7 @@ void Expander::Add_child(Expander* c)
 		return;
 	children.push_back(c);
 	c->Set_parent(this);
+	Child_resized();
 }
 
 const Expanders& Expander::Get_children() const
