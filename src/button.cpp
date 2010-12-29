@@ -48,3 +48,13 @@ void Button::Handle_event(const ALLEGRO_EVENT& event)
 		}
 	}
 }
+
+bool Button::Is_pressed() const
+{
+	return pressed;
+}
+
+bool Button::Is_mouse_over() const
+{
+	return mouse_over;
+}

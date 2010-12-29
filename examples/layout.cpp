@@ -298,8 +298,16 @@ public:
 		ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
 		float h = al_get_font_line_height(font);
 
-		al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
-		al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color, 0);
+		if(button.Is_pressed() && button.Is_mouse_over())
+		{
+			al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color);
+			al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color, 0);
+		}
+		else
+		{
+			al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
+			al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color, 0);
+		}
 
 		int font_h = al_get_font_line_height(font);
 		int y = p.y + (s.y - font_h)/2;
