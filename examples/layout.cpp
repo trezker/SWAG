@@ -124,10 +124,19 @@ public:
 		if(!children.empty())
 		{
 			float top = h*0.25;
+			float middle = h*0.5;
 			float bottom = h*0.75;
 
-			al_draw_filled_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, tri_color);
-			al_draw_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+h/2, p.x+3, p.y+3+bottom, edge_color, 0);
+			if(expander.Is_open())
+			{
+				al_draw_filled_triangle(p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, tri_color);
+				al_draw_triangle       (p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, edge_color, 0);
+			}
+			else
+			{
+				al_draw_filled_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+middle, p.x+3, p.y+3+bottom, tri_color);
+				al_draw_triangle       (p.x+3, p.y+3+top, p.x+3+top, p.y+3+middle, p.x+3, p.y+3+bottom, edge_color, 0);
+			}
 		}
 	}
 public:
