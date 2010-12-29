@@ -82,18 +82,18 @@ public:
 		const std::string& text = expander.Get_text();
 		size.x = al_get_text_width(font, text.c_str()) + 6;
 		size.y = al_get_font_line_height(font) + 6;
+		float lh = size.y/4+6;
 
 		Expanders children = expander.Get_children();
-		if(!children.empty())
-			size.x += size.y/2;
+		size.x += size.y/2;
 		if(expander.Is_open())
 		{
 			for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 			{
-				Vector2 ws = (*i)->Get_size();
+				Vector2 ws = (*i)->Request_size();
 				size.y += ws.y;
-				if(ws.x>size.x)
-					size.x = ws.x;
+				if(ws.x+lh>size.x)
+					size.x = ws.x+lh;
 			}
 		}
 		return size;
@@ -121,8 +121,11 @@ public:
 
 		const std::string& text = expander.Get_text();
 		float h = al_get_font_line_height(font);
+
+		float text_width = al_get_text_width(font, text.c_str());
 		if(expander.Is_selected())
-			al_draw_filled_rectangle(p.x+3+h/2, p.y+1, p.x+s.x-1, p.y+h+6, select_color);
+			al_draw_filled_rectangle(p.x+3+h/2, p.y+1, p.x+6+h/2+text_width, p.y+h+6, select_color);
+
 		al_draw_text(font, text_color, p.x+6+h/2, p.y+3, 0, text.c_str());
 		if(!children.empty())
 		{
@@ -392,45 +395,9 @@ int main()
 	Expander_view expander_view;
 	expander_view.font = font;
 
-	Expander* expand_child_1_1_1 = new Expander;
-	expand_child_1_1_1->Set_view(&expander_view);
-	expand_child_1_1_1->Set_text("Child 1_1_1");
-
-	Expander* expand_child_1_1 = new Expander;
-	expand_child_1_1->Set_view(&expander_view);
-	expand_child_1_1->Set_text("Child 1_1");
-	expand_child_1_1->Add_child(expand_child_1_1_1);
-
-	Expander* expand_child_1_2 = new Expander;
-	expand_child_1_2->Set_view(&expander_view);
-	expand_child_1_2->Set_text("Child 1_2");
-
-	Expander* expand_child_1 = new Expander;
-	expand_child_1->Set_view(&expander_view);
-	expand_child_1->Set_text("Child 1");
-	expand_child_1->Add_child(expand_child_1_1);
-	expand_child_1->Add_child(expand_child_1_2);
-
-	Expander* expand_child_2_1 = new Expander;
-	expand_child_2_1->Set_view(&expander_view);
-	expand_child_2_1->Set_text("Child 2_1");
-
-	Expander* expand_child_2_2 = new Expander;
-	expand_child_2_2->Set_view(&expander_view);
-	expand_child_2_2->Set_text("Child 2_2");
-
-	Expander* expand_child_2 = new Expander;
-	expand_child_2->Set_view(&expander_view);
-	expand_child_2->Set_text("Child 2");
-	expand_child_2->Add_child(expand_child_2_1);
-	expand_child_2->Add_child(expand_child_2_2);
-
-
 	Expander* widget_tree = new Expander;
 	widget_tree->Set_view(&expander_view);
 	widget_tree->Set_text("Expander");
-	widget_tree->Add_child(expand_child_1);
-	widget_tree->Add_child(expand_child_2);
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 
@@ -505,21 +472,18 @@ int main()
 				if(newsel)
 				{
 					selected_expander = newsel;
-					std::cout<<"Selected expander "<<newsel<<std::endl;
 				}
 			}
 			else if(gui_event.type == "clicked")
 			{
 				if(gui_event.source == createbutton)
 				{
-					std::cout<<"Creating"<<std::endl;
 					if(selected_expander)
 					{
 						Expander* expand_child = new Expander;
 						expand_child->Set_view(&expander_view);
 						expand_child->Set_text("Created child");
 						selected_expander->Add_child(expand_child);
-						toolroot->Organise();
 					}
 				}
 			}
@@ -537,6 +501,7 @@ int main()
 
 		al_set_target_backbuffer(tooldisplay);
 		toolroot->Render();
+
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 

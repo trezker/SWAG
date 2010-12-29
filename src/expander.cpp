@@ -39,6 +39,7 @@ void Expander::Add_child(Expander* c)
 		return;
 	children.push_back(c);
 	c->Set_parent(this);
+	Organise();
 	Child_resized();
 }
 
@@ -87,8 +88,6 @@ void Expander::Organise()
 	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
 	{
 		Vector2 size = (*i)->Request_size();
-		if(!(*i)->Has_fixed_width())
-			size.x = Get_size().x;
 		(*i)->Set_size(size);
 		(*i)->Set_position(Vector2(x, y));
 		y += size.y;

@@ -1,5 +1,6 @@
 #include "vertical_box.h"
 #include "widget_view.h"
+#include <iostream>
 
 void Vertical_box::Organise()
 {
