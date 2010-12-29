@@ -121,6 +121,11 @@ void Widget::Set_parent(Container* p)
 	parent = p;
 }
 
+Container* Widget::Get_parent() const
+{
+	return parent;
+}
+
 void Widget::Child_resized()
 {
 	if(parent)

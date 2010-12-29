@@ -1,5 +1,6 @@
 #include "expander.h"
 #include "widget_view.h"
+#include "event_queue.h"
 
 Expander::Expander()
 :open(false)
@@ -42,6 +43,31 @@ void Expander::Add_child(Expander* c)
 const Expanders& Expander::Get_children() const
 {
 	return children;
+}
+
+bool Expander::Is_selected() const
+{
+	return selected;
+}
+
+void Expander::Child_selected()
+{
+	Expander* parent = dynamic_cast<Expander*>(Get_parent());
+	if(parent)
+		parent->Child_selected();
+	Deselect();
+}
+
+void Expander::Deselect()
+{
+	bool event_deselected = selected;
+	selected = false;
+	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+	{
+		(*i)->Deselect();
+	}
+	if(event_deselected)
+		Push_event(Event(this, "deselected"));
 }
 
 void Expander::Organise()
@@ -87,13 +113,22 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 		Vector2 p = Get_position();
 		
 		if(event.mouse.x > p.x && event.mouse.y > p.y
-		&& event.mouse.x < p.x+s.y/2 && event.mouse.y < p.y + s.y)
+		&& event.mouse.x < p.x+s.x && event.mouse.y < p.y + s.y)
 		{
-			if(is_open)
-				Close();
+			if(event.mouse.x < p.x+s.y/2)
+			{
+				if(is_open)
+					Close();
+				else
+					Open();
+				Child_resized();
+			}
 			else
-				Open();
-			Child_resized();
+			{
+				Child_selected();
+				selected = true;
+				Push_event(Event(this, "selected"));
+			}
 		}
 	}
 }

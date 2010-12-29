@@ -19,6 +19,11 @@ public:
 
 	void Add_child(Expander* c);
 	const Expanders& Get_children() const;
+
+	bool Is_selected() const;
+	void Child_selected();
+	void Deselect();
+
 	virtual void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual void Handle_child_resize();
@@ -27,6 +32,7 @@ private:
 	bool open;
 	std::string text;
 	Expanders children;
+	bool selected;
 };
 
 #endif
