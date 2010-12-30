@@ -499,6 +499,7 @@ int main()
 							parent->Remove_child(selected_expander);
 							Expanders deadlist;
 							deadlist.push_back(selected_expander);
+							selected_expander = NULL;
 							int count = 0;
 							while(!deadlist.empty())
 							{
