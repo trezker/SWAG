@@ -72,6 +72,35 @@ public:
 	}
 };
 
+class HBox_view: public Widget_view
+{
+public:
+	virtual Vector2 Request_size(const Widget& widget) const
+	{
+		Vector2 size;
+		const Box& box = dynamic_cast<const Box&>(widget);
+		Widgets widgets = box.Get_widgets();
+		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+		{
+			Vector2 ws = (*i)->Request_size();
+			size.x += ws.x;
+			if(ws.y>size.y)
+				size.y = ws.y;
+		}
+		return size;
+	}
+	
+	virtual void Render(const Widget& widget) const
+	{
+		const Box& box = dynamic_cast<const Box&>(widget);
+		Widgets widgets = box.Get_widgets();
+		for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i)
+		{
+			(*i)->Render();
+		}
+	}
+};
+
 class Expander_view: public Widget_view
 {
 public:
@@ -401,6 +430,7 @@ int main()
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 
+
 	Button_view button_view;
 	button_view.font = font;
 	
@@ -414,13 +444,18 @@ int main()
 	removebutton->Set_view(&button_view);
 	removebutton->Enable_fixed_height();
 
+	HBox_view hbox_view;
+	Horizontal_box* hbox = new Horizontal_box;
+	hbox->Set_view(&hbox_view);
+	hbox->Add(createbutton);
+	hbox->Add(removebutton);
+
 	Vertical_box* toolroot = new Vertical_box;
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Set_view(&box_view);
 	toolroot->Add(widget_tree);
-	toolroot->Add(createbutton);
-	toolroot->Add(removebutton);
+	toolroot->Add(hbox);
 	toolroot->Organise();
 
 	Event_queue gui_events;
