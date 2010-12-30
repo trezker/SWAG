@@ -126,6 +126,14 @@ Container* Widget::Get_parent() const
 	return parent;
 }
 
+bool Widget::Covers_point(float x, float y)
+{
+	Vector2 s = Get_size();
+	Vector2 p = Get_position();
+	return (x > p.x && y > p.y+1
+		&& x < p.x+s.x-1 && y < p.y + s.y);
+}
+
 void Widget::Child_resized()
 {
 	if(parent)

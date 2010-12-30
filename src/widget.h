@@ -38,6 +38,8 @@ public:
 	void Set_event_queue(Event_queue* event_queue);
 	void Set_parent(Container* parent);
 	Container* Get_parent() const;
+	
+	bool Covers_point(float x, float y);
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();

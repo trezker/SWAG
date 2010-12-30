@@ -122,14 +122,22 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
 	{
 		bool is_open = Is_open();
-		Close();
-		Vector2 s = Request_size();
+		Vector2 ps = Get_size();
 		if(is_open)
-			Open();
+		{
+			Close();
+			Set_size(Request_size());
+		}
 		Vector2 p = Get_position();
+		Vector2 s = Get_size();
+		bool covers_point = Covers_point(event.mouse.x, event.mouse.y);
+		if(is_open)
+		{
+			Open();
+			Set_size(ps);
+		}
 		
-		if(event.mouse.x > p.x && event.mouse.y > p.y
-		&& event.mouse.x < p.x+s.x && event.mouse.y < p.y + s.y)
+		if(covers_point)
 		{
 			if(event.mouse.x < p.x+s.y/2)
 			{
