@@ -409,12 +409,18 @@ int main()
 	createbutton->Set_view(&button_view);
 	createbutton->Enable_fixed_height();
 
+	Button* removebutton = new Button;
+	removebutton->Set_text("Remove");
+	removebutton->Set_view(&button_view);
+	removebutton->Enable_fixed_height();
+
 	Vertical_box* toolroot = new Vertical_box;
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Set_view(&box_view);
 	toolroot->Add(widget_tree);
 	toolroot->Add(createbutton);
+	toolroot->Add(removebutton);
 	toolroot->Organise();
 
 	Event_queue gui_events;
@@ -465,7 +471,7 @@ int main()
 		while(!gui_events.Empty())
 		{
 			const Event& gui_event = gui_events.Front();
-			std::cout<<gui_event.type<<std::endl;
+//			std::cout<<gui_event.type<<std::endl;
 			if(gui_event.type == "selected")
 			{
 				Expander* newsel = dynamic_cast<Expander*>(gui_event.source);
@@ -476,14 +482,37 @@ int main()
 			}
 			else if(gui_event.type == "clicked")
 			{
-				if(gui_event.source == createbutton)
+				if(selected_expander)
 				{
-					if(selected_expander)
+					if(gui_event.source == createbutton)
 					{
 						Expander* expand_child = new Expander;
 						expand_child->Set_view(&expander_view);
 						expand_child->Set_text("Created child");
 						selected_expander->Add_child(expand_child);
+					}
+					if(gui_event.source == removebutton)
+					{
+						Expander* parent = dynamic_cast<Expander*>(selected_expander->Get_parent());
+						if(parent)
+						{
+							parent->Remove_child(selected_expander);
+							Expanders deadlist;
+							deadlist.push_back(selected_expander);
+							int count = 0;
+							while(!deadlist.empty())
+							{
+								Expander* current = deadlist.back();
+								deadlist.erase(--deadlist.end());
+								Expanders& children = current->Get_children();
+								for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+								{
+									deadlist.push_back(*i);
+								}
+								delete current;
+								++count;
+							}
+						}
 					}
 				}
 			}

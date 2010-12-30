@@ -18,7 +18,9 @@ public:
 	const std::string& Get_text() const;
 
 	void Add_child(Expander* c);
+	void Remove_child(Expander* c);
 	const Expanders& Get_children() const;
+	Expanders& Get_children();
 
 	bool Is_selected() const;
 	void Child_selected();

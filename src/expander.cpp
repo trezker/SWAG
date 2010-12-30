@@ -1,6 +1,7 @@
 #include "expander.h"
 #include "widget_view.h"
 #include "event_queue.h"
+#include <algorithm>
 
 Expander::Expander()
 :open(false)
@@ -43,7 +44,21 @@ void Expander::Add_child(Expander* c)
 	Child_resized();
 }
 
+void Expander::Remove_child(Expander* c)
+{
+	Expanders::iterator i = std::find(children.begin(), children.end(), c);
+	if(i!=children.end())
+		children.erase(i);
+	Organise();
+	Child_resized();
+}
+
 const Expanders& Expander::Get_children() const
+{
+	return children;
+}
+
+Expanders& Expander::Get_children()
 {
 	return children;
 }
