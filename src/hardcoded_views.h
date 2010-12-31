@@ -7,6 +7,6 @@
 
 typedef std::map<std::string, Widget*> Widgetmap;
 
-void Init_hardcoded_views(Widgetmap& widgetmap);
+void Init_hardcoded_views(Widget_factory& widget_factory);
 
 #endif

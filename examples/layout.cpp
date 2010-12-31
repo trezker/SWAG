@@ -34,23 +34,23 @@ int main()
 	if(!font)
 		font = al_load_font("examples/data/times.ttf", 12, 0);
 
-	Widgetmap widgetmap;
-	Init_hardcoded_views(widgetmap);
+	Widget_factory widget_factory;
+	Init_hardcoded_views(widget_factory);
 	
-	Widget* dyn_child = widgetmap["size mode"]->Clone();
-	Widget* fix_child = widgetmap["size mode"]->Clone();
+	Widget* dyn_child = widget_factory.Clone<Widget>("size mode");
+	Widget* fix_child = widget_factory.Clone<Widget>("size mode");
 	fix_child->Enable_fixed_height();
 	fix_child->Enable_fixed_width();
-	Widget* dyn_child2 = widgetmap["size mode"]->Clone();
-	Horizontal_paned* hpaned = dynamic_cast<Horizontal_paned*>(widgetmap["horizontal paned"]->Clone());
+	Widget* dyn_child2 = widget_factory.Clone<Widget>("size mode");
+	Horizontal_paned* hpaned = widget_factory.Clone<Horizontal_paned>("horizontal paned");
 	hpaned->Set_left(dyn_child2);
 	hpaned->Set_pane_fraction(0.5);
 
-	Vertical_box* vbox = dynamic_cast<Vertical_box*>(widgetmap["vertical box"]->Clone());
+	Vertical_box* vbox = widget_factory.Clone<Vertical_box>("vertical box");
 	vbox->Add(hpaned);
 	vbox->Add(fix_child);
 
-	Vertical_paned* root = dynamic_cast<Vertical_paned*>(widgetmap["vertical paned"]->Clone());
+	Vertical_paned* root = widget_factory.Clone<Vertical_paned>("vertical paned");
 	root->Set_pane_fraction(0.5);
 	root->Set_position(Vector2(10, 10));
 	root->Set_size(Vector2(620, 460));
@@ -58,29 +58,29 @@ int main()
 	root->Set_bottom(vbox);
 	root->Organise();
 
-	Expander* widget_tree = dynamic_cast<Expander*>(widgetmap["expander"]->Clone());
+	Expander* widget_tree = widget_factory.Clone<Expander>("expander");
 	widget_tree->Set_text("Expander");
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 	
-	Button* createbutton = dynamic_cast<Button*>(widgetmap["button"]->Clone());
+	Button* createbutton = widget_factory.Clone<Button>("button");
 	createbutton->Set_text("Create");
 	createbutton->Enable_fixed_height();
 
-	Button* removebutton = dynamic_cast<Button*>(widgetmap["button"]->Clone());
+	Button* removebutton = widget_factory.Clone<Button>("button");
 	removebutton->Set_text("Remove");
 	removebutton->Enable_fixed_height();
 
-	Horizontal_box* hbox = dynamic_cast<Horizontal_box*>(widgetmap["horizontal box"]->Clone());
+	Horizontal_box* hbox = widget_factory.Clone<Horizontal_box>("horizontal box");
 	hbox->Add(createbutton);
 	hbox->Add(removebutton);
 	hbox->Enable_fixed_height();
 
-	Inputbox* inputbox = dynamic_cast<Inputbox*>(widgetmap["inputbox"]->Clone());
+	Inputbox* inputbox = widget_factory.Clone<Inputbox>("inputbox");
 	inputbox->Set_text("Change me");
 	inputbox->Enable_fixed_height();
 
-	Vertical_box* toolroot = dynamic_cast<Vertical_box*>(widgetmap["vertical box"]->Clone());
+	Vertical_box* toolroot = widget_factory.Clone<Vertical_box>("vertical box");
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Add(widget_tree);
@@ -151,7 +151,7 @@ int main()
 				{
 					if(gui_event.source == createbutton)
 					{
-						Expander* expand_child = dynamic_cast<Expander*>(widgetmap["expander"]->Clone());
+						Expander* expand_child = widget_factory.Clone<Expander>("expander");
 						expand_child->Set_text("Created child");
 						selected_expander->Add_child(expand_child);
 					}

@@ -10,5 +10,6 @@
 #include "button.h"
 #include "inputbox.h"
 #include "event_queue.h"
+#include "widget_factory.h"
 
 #endif

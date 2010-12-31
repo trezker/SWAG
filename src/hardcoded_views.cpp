@@ -390,7 +390,7 @@ public:
 	ALLEGRO_FONT* font;
 };
 
-void Init_hardcoded_views(Widgetmap& widgetmap)
+void Init_hardcoded_views(Widget_factory& widget_factory)
 {
 	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
 	if(!font)
@@ -402,43 +402,43 @@ void Init_hardcoded_views(Widgetmap& widgetmap)
 	size_mode_view->font = font;
 	widget = new Widget;
 	widget->Set_view(size_mode_view);
-	widgetmap["size mode"] = widget;
+	widget_factory.Set_prototype("size mode", widget);
 
 	Horizontal_paned_view* hpaned_view = new Horizontal_paned_view;
 	widget = new Horizontal_paned;
 	widget->Set_view(hpaned_view);
-	widgetmap["horizontal paned"] = widget;
+	widget_factory.Set_prototype("horizontal paned", widget);
 
 	Vertical_paned_view* vpaned_view = new Vertical_paned_view;
 	widget = new Vertical_paned;
 	widget->Set_view(vpaned_view);
-	widgetmap["vertical paned"] = widget;
+	widget_factory.Set_prototype("vertical paned", widget);
 
 	Box_view* vbox_view = new Box_view;
 	widget = new Vertical_box;
 	widget->Set_view(vbox_view);
-	widgetmap["vertical box"] = widget;
+	widget_factory.Set_prototype("vertical box", widget);
 
 	HBox_view* hbox_view = new HBox_view;
 	widget = new Horizontal_box;
 	widget->Set_view(hbox_view);
-	widgetmap["horizontal box"] = widget;
+	widget_factory.Set_prototype("horizontal box", widget);
 
 	Expander_view* expander_view = new Expander_view;
 	expander_view->font = font;
 	widget = new Expander;
 	widget->Set_view(expander_view);
-	widgetmap["expander"] = widget;
+	widget_factory.Set_prototype("expander", widget);
 
 	Button_view* button_view = new Button_view;
 	button_view->font = font;
 	widget = new Button;
 	widget->Set_view(button_view);
-	widgetmap["button"] = widget;
+	widget_factory.Set_prototype("button", widget);
 
 	Inputbox_view* inputbox_view = new Inputbox_view;
 	inputbox_view->font = font;
 	widget = new Inputbox;
 	widget->Set_view(inputbox_view);
-	widgetmap["inputbox"] = widget;
+	widget_factory.Set_prototype("inputbox", widget);
 }
