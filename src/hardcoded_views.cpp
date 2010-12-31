@@ -7,7 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include <iostream>
-/*
+
 class Size_mode_view: public Widget_view
 {
 public:
@@ -389,292 +389,56 @@ public:
 public:
 	ALLEGRO_FONT* font;
 };
-*/
-int main()
+
+void Init_hardcoded_views(Widgetmap& widgetmap)
 {
-	al_init();
-	al_install_mouse();
-	al_install_keyboard();
-	al_init_image_addon();
-	al_init_font_addon();
-	al_init_ttf_addon();
-	al_init_primitives_addon();
-	
-	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
-	ALLEGRO_DISPLAY *display = al_create_display(640, 480);
-	ALLEGRO_DISPLAY *tooldisplay = al_create_display(200, 480);
-
-	ALLEGRO_DISPLAY *current_display = tooldisplay;
-
-	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)tooldisplay);
-	al_register_event_source(event_queue, al_get_keyboard_event_source());
-	al_register_event_source(event_queue, al_get_mouse_event_source());
-
 	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
 	if(!font)
 		font = al_load_font("examples/data/times.ttf", 12, 0);
-
-/*	
-	Size_mode_view size_mode_view;
-	size_mode_view.font = font;
-	Horizontal_paned_view hpaned_view;
-	Box_view box_view;
-	Vertical_paned_view root_view;
-	Expander_view expander_view;
-	expander_view.font = font;
-	Button_view button_view;
-	button_view.font = font;
-	HBox_view hbox_view;
-	Inputbox_view inputbox_view;
-	inputbox_view.font = font;
-*/
-	Widgetmap widgetmap;
-	Init_hardcoded_views(widgetmap);
 	
-	Widget* dyn_child = widgetmap["size mode"]->Clone();
-	Widget* fix_child = widgetmap["size mode"]->Clone();
-	fix_child->Enable_fixed_height();
-	fix_child->Enable_fixed_width();
-	Widget* dyn_child2 = widgetmap["size mode"]->Clone();
-	Horizontal_paned* hpaned = dynamic_cast<Horizontal_paned*>(widgetmap["horizontal paned"]->Clone());
-	hpaned->Set_left(dyn_child2);
-	hpaned->Set_pane_fraction(0.5);
+	Widget* widget;
 
-	Vertical_box* vbox = dynamic_cast<Vertical_box*>(widgetmap["vertical box"]->Clone());
-	vbox->Add(hpaned);
-	vbox->Add(fix_child);
+	Size_mode_view* size_mode_view = new Size_mode_view;
+	size_mode_view->font = font;
+	widget = new Widget;
+	widget->Set_view(size_mode_view);
+	widgetmap["size mode"] = widget;
 
-	Vertical_paned* root = dynamic_cast<Vertical_paned*>(widgetmap["vertical paned"]->Clone());
-	root->Set_pane_fraction(0.5);
-	root->Set_position(Vector2(10, 10));
-	root->Set_size(Vector2(620, 460));
-	root->Set_top(dyn_child);
-	root->Set_bottom(vbox);
-	root->Organise();
-/*	
-	Widget* dyn_child = new Widget();
-	dyn_child->Set_view(&size_mode_view);
+	Horizontal_paned_view* hpaned_view = new Horizontal_paned_view;
+	widget = new Horizontal_paned;
+	widget->Set_view(hpaned_view);
+	widgetmap["horizontal paned"] = widget;
 
-	Widget* fix_child = new Widget();
-	fix_child->Enable_fixed_height();
-	fix_child->Enable_fixed_width();
-	fix_child->Set_view(&size_mode_view);
+	Vertical_paned_view* vpaned_view = new Vertical_paned_view;
+	widget = new Vertical_paned;
+	widget->Set_view(vpaned_view);
+	widgetmap["vertical paned"] = widget;
 
-	Widget* dyn_child2 = new Widget();
-	dyn_child2->Set_view(&size_mode_view);
+	Box_view* vbox_view = new Box_view;
+	widget = new Vertical_box;
+	widget->Set_view(vbox_view);
+	widgetmap["vertical box"] = widget;
 
-	Horizontal_paned* hpaned = new Horizontal_paned;
-	hpaned->Set_view(&hpaned_view);
-	hpaned->Set_left(dyn_child2);
-	hpaned->Set_right(NULL);
-	hpaned->Set_pane_fraction(0.5);
+	HBox_view* hbox_view = new HBox_view;
+	widget = new Horizontal_box;
+	widget->Set_view(hbox_view);
+	widgetmap["horizontal box"] = widget;
 
-	Vertical_box* vbox = new Vertical_box;
-	vbox->Set_view(&box_view);
-	vbox->Add(hpaned);
-	vbox->Add(fix_child);
+	Expander_view* expander_view = new Expander_view;
+	expander_view->font = font;
+	widget = new Expander;
+	widget->Set_view(expander_view);
+	widgetmap["expander"] = widget;
 
-	Vertical_paned* root = new Vertical_paned;
-	root->Set_pane_fraction(0.5);
-	root->Set_position(Vector2(10, 10));
-	root->Set_size(Vector2(620, 460));
-	root->Set_view(&root_view);
-	root->Set_top(dyn_child);
-	root->Set_bottom(vbox);
-	root->Organise();
-*/
+	Button_view* button_view = new Button_view;
+	button_view->font = font;
+	widget = new Button;
+	widget->Set_view(button_view);
+	widgetmap["button"] = widget;
 
-	Expander* widget_tree = dynamic_cast<Expander*>(widgetmap["expander"]->Clone());
-	widget_tree->Set_text("Expander");
-	widget_tree->Enable_fixed_height();
-	widget_tree->Enable_fixed_width();
-	
-	Button* createbutton = dynamic_cast<Button*>(widgetmap["button"]->Clone());
-	createbutton->Set_text("Create");
-	createbutton->Enable_fixed_height();
-
-	Button* removebutton = dynamic_cast<Button*>(widgetmap["button"]->Clone());
-	removebutton->Set_text("Remove");
-	removebutton->Enable_fixed_height();
-
-	Horizontal_box* hbox = dynamic_cast<Horizontal_box*>(widgetmap["horizontal box"]->Clone());
-	hbox->Add(createbutton);
-	hbox->Add(removebutton);
-	hbox->Enable_fixed_height();
-
-	Inputbox* inputbox = dynamic_cast<Inputbox*>(widgetmap["inputbox"]->Clone());
-	inputbox->Set_text("Change me");
-	inputbox->Enable_fixed_height();
-
-	Vertical_box* toolroot = dynamic_cast<Vertical_box*>(widgetmap["vertical box"]->Clone());
-	toolroot->Set_position(Vector2(10, 10));
-	toolroot->Set_size(Vector2(180, 460));
-	toolroot->Add(widget_tree);
-	toolroot->Add(hbox);
-	toolroot->Add(inputbox);
-	toolroot->Organise();
-/*
-	Expander* widget_tree = new Expander;
-	widget_tree->Set_view(&expander_view);
-	widget_tree->Set_text("Expander");
-	widget_tree->Enable_fixed_height();
-	widget_tree->Enable_fixed_width();
-	
-	Button* createbutton = new Button;
-	createbutton->Set_text("Create");
-	createbutton->Set_view(&button_view);
-	createbutton->Enable_fixed_height();
-
-	Button* removebutton = new Button;
-	removebutton->Set_text("Remove");
-	removebutton->Set_view(&button_view);
-	removebutton->Enable_fixed_height();
-
-	Horizontal_box* hbox = new Horizontal_box;
-	hbox->Set_view(&hbox_view);
-	hbox->Add(createbutton);
-	hbox->Add(removebutton);
-	hbox->Enable_fixed_height();
-
-	Inputbox* inputbox = new Inputbox;
-	inputbox->Set_view(&inputbox_view);
-	inputbox->Set_text("Change me");
-	inputbox->Enable_fixed_height();
-
-	Vertical_box* toolroot = new Vertical_box;
-	toolroot->Set_position(Vector2(10, 10));
-	toolroot->Set_size(Vector2(180, 460));
-	toolroot->Set_view(&box_view);
-	toolroot->Add(widget_tree);
-	toolroot->Add(hbox);
-	toolroot->Add(inputbox);
-	toolroot->Organise();
-*/
-	Event_queue gui_events;
-	toolroot->Set_event_queue(&gui_events);
-
-	Expander* selected_expander = NULL;
-
-//	double last_time = al_current_time();
-	bool quit = false;
-	while(!quit)
-	{
-		ALLEGRO_EVENT event;
-		if (al_get_next_event(event_queue, &event))
-		{
-			if (ALLEGRO_EVENT_KEY_DOWN == event.type)
-			{
-				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
-				{
-					break;
-				}
-			}
-			if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)
-			{
-				break;
-			}
-			if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
-			{
-				al_acknowledge_resize(event.display.source);
-				if(event.display.source == display)
-					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
-				if(event.display.source == tooldisplay)
-					toolroot->Set_size(Vector2(event.display.width-20, event.display.height-20));
-			}
-			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
-			{
-				current_display = event.display.source;
-			}
-			if(current_display == tooldisplay)
-			{
-				toolroot->Handle_event(event);
-			}
-			if(current_display == display)
-			{
-				root->Handle_event(event);
-			}
-		}
-
-		while(!gui_events.Empty())
-		{
-			const Event& gui_event = gui_events.Front();
-//			std::cout<<gui_event.type<<std::endl;
-			if(gui_event.type == "selected")
-			{
-				Expander* newsel = dynamic_cast<Expander*>(gui_event.source);
-				if(newsel)
-				{
-					selected_expander = newsel;
-				}
-			}
-			else if(gui_event.type == "clicked")
-			{
-				if(selected_expander)
-				{
-					if(gui_event.source == createbutton)
-					{
-						Expander* expand_child = dynamic_cast<Expander*>(widgetmap["expander"]->Clone());
-						expand_child->Set_text("Created child");
-						selected_expander->Add_child(expand_child);
-/*
-						Expander* expand_child = new Expander;
-						expand_child->Set_view(&expander_view);
-						expand_child->Set_text("Created child");
-						selected_expander->Add_child(expand_child);
-*/
-					}
-					if(gui_event.source == removebutton)
-					{
-						Expander* parent = dynamic_cast<Expander*>(selected_expander->Get_parent());
-						if(parent)
-						{
-							parent->Remove_child(selected_expander);
-							Expanders deadlist;
-							deadlist.push_back(selected_expander);
-							selected_expander = NULL;
-							int count = 0;
-							while(!deadlist.empty())
-							{
-								Expander* current = deadlist.back();
-								deadlist.erase(--deadlist.end());
-								Expanders& children = current->Get_children();
-								for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
-								{
-									deadlist.push_back(*i);
-								}
-								delete current;
-								++count;
-							}
-						}
-					}
-				}
-			}
-			gui_events.Pop();
-		}
-
-/*		double current_time = al_current_time();
-		double dt = current_time - last_time;
-		last_time = current_time;
-*/
-		al_set_target_backbuffer(display);
-		root->Render();
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
-
-		al_set_target_backbuffer(tooldisplay);
-		toolroot->Render();
-
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
-
-		al_rest(0.001);
-	}
-
-//	delete root;
-
-	al_destroy_event_queue(event_queue);
-	al_destroy_display(display);
-	return 0;
+	Inputbox_view* inputbox_view = new Inputbox_view;
+	inputbox_view->font = font;
+	widget = new Inputbox;
+	widget->Set_view(inputbox_view);
+	widgetmap["inputbox"] = widget;
 }

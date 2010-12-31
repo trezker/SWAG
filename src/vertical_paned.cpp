@@ -10,6 +10,11 @@ Vertical_paned::Vertical_paned()
 {
 }
 
+Widget* Vertical_paned::Clone() const
+{
+	return new Vertical_paned(*this);
+}
+
 void Vertical_paned::Set_top(Widget* widget)
 {
 	if(widget)

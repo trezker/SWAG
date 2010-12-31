@@ -11,6 +11,7 @@ class Expander: public Container
 {
 public:
 	Expander();
+	virtual Widget* Clone() const;
 	bool Is_open() const;
 	void Open();
 	void Close();

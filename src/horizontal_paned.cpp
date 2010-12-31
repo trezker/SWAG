@@ -10,6 +10,11 @@ Horizontal_paned::Horizontal_paned()
 {
 }
 
+Widget* Horizontal_paned::Clone() const
+{
+	return new Horizontal_paned(*this);
+}
+
 void Horizontal_paned::Set_left(Widget* widget)
 {
 	if(widget)

@@ -16,6 +16,11 @@ Widget::~Widget()
 {
 }
 
+Widget* Widget::Clone() const
+{
+	return new Widget(*this);
+}
+
 void Widget::Handle_event(const ALLEGRO_EVENT& event)
 {
 }

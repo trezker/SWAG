@@ -9,6 +9,11 @@ Expander::Expander()
 {
 }
 
+Widget* Expander::Clone() const
+{
+	return new Expander(*this);
+}
+
 bool Expander::Is_open() const
 {
 	return open;

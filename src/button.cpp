@@ -7,6 +7,11 @@ Button::Button()
 {
 }
 
+Widget* Button::Clone() const
+{
+	return new Button(*this);
+}
+
 void Button::Set_text(const std::string& t)
 {
 	text = t;

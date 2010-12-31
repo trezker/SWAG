@@ -6,6 +6,7 @@
 class Horizontal_box: public Box
 {
 public:
+	virtual Widget* Clone() const;
 	virtual void Organise();
 };
 

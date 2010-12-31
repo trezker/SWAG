@@ -2,6 +2,11 @@
 #include "widget_view.h"
 #include <iostream>
 
+Widget* Vertical_box::Clone() const
+{
+	return new Vertical_box(*this);
+}
+
 void Vertical_box::Organise()
 {
 	float minimum_height = 0;

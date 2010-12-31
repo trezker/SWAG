@@ -7,6 +7,7 @@ class Vertical_paned: public Container
 {
 public:
 	Vertical_paned();
+	virtual Widget* Clone() const;
 	void Set_top(Widget* widget);
 	void Set_bottom(Widget* widget);
 	Widget* Get_top() const;

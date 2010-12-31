@@ -7,6 +7,7 @@ class Horizontal_paned: public Container
 {
 public:
 	Horizontal_paned();
+	virtual Widget* Clone() const;
 	void Set_left(Widget* widget);
 	void Set_right(Widget* widget);
 	Widget* Get_left() const;

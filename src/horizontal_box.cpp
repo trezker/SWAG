@@ -2,6 +2,11 @@
 #include "widget_view.h"
 #include <iostream>
 
+Widget* Horizontal_box::Clone() const
+{
+	return new Horizontal_box(*this);
+}
+
 void Horizontal_box::Organise()
 {
 	float minimum_width = 0;

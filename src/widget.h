@@ -15,6 +15,7 @@ class Widget
 public:
 	Widget();
 	virtual ~Widget();
+	virtual Widget* Clone() const;
 
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 
