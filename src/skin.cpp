@@ -35,3 +35,16 @@ void Skin::Add_view(Widget_view* view)
 {
 	views.push_back(view);
 }
+
+void Skin::Add_animated_view(Widget_view* view)
+{
+	animated_views.push_back(view);
+}
+
+void Skin::Update(float t)
+{
+	for(Views::iterator i = animated_views.begin(); i != animated_views.end(); ++i)
+	{
+		(*i)->Update(t);
+	}
+}

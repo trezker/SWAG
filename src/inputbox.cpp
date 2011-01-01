@@ -5,6 +5,7 @@ Inputbox::Inputbox()
 :pressed(false)
 ,mouse_over(false)
 ,text(al_ustr_new(""))
+,cursor(0)
 {
 }
 
@@ -18,6 +19,7 @@ Inputbox::Inputbox(const Inputbox& o)
 ,pressed(false)
 ,mouse_over(false)
 ,text(al_ustr_dup(o.text))
+,cursor(0)
 {
 }
 
@@ -80,26 +82,33 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 	}
 	if(has_focus)
 	{
-/*		if(event.type == ALLEGRO_EVENT_KEY_DOWN)
-		{
-			if(event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE)
-			{
-				int pos = al_ustr_offset(text, -1);
-				al_ustr_remove_chr(text, pos);
-				return;
-			}
-		}
-*/		if(ALLEGRO_EVENT_KEY_CHAR == event.type)
+		if(ALLEGRO_EVENT_KEY_CHAR == event.type)
 		{
 			if(ALLEGRO_KEY_BACKSPACE == event.keyboard.keycode)
 			{
-				int pos = al_ustr_offset(text, -1);
-				al_ustr_remove_chr(text, pos);
+				if(cursor>0)
+				{
+					int pos = al_ustr_offset(text, cursor-1);
+					al_ustr_remove_chr(text, pos);
+					--cursor;
+				}
 				return;
+			}
+			else if(ALLEGRO_KEY_LEFT == event.keyboard.keycode)
+			{
+				if(cursor>0)
+					--cursor;
+			}
+			else if(ALLEGRO_KEY_RIGHT == event.keyboard.keycode)
+			{
+				if(cursor<al_ustr_length(text))
+					++cursor;
 			}
 			else
 			{
-				al_ustr_append_chr(text, event.keyboard.unichar);
+				int pos = al_ustr_offset(text, cursor);
+				al_ustr_insert_chr(text, pos, event.keyboard.unichar);
+				++cursor;
 			}
 		}
 	}
@@ -108,4 +117,9 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 bool Inputbox::Is_pressed() const
 {
 	return pressed;
+}
+
+int Inputbox::Cursor_position() const
+{
+	return cursor;
 }

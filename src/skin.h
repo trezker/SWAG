@@ -28,6 +28,8 @@ public:
 		}
 		return NULL;
 	}
+
+	void Update(float t);
 protected:
 	/* Function: Set_prototype
 	 * Maps the prototype to a name. If a prototype was already mapped to the given name, the old prototype is deleted.
@@ -43,11 +45,17 @@ protected:
 	 * Add a view to the list of views to be deleted when the skin is destroyed.
 	 * */
 	void Add_view(Widget_view* view);
+	
+	/* Function: Add_animated_view
+	 * Add a view to the list of views to be updated
+	 * */
+	void Add_animated_view(Widget_view* view);
 private:
 	typedef std::map<std::string, Widget*> Prototypes;
 	Prototypes prototypes;
 	typedef std::list<Widget_view*> Views;
 	Views views;
+	Views animated_views;
 };
 
 #endif

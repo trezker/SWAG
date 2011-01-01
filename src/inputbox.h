@@ -16,11 +16,13 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;
 	bool Has_focus() const;
+	int Cursor_position() const;
 private:
 	ALLEGRO_USTR *text;
 	bool pressed;
 	bool has_focus;
 	bool mouse_over;
+	int cursor;
 };
 
 #endif

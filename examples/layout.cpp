@@ -93,7 +93,7 @@ int main()
 
 	Expander* selected_expander = NULL;
 
-//	double last_time = al_current_time();
+	double last_time = al_current_time();
 	bool quit = false;
 	while(!quit)
 	{
@@ -184,10 +184,12 @@ int main()
 			gui_events.Pop();
 		}
 
-/*		double current_time = al_current_time();
+		double current_time = al_current_time();
 		double dt = current_time - last_time;
 		last_time = current_time;
-*/
+		
+		skin.Update(dt);
+
 		al_set_target_backbuffer(display);
 		root->Render();
 		al_flip_display();

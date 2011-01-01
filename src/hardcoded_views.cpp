@@ -358,6 +358,10 @@ public:
 class Inputbox_view: public Widget_view
 {
 public:
+	Inputbox_view()
+	:cursor_flash(0)
+	{}
+
 	virtual Vector2 Request_size(const Widget& widget) const
 	{
 		const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
@@ -385,9 +389,25 @@ public:
 		int x = p.x + 3;
 		std::string text = inputbox.Get_text();
 		al_draw_text(font, text_color, x, y, 0, text.c_str());
+		
+		if(cursor_flash<1)
+		{
+			int cursor = inputbox.Cursor_position();
+			int cp = al_get_text_width(font, text.substr(0, cursor).c_str());
+			int h = al_get_font_line_height(font);
+			al_draw_line(x+cp-1, y, x+cp, y+h, al_map_rgb_f(0, 0, 0), 0);
+		}
+	}
+
+	virtual void Update(float t)
+	{
+		cursor_flash+=t;
+		if(cursor_flash>1.4)
+			cursor_flash-=1.4;
 	}
 public:
 	ALLEGRO_FONT* font;
+	float cursor_flash;
 };
 
 Hardcoded_skin::Hardcoded_skin()
@@ -449,6 +469,7 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(inputbox_view);
 	Set_prototype("inputbox", widget);
 	Add_view(inputbox_view);
+	Add_animated_view(inputbox_view);
 }
 
 Hardcoded_skin::~Hardcoded_skin()
