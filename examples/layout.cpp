@@ -7,6 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include <iostream>
+#include <string>
 
 int main()
 {
@@ -34,23 +35,22 @@ int main()
 	if(!font)
 		font = al_load_font("examples/data/times.ttf", 12, 0);
 
-	Widget_factory widget_factory;
-	Init_hardcoded_views(widget_factory);
+	Hardcoded_skin skin;
 	
-	Widget* dyn_child = widget_factory.Clone<Widget>("size mode");
-	Widget* fix_child = widget_factory.Clone<Widget>("size mode");
+	Widget* dyn_child = skin.Clone<Widget>("size mode");
+	Widget* fix_child = skin.Clone<Widget>("size mode");
 	fix_child->Enable_fixed_height();
 	fix_child->Enable_fixed_width();
-	Widget* dyn_child2 = widget_factory.Clone<Widget>("size mode");
-	Horizontal_paned* hpaned = widget_factory.Clone<Horizontal_paned>("horizontal paned");
+	Widget* dyn_child2 = skin.Clone<Widget>("size mode");
+	Horizontal_paned* hpaned = skin.Clone<Horizontal_paned>("horizontal paned");
 	hpaned->Set_left(dyn_child2);
 	hpaned->Set_pane_fraction(0.5);
 
-	Vertical_box* vbox = widget_factory.Clone<Vertical_box>("vertical box");
+	Vertical_box* vbox = skin.Clone<Vertical_box>("vertical box");
 	vbox->Add(hpaned);
 	vbox->Add(fix_child);
 
-	Vertical_paned* root = widget_factory.Clone<Vertical_paned>("vertical paned");
+	Vertical_paned* root = skin.Clone<Vertical_paned>("vertical paned");
 	root->Set_pane_fraction(0.5);
 	root->Set_position(Vector2(10, 10));
 	root->Set_size(Vector2(620, 460));
@@ -58,29 +58,29 @@ int main()
 	root->Set_bottom(vbox);
 	root->Organise();
 
-	Expander* widget_tree = widget_factory.Clone<Expander>("expander");
+	Expander* widget_tree = skin.Clone<Expander>("expander");
 	widget_tree->Set_text("Expander");
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 	
-	Button* createbutton = widget_factory.Clone<Button>("button");
+	Button* createbutton = skin.Clone<Button>("button");
 	createbutton->Set_text("Create");
 	createbutton->Enable_fixed_height();
 
-	Button* removebutton = widget_factory.Clone<Button>("button");
+	Button* removebutton = skin.Clone<Button>("button");
 	removebutton->Set_text("Remove");
 	removebutton->Enable_fixed_height();
 
-	Horizontal_box* hbox = widget_factory.Clone<Horizontal_box>("horizontal box");
+	Horizontal_box* hbox = skin.Clone<Horizontal_box>("horizontal box");
 	hbox->Add(createbutton);
 	hbox->Add(removebutton);
 	hbox->Enable_fixed_height();
 
-	Inputbox* inputbox = widget_factory.Clone<Inputbox>("inputbox");
+	Inputbox* inputbox = skin.Clone<Inputbox>("inputbox");
 	inputbox->Set_text("Change me");
 	inputbox->Enable_fixed_height();
 
-	Vertical_box* toolroot = widget_factory.Clone<Vertical_box>("vertical box");
+	Vertical_box* toolroot = skin.Clone<Vertical_box>("vertical box");
 	toolroot->Set_position(Vector2(10, 10));
 	toolroot->Set_size(Vector2(180, 460));
 	toolroot->Add(widget_tree);
@@ -151,7 +151,7 @@ int main()
 				{
 					if(gui_event.source == createbutton)
 					{
-						Expander* expand_child = widget_factory.Clone<Expander>("expander");
+						Expander* expand_child = skin.Clone<Expander>("expander");
 						expand_child->Set_text("Created child");
 						selected_expander->Add_child(expand_child);
 					}
@@ -206,5 +206,7 @@ int main()
 
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);
+	al_destroy_display(tooldisplay);
+
 	return 0;
 }

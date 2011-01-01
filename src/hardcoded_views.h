@@ -4,9 +4,15 @@
 #include "swag.h"
 #include <string>
 #include <map>
+#include <allegro5/allegro_font.h>
 
-typedef std::map<std::string, Widget*> Widgetmap;
-
-void Init_hardcoded_views(Widget_factory& widget_factory);
+class Hardcoded_skin: public Skin
+{
+public:
+	Hardcoded_skin();
+	virtual ~Hardcoded_skin();
+private:
+	ALLEGRO_FONT* font;
+};
 
 #endif

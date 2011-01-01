@@ -390,9 +390,9 @@ public:
 	ALLEGRO_FONT* font;
 };
 
-void Init_hardcoded_views(Widget_factory& widget_factory)
+Hardcoded_skin::Hardcoded_skin()
 {
-	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
+	font = al_load_font("data/times.ttf", 12, 0);
 	if(!font)
 		font = al_load_font("examples/data/times.ttf", 12, 0);
 	
@@ -402,43 +402,56 @@ void Init_hardcoded_views(Widget_factory& widget_factory)
 	size_mode_view->font = font;
 	widget = new Widget;
 	widget->Set_view(size_mode_view);
-	widget_factory.Set_prototype("size mode", widget);
+	Set_prototype("size mode", widget);
+	Add_view(size_mode_view);
 
 	Horizontal_paned_view* hpaned_view = new Horizontal_paned_view;
 	widget = new Horizontal_paned;
 	widget->Set_view(hpaned_view);
-	widget_factory.Set_prototype("horizontal paned", widget);
+	Set_prototype("horizontal paned", widget);
+	Add_view(hpaned_view);
 
 	Vertical_paned_view* vpaned_view = new Vertical_paned_view;
 	widget = new Vertical_paned;
 	widget->Set_view(vpaned_view);
-	widget_factory.Set_prototype("vertical paned", widget);
+	Set_prototype("vertical paned", widget);
+	Add_view(vpaned_view);
 
 	Box_view* vbox_view = new Box_view;
 	widget = new Vertical_box;
 	widget->Set_view(vbox_view);
-	widget_factory.Set_prototype("vertical box", widget);
+	Set_prototype("vertical box", widget);
+	Add_view(vbox_view);
 
 	HBox_view* hbox_view = new HBox_view;
 	widget = new Horizontal_box;
 	widget->Set_view(hbox_view);
-	widget_factory.Set_prototype("horizontal box", widget);
+	Set_prototype("horizontal box", widget);
+	Add_view(hbox_view);
 
 	Expander_view* expander_view = new Expander_view;
 	expander_view->font = font;
 	widget = new Expander;
 	widget->Set_view(expander_view);
-	widget_factory.Set_prototype("expander", widget);
+	Set_prototype("expander", widget);
+	Add_view(expander_view);
 
 	Button_view* button_view = new Button_view;
 	button_view->font = font;
 	widget = new Button;
 	widget->Set_view(button_view);
-	widget_factory.Set_prototype("button", widget);
+	Set_prototype("button", widget);
+	Add_view(button_view);
 
 	Inputbox_view* inputbox_view = new Inputbox_view;
 	inputbox_view->font = font;
 	widget = new Inputbox;
 	widget->Set_view(inputbox_view);
-	widget_factory.Set_prototype("inputbox", widget);
+	Set_prototype("inputbox", widget);
+	Add_view(inputbox_view);
+}
+
+Hardcoded_skin::~Hardcoded_skin()
+{
+	al_destroy_font(font);
 }
