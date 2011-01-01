@@ -390,7 +390,7 @@ public:
 		std::string text = inputbox.Get_text();
 		al_draw_text(font, text_color, x, y, 0, text.c_str());
 		
-		if(cursor_flash<1)
+		if(inputbox.Has_focus() && cursor_flash<1)
 		{
 			int cursor = inputbox.Cursor_position();
 			int cp = al_get_text_width(font, text.substr(0, cursor).c_str());

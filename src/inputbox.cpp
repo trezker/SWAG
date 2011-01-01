@@ -1,5 +1,6 @@
 #include "inputbox.h"
 #include "event_queue.h"
+#include <iostream>
 
 Inputbox::Inputbox()
 :pressed(false)
@@ -53,7 +54,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			mouse_over = true;
 			Push_event(Event(this, "enter"));
 		}
-		else if(mouse_over && !Covers_point(emx, emy))//(emx<p.x || emx>p.x+s.x || emy<p.y || emy>p.y+s.y))
+		if(mouse_over && !Covers_point(emx, emy))//(emx<p.x || emx>p.x+s.x || emy<p.y || emy>p.y+s.y))
 		{
 			mouse_over = false;
 			Push_event(Event(this, "leave"));
@@ -66,18 +67,20 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			pressed = true;
 		}
 	}
-	if(pressed && ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
+	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
 	{
-		pressed = false;
-		if(mouse_over && !has_focus)
+		if(pressed && mouse_over)
 		{
+			pressed = false;
+			if(!has_focus)
+				Push_event(Event(this, "got focus"));
 			has_focus = true;
-			Push_event(Event(this, "got focus"));
 		}
-		else if(has_focus)
+		else
 		{
-			has_focus = false;
-			Push_event(Event(this, "lost focus"));
+ 			if(has_focus)
+				Push_event(Event(this, "lost focus"));
+ 			has_focus = false;
 		}
 	}
 	if(has_focus)
@@ -91,7 +94,23 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 					int pos = al_ustr_offset(text, cursor-1);
 					al_ustr_remove_chr(text, pos);
 					--cursor;
+					Push_event(Event(this, "changed"));
 				}
+				return;
+			}
+			else if(ALLEGRO_KEY_DELETE == event.keyboard.keycode)
+			{
+				if(cursor<al_ustr_length(text))
+				{
+					int pos = al_ustr_offset(text, cursor);
+					al_ustr_remove_chr(text, pos);
+					Push_event(Event(this, "changed"));
+				}
+				return;
+			}
+			else if(ALLEGRO_KEY_ENTER == event.keyboard.keycode)
+			{
+				Push_event(Event(this, "activated"));
 				return;
 			}
 			else if(ALLEGRO_KEY_LEFT == event.keyboard.keycode)
@@ -104,11 +123,22 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 				if(cursor<al_ustr_length(text))
 					++cursor;
 			}
+			else if(ALLEGRO_KEY_END == event.keyboard.keycode)
+			{
+				cursor = al_ustr_length(text);
+			}
+			else if(ALLEGRO_KEY_HOME == event.keyboard.keycode)
+			{
+				cursor = 0;
+			}
 			else
 			{
 				int pos = al_ustr_offset(text, cursor);
-				al_ustr_insert_chr(text, pos, event.keyboard.unichar);
-				++cursor;
+				if(al_ustr_insert_chr(text, pos, event.keyboard.unichar)>0)
+				{
+					++cursor;
+					Push_event(Event(this, "changed"));
+				}
 			}
 		}
 	}
@@ -117,6 +147,11 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 bool Inputbox::Is_pressed() const
 {
 	return pressed;
+}
+
+bool Inputbox::Has_focus() const
+{
+	return has_focus;
 }
 
 int Inputbox::Cursor_position() const
