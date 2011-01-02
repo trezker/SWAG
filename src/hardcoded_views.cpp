@@ -279,6 +279,11 @@ public:
 		return size;
 	}
 	
+	virtual float Get_value(int id, const Widget& widget) const
+	{
+		return 7;
+	}
+
 	virtual void Render(const Widget& widget) const
 	{
 		const Horizontal_paned& horizontal_paned = dynamic_cast<const Horizontal_paned&>(widget);
