@@ -129,6 +129,12 @@ public:
 		return size;
 	}
 	
+	virtual float Get_value(int id, const Widget& widget) const
+	{
+		float sizey = al_get_font_line_height(font) + 6;
+		return sizey/4+6;
+	}
+	
 	virtual void Render(const Widget& widget) const
 	{
 		const Expander& expander = dynamic_cast<const Expander&>(widget);

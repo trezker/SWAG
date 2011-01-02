@@ -30,6 +30,10 @@ public:
 	virtual void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual void Handle_child_resize();
+	enum Value
+	{
+		INDENT
+	};
 private:
 	virtual void Resized();
 	bool open;

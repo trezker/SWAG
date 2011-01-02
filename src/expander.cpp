@@ -101,8 +101,9 @@ void Expander::Organise()
 	if(is_open)
 		Open();
 
+	float indent = Get_value(INDENT);
 	float y = Get_position().y;
-	float x = Get_position().x + selfsize.y/4 + 6;
+	float x = Get_position().x + indent;
 	y += selfsize.y;
 
 	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
@@ -144,7 +145,7 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 		
 		if(covers_point)
 		{
-			if(event.mouse.x < p.x+s.y/2)
+			if(event.mouse.x < p.x+Get_value(INDENT))
 			{
 				if(is_open)
 					Close();
