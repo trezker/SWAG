@@ -17,6 +17,11 @@ public:
 	float Get_pane_position() const;
 	void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
+	
+	enum Values
+	{
+		PANE
+	};
 private:
 	virtual void Resized();
 	Widget* top;

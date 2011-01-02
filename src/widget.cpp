@@ -35,6 +35,18 @@ Widget_view* Widget::Get_view() const
 	return view;
 }
 */
+
+float Widget::Get_value(int id) const
+{
+	return view?view->Get_value(id, *this):0;
+}
+
+void Widget::Set_value(int id, float v)
+{
+	if(view)
+		view->Set_value(id, v);
+}
+
 Vector2 Widget::Request_size() const
 {
 	if(view)

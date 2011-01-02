@@ -20,6 +20,8 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 
 	void Set_view(Widget_view* view);
+	float Get_value(int id) const;
+	void Set_value(int id, float v);
 //	Widget_view* Get_view() const;
 	Vector2 Request_size() const;
 	void Render() const;

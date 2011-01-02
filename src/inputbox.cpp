@@ -75,6 +75,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			if(!has_focus)
 				Push_event(Event(this, "got focus"));
 			has_focus = true;
+			cursor = Get_value(POSITION);
 		}
 		else
 		{
@@ -85,6 +86,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 	}
 	if(has_focus)
 	{
+		Set_value(FLASH, 0);
 		if(ALLEGRO_EVENT_KEY_CHAR == event.type)
 		{
 			if(ALLEGRO_KEY_BACKSPACE == event.keyboard.keycode)

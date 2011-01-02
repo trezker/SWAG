@@ -208,6 +208,11 @@ public:
 		return size;
 	}
 	
+	virtual float Get_value(int id, const Widget& widget) const
+	{
+		return 7;
+	}
+	
 	virtual void Render(const Widget& widget) const
 	{
 		const Vertical_paned& vertical_paned = dynamic_cast<const Vertical_paned&>(widget);
@@ -372,6 +377,44 @@ public:
 		return size;
 	}
 	
+	virtual float Get_value(int id, const Widget& widget) const
+	{
+		const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
+		std::string text = inputbox.Get_text();
+		ALLEGRO_MOUSE_STATE mouse;
+		al_get_mouse_state(&mouse);
+		int char_w = al_get_text_width(font, " ");
+		int x = mouse.x - widget.Get_position().x-6;
+		int guess = x/char_w;
+		int diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+		//First back up if needed
+		while(diff<0 && guess > 0)
+		{
+			--guess;
+			diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+		}
+		//Then check forth
+		int diff2;
+		while(diff>0 && guess < text.length())
+		{
+			diff2 = diff;
+			++guess;
+			diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+		}
+		if(diff>diff2)
+			--guess;
+		if(guess<0)
+			guess=0;
+		if(guess>text.length())
+			guess=text.length();
+		return guess;
+	}
+
+	virtual void Set_value(int id, float v)
+	{
+		cursor_flash=0;
+	}
+
 	virtual void Render(const Widget& widget) const
 	{
 		const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
@@ -390,7 +433,7 @@ public:
 		std::string text = inputbox.Get_text();
 		al_draw_text(font, text_color, x, y, 0, text.c_str());
 		
-		if(inputbox.Has_focus() && cursor_flash<1)
+		if(inputbox.Has_focus() && cursor_flash>0)
 		{
 			int cursor = inputbox.Cursor_position();
 			int cp = al_get_text_width(font, text.substr(0, cursor).c_str());
@@ -402,8 +445,8 @@ public:
 	virtual void Update(float t)
 	{
 		cursor_flash+=t;
-		if(cursor_flash>1.4)
-			cursor_flash-=1.4;
+		if(cursor_flash>0.5)
+			cursor_flash-=1;
 	}
 public:
 	ALLEGRO_FONT* font;

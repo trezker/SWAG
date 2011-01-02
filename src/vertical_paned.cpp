@@ -45,7 +45,8 @@ Widget* Vertical_paned::Get_bottom() const
 
 void Vertical_paned::Set_pane_position(float p)
 {
-	float max_y = Get_size().y-7;
+	float pane_size = Get_value(PANE);
+	float max_y = Get_size().y-pane_size;
 	pane_position = p<0?0:p>max_y?max_y:p;
 	pane_reference = pane_position/max_y;
 	Organise();
@@ -53,7 +54,8 @@ void Vertical_paned::Set_pane_position(float p)
 
 void Vertical_paned::Set_pane_fraction(float p)
 {
-	float max_y = Get_size().y-7;
+	float pane_size = Get_value(PANE);
+	float max_y = Get_size().y-pane_size;
 	float pp = p*max_y;
 	pane_position = pp<0?0:pp>max_y?max_y:pp;
 	pane_reference = p;
@@ -69,7 +71,8 @@ void Vertical_paned::Organise()
 	Vector2 position = Get_position();
 	Vector2 size = Get_size();
 	float topsize = pane_position;
-	float bottomsize = size.y-7-topsize;
+	float pane_size = Get_value(PANE);
+	float bottomsize = size.y-pane_size-topsize;
 	if(top)
 	{
 		top->Set_position(position);
@@ -77,7 +80,7 @@ void Vertical_paned::Organise()
 	}
 	if(bottom)
 	{
-		bottom->Set_position(Vector2(position.x, position.y+topsize+7));
+		bottom->Set_position(Vector2(position.x, position.y+topsize+pane_size));
 		bottom->Set_size(Vector2(size.x, bottomsize));
 	}
 }
@@ -86,11 +89,12 @@ void Vertical_paned::Handle_event(const ALLEGRO_EVENT& event)
 {
 	Vector2 p = Get_position();
 	Vector2 s = Get_size();
+	float pane_size = Get_value(PANE);
 	if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 	{
 		float pane_y_diff = event.mouse.y-(p.y + pane_position);
 		if(event.mouse.x >= p.x && event.mouse.x <= p.x + s.x
-		&& pane_y_diff >= 0 && pane_y_diff < 7)
+		&& pane_y_diff >= 0 && pane_y_diff < pane_size)
 		{
 			holding_pane = pane_y_diff;
 		}
@@ -104,7 +108,7 @@ void Vertical_paned::Handle_event(const ALLEGRO_EVENT& event)
 		if(holding_pane != -1)
 		{
 			float new_y = (event.mouse.y - p.y) - holding_pane;
-			float max_y = Get_size().y-7;
+			float max_y = Get_size().y-pane_size;
 			Set_pane_fraction(new_y/max_y);
 			Organise();
 		}

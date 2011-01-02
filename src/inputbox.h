@@ -17,6 +17,12 @@ public:
 	bool Is_pressed() const;
 	bool Has_focus() const;
 	int Cursor_position() const;
+	
+	enum Value
+	{
+		POSITION,
+		FLASH
+	};
 private:
 	ALLEGRO_USTR *text;
 	bool pressed;
