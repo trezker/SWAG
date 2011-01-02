@@ -9,6 +9,7 @@
 #include "expander.h"
 #include "button.h"
 #include "inputbox.h"
+#include "desktop.h"
 #include "event_queue.h"
 #include "skin.h"
 

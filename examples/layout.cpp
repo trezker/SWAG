@@ -80,13 +80,18 @@ int main()
 	inputbox->Set_text("Change me");
 	inputbox->Enable_fixed_height();
 
-	Vertical_box* toolroot = skin.Clone<Vertical_box>("vertical box");
-	toolroot->Set_position(Vector2(10, 10));
-	toolroot->Set_size(Vector2(180, 460));
-	toolroot->Add(widget_tree);
-	toolroot->Add(hbox);
-	toolroot->Add(inputbox);
-	toolroot->Organise();
+	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
+	toolvbox->Add(widget_tree);
+	toolvbox->Add(hbox);
+	toolvbox->Add(inputbox);
+	toolvbox->Organise();
+
+	Desktop* desktop = skin.Clone<Desktop>("desktop");
+	desktop->Set_child(toolvbox);
+	desktop->Set_position(Vector2(0, 0));
+	desktop->Set_size(Vector2(200, 480));
+
+	Widget* toolroot = desktop;
 
 	Event_queue gui_events;
 	toolroot->Set_event_queue(&gui_events);
@@ -116,8 +121,8 @@ int main()
 				al_acknowledge_resize(event.display.source);
 				if(event.display.source == display)
 					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
-				if(event.display.source == tooldisplay)
-					toolroot->Set_size(Vector2(event.display.width-20, event.display.height-20));
+//				if(event.display.source == tooldisplay)
+//					toolroot->Set_size(Vector2(event.display.width-20, event.display.height-20));
 			}
 			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
 			{
@@ -178,6 +183,16 @@ int main()
 								++count;
 							}
 						}
+					}
+				}
+			}
+			else if(gui_event.type == "activated")
+			{
+				if(selected_expander)
+				{
+					if(gui_event.source == inputbox)
+					{
+						selected_expander->Set_text(inputbox->Get_text());
 					}
 				}
 			}

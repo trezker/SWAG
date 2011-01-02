@@ -44,6 +44,23 @@ public:
 	ALLEGRO_FONT* font;
 };
 
+class Desktop_view: public Widget_view
+{
+public:
+	virtual Vector2 Request_size(const Widget& widget) const
+	{
+		Vector2 size;
+		const Desktop& desktop = dynamic_cast<const Desktop&>(widget);
+		return desktop.Get_child()->Request_size();
+	}
+	
+	virtual void Render(const Widget& widget) const
+	{
+		const Desktop& desktop = dynamic_cast<const Desktop&>(widget);
+		desktop.Get_child()->Render();
+	}
+};
+
 class Box_view: public Widget_view
 {
 public:
@@ -490,6 +507,12 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(vpaned_view);
 	Set_prototype("vertical paned", widget);
 	Add_view(vpaned_view);
+
+	Desktop_view* desktop_view = new Desktop_view;
+	widget = new Desktop;
+	widget->Set_view(desktop_view);
+	Set_prototype("desktop", widget);
+	Add_view(desktop_view);
 
 	Box_view* vbox_view = new Box_view;
 	widget = new Vertical_box;
