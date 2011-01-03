@@ -10,6 +10,7 @@ public:
 	const Widgets& Get_widgets() const;
 	virtual void Organise() = 0;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
+	virtual bool Add_child(Widget* c);
 protected:
 	Widgets widgets;
 private:

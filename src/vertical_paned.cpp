@@ -124,3 +124,18 @@ void Vertical_paned::Resized()
 	Set_pane_fraction(pane_reference);
 	Organise();
 }
+
+bool Vertical_paned::Add_child(Widget* c)
+{
+	if(!top)
+	{
+		Set_top(c);
+		return true;
+	}
+	if(!bottom)
+	{
+		Set_bottom(c);
+		return true;
+	}
+	return false;
+}

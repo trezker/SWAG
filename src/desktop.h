@@ -11,6 +11,7 @@ public:
 	void Set_child(Widget* widget);
 	Widget* Get_child() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
+	virtual bool Add_child(Widget* c);
 private:
 	virtual void Resized();
 	Widget* child;

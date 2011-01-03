@@ -17,6 +17,7 @@ public:
 	float Get_pane_position() const;
 	void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
+	virtual bool Add_child(Widget* c);
 	
 	enum Values
 	{

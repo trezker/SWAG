@@ -30,6 +30,8 @@ public:
 	virtual void Organise();
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual void Handle_child_resize();
+	virtual bool Add_child(Widget* c);
+
 	enum Value
 	{
 		INDENT

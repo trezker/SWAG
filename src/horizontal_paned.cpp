@@ -124,3 +124,18 @@ void Horizontal_paned::Resized()
 	Set_pane_fraction(pane_reference);
 	Organise();
 }
+
+bool Horizontal_paned::Add_child(Widget* c)
+{
+	if(!left)
+	{
+		Set_left(c);
+		return true;
+	}
+	if(!right)
+	{
+		Set_right(c);
+		return true;
+	}
+	return false;
+}

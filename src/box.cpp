@@ -31,3 +31,9 @@ void Box::Handle_child_resize()
 	Organise();
 	Child_resized();
 }
+
+bool Box::Add_child(Widget* c)
+{
+	Add(c);
+	return true;
+}

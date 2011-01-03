@@ -173,3 +173,14 @@ void Expander::Handle_child_resize()
 	Resized();
 	Child_resized();
 }
+
+bool Expander::Add_child(Widget* c)
+{
+	Expander* e = dynamic_cast<Expander*>(c);
+	if(e)
+	{
+		Add_child(e);
+		return true;
+	}
+	return false;
+}

@@ -45,3 +45,12 @@ void Desktop::Resized()
 		child->Set_size(Get_size());
 	}
 }
+
+bool Desktop::Add_child(Widget* c)
+{
+	if(!child)
+	{
+		Set_child(c);
+	}
+	return false;
+}
