@@ -36,7 +36,7 @@ int main()
 		font = al_load_font("examples/data/times.ttf", 12, 0);
 
 	Hardcoded_skin skin;
-	
+/*	
 	Widget* dyn_child = skin.Clone<Widget>("size mode");
 	Widget* fix_child = skin.Clone<Widget>("size mode");
 	fix_child->Enable_fixed_height();
@@ -57,6 +57,11 @@ int main()
 	root->Set_top(dyn_child);
 	root->Set_bottom(vbox);
 	root->Organise();
+*/
+	Desktop* root = skin.Clone<Desktop>("desktop");
+	root->Set_position(Vector2(0, 0));
+	root->Set_size(Vector2(640, 480));
+
 
 	Expander* widget_tree = skin.Clone<Expander>("expander");
 	widget_tree->Set_text("Expander");
@@ -97,6 +102,10 @@ int main()
 	toolroot->Set_event_queue(&gui_events);
 
 	Expander* selected_expander = NULL;
+
+	typedef std::map<Expander*, Widget*> Treemap;
+	Treemap treemap;
+	treemap[widget_tree] = root;
 
 	double last_time = al_current_time();
 	bool quit = false;
@@ -156,9 +165,18 @@ int main()
 				{
 					if(gui_event.source == createbutton)
 					{
-						Expander* expand_child = skin.Clone<Expander>("expander");
-						expand_child->Set_text("Created child");
-						selected_expander->Add_child(expand_child);
+						Vertical_paned* child = skin.Clone<Vertical_paned>("vertical paned");
+						//child->Set_text("Child");
+						Container* parent = dynamic_cast<Container*>(treemap[selected_expander]);
+						if(parent->Add_child(child))
+						{
+							Expander* tree_child = skin.Clone<Expander>("expander");
+							tree_child->Set_text("Created child");
+							selected_expander->Add_child(tree_child);
+							treemap[tree_child] = child;
+						}
+						else
+							delete child;
 					}
 					if(gui_event.source == removebutton)
 					{

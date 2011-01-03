@@ -18,6 +18,7 @@ void Desktop::Set_child(Widget* widget)
 	if(child)
 		child->Set_parent(NULL);
 	child = widget;
+	child->Set_size(Get_size());
 }
 
 Widget* Desktop::Get_child() const
@@ -51,6 +52,7 @@ bool Desktop::Add_child(Widget* c)
 	if(!child)
 	{
 		Set_child(c);
+		return true;
 	}
 	return false;
 }

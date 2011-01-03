@@ -22,6 +22,7 @@ void Vertical_paned::Set_top(Widget* widget)
 	else if(top)
 		top->Set_parent(NULL);
 	top = widget;
+	Organise();
 }
 
 void Vertical_paned::Set_bottom(Widget* widget)
@@ -31,6 +32,7 @@ void Vertical_paned::Set_bottom(Widget* widget)
 	else if(bottom)
 		bottom->Set_parent(NULL);
 	bottom = widget;
+	Organise();
 }
 
 Widget* Vertical_paned::Get_top() const
