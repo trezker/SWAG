@@ -57,7 +57,9 @@ public:
 	virtual void Render(const Widget& widget) const
 	{
 		const Desktop& desktop = dynamic_cast<const Desktop&>(widget);
-		desktop.Get_child()->Render();
+		Widget* child = desktop.Get_child();
+		if(child)
+			child->Render();
 	}
 };
 
