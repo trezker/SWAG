@@ -184,3 +184,13 @@ bool Expander::Add_child(Widget* c)
 	}
 	return false;
 }
+
+const std::string& Expander::Get_tooltip(float x, float y) const
+{
+	for(Expanders::const_iterator i = children.begin(); i != children.end(); ++i)
+	{
+		if((*i)->Covers_point(x, y))
+			return (*i)->Get_tooltip(x, y);
+	}
+	return Widget::Get_tooltip(x, y);
+}

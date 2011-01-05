@@ -6,6 +6,8 @@
 #include <list>
 #include "widget.h"
 
+typedef std::list<std::string> Namelist;
+
 /* Class: Skin
  * */
 class Skin
@@ -30,6 +32,8 @@ public:
 	}
 
 	void Update(float t);
+	
+	Namelist Get_prototype_list() const;
 protected:
 	/* Function: Set_prototype
 	 * Maps the prototype to a name. If a prototype was already mapped to the given name, the old prototype is deleted.

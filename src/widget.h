@@ -2,6 +2,7 @@
 #define swag_widget_h
 
 #include <vector>
+#include <string>
 
 #include <allegro5/allegro.h>
 #include "vector2.h"
@@ -30,6 +31,9 @@ public:
 	void Set_size(Vector2 size);
 	Vector2 Get_position() const;
 	Vector2 Get_size() const;
+	
+	void Set_tooltip(const std::string& t);
+	virtual const std::string& Get_tooltip(float x, float y) const;
 
 	void Enable_fixed_height();
 	void Enable_fixed_width();
@@ -55,6 +59,7 @@ private:
 	Widget_view* view;
 	Container* parent;
 	Event_queue* event_queue;
+	std::string tooltip;
 };
 
 typedef std::vector<Widget*> Widgets;

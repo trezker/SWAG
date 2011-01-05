@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <list>
 
 int main()
 {
@@ -25,11 +26,16 @@ int main()
 
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
 
+
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)tooldisplay);
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
+
+	ALLEGRO_TIMER *timer = al_create_timer(0.01);
+	al_register_event_source(event_queue, al_get_timer_event_source(timer));
+	al_start_timer(timer);
 
 	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
 	if(!font)
@@ -75,6 +81,7 @@ int main()
 	Button* removebutton = skin.Clone<Button>("button");
 	removebutton->Set_text("Remove");
 	removebutton->Enable_fixed_height();
+	removebutton->Set_tooltip("Remove widget and its children");
 
 	Horizontal_box* hbox = skin.Clone<Horizontal_box>("horizontal box");
 	hbox->Add(createbutton);
@@ -84,12 +91,26 @@ int main()
 	Inputbox* inputbox = skin.Clone<Inputbox>("inputbox");
 	inputbox->Set_text("Change me");
 	inputbox->Enable_fixed_height();
+	inputbox->Set_tooltip("Change this text");
+
 
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(hbox);
 	toolvbox->Add(inputbox);
-	toolvbox->Organise();
+
+	typedef std::map<Widget*, std::string> Create_buttons;
+	Create_buttons create_buttons;
+	Namelist protlist = skin.Get_prototype_list();
+	for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
+	{
+		Button* createbutton = skin.Clone<Button>("button");
+		createbutton->Set_text(*i);
+		createbutton->Enable_fixed_height();
+		create_buttons[createbutton] = *i;
+		toolvbox->Add(createbutton);
+		createbutton->Set_tooltip("Create a widget");
+	}
 
 	Desktop* desktop = skin.Clone<Desktop>("desktop");
 	desktop->Set_child(toolvbox);
@@ -163,15 +184,30 @@ int main()
 			{
 				if(selected_expander)
 				{
+					Create_buttons::iterator i = create_buttons.find(gui_event.source);
+					if(i != create_buttons.end())
+					{
+						std::cout<<i->second<<std::endl;
+						Widget* child = skin.Clone<Widget>(i->second);
+						Container* parent = dynamic_cast<Container*>(treemap[selected_expander]);
+						if(parent && parent->Add_child(child))
+						{
+							Expander* tree_child = skin.Clone<Expander>("expander");
+							tree_child->Set_text(i->second);
+							selected_expander->Add_child(tree_child);
+							treemap[tree_child] = child;
+						}
+						else
+							delete child;
+					}
 					if(gui_event.source == createbutton)
 					{
 						Vertical_paned* child = skin.Clone<Vertical_paned>("vertical paned");
-						//child->Set_text("Child");
 						Container* parent = dynamic_cast<Container*>(treemap[selected_expander]);
 						if(parent->Add_child(child))
 						{
 							Expander* tree_child = skin.Clone<Expander>("expander");
-							tree_child->Set_text("Created child");
+							tree_child->Set_text("VPaned");
 							selected_expander->Add_child(tree_child);
 							treemap[tree_child] = child;
 						}

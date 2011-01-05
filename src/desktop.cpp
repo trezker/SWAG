@@ -33,6 +33,12 @@ void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 		Set_size(Vector2(event.display.width, event.display.height));
 	}
 
+	if (ALLEGRO_EVENT_MOUSE_AXES == event.type)
+	{
+		Set_tooltip(child->Get_tooltip(event.mouse.x, event.mouse.y));
+		tooltip_position.Set(event.mouse.x, event.mouse.y);
+	}
+
 	if(child)
 	{
 		child->Handle_event(event);
@@ -55,4 +61,9 @@ bool Desktop::Add_child(Widget* c)
 		return true;
 	}
 	return false;
+}
+
+Vector2 Desktop::Get_tooltip_position() const
+{
+	return tooltip_position;
 }

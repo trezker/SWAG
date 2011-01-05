@@ -82,6 +82,16 @@ Vector2 Widget::Get_size() const
 	return size;
 }
 
+void Widget::Set_tooltip(const std::string& t)
+{
+	tooltip = t;
+}
+
+const std::string& Widget::Get_tooltip(float x, float y) const
+{
+	return tooltip;
+}
+
 void Widget::Enable_fixed_height()
 {
 	fixed_height = true;

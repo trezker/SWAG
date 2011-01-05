@@ -48,3 +48,13 @@ void Skin::Update(float t)
 		(*i)->Update(t);
 	}
 }
+
+Namelist Skin::Get_prototype_list() const
+{
+	Namelist l;
+	for(Prototypes::const_iterator i = prototypes.begin(); i != prototypes.end(); ++i)
+	{
+		l.push_back(i->first);
+	}
+	return l;
+}

@@ -139,3 +139,15 @@ bool Horizontal_paned::Add_child(Widget* c)
 	}
 	return false;
 }
+
+const std::string& Horizontal_paned::Get_tooltip(float x, float y) const
+{
+	if(left && left->Covers_point(x, y))
+	{
+		return left->Get_tooltip(x, y);
+	}
+	if(right && right->Covers_point(x, y))
+	{
+		return right->Get_tooltip(x, y);
+	}
+}

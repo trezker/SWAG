@@ -37,3 +37,13 @@ bool Box::Add_child(Widget* c)
 	Add(c);
 	return true;
 }
+
+const std::string& Box::Get_tooltip(float x, float y) const
+{
+	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
+	{
+		if((*i)->Covers_point(x, y))
+			return (*i)->Get_tooltip(x, y);
+	}
+	return Widget::Get_tooltip(x, y);
+}

@@ -141,3 +141,15 @@ bool Vertical_paned::Add_child(Widget* c)
 	}
 	return false;
 }
+
+const std::string& Vertical_paned::Get_tooltip(float x, float y) const
+{
+	if(top && top->Covers_point(x, y))
+	{
+		return top->Get_tooltip(x, y);
+	}
+	if(bottom && bottom->Covers_point(x, y))
+	{
+		return bottom->Get_tooltip(x, y);
+	}
+}

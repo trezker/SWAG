@@ -31,6 +31,7 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual void Handle_child_resize();
 	virtual bool Add_child(Widget* c);
+	virtual const std::string& Get_tooltip(float x, float y) const;
 
 	enum Value
 	{
