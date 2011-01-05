@@ -70,7 +70,7 @@ int main()
 
 
 	Expander* widget_tree = skin.Clone<Expander>("expander");
-	widget_tree->Set_text("Expander");
+	widget_tree->Set_text("Root");
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
 	
@@ -219,6 +219,8 @@ int main()
 						Expander* parent = dynamic_cast<Expander*>(selected_expander->Get_parent());
 						if(parent)
 						{
+							dynamic_cast<Container*>(treemap[parent])->Remove_child(treemap[selected_expander]);
+
 							parent->Remove_child(selected_expander);
 							Expanders deadlist;
 							deadlist.push_back(selected_expander);
@@ -233,6 +235,7 @@ int main()
 								{
 									deadlist.push_back(*i);
 								}
+								delete treemap[current];
 								delete current;
 								++count;
 							}

@@ -185,6 +185,16 @@ bool Expander::Add_child(Widget* c)
 	return false;
 }
 
+void Expander::Remove_child(Widget* c)
+{
+	Expanders::iterator i = std::find(children.begin(), children.end(), c);
+	if(i != children.end())
+	{
+		children.erase(i);
+	}
+	Organise();
+}
+
 const std::string& Expander::Get_tooltip(float x, float y) const
 {
 	for(Expanders::const_iterator i = children.begin(); i != children.end(); ++i)

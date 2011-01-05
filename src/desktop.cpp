@@ -80,6 +80,11 @@ bool Desktop::Add_child(Widget* c)
 	return false;
 }
 
+void Desktop::Remove_child(Widget* c)
+{
+	child = NULL;
+}
+
 Vector2 Desktop::Get_tooltip_position() const
 {
 	return tooltip_position;

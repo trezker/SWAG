@@ -1,4 +1,5 @@
 #include "box.h"
+#include <algorithm>
 
 void Box::Add(Widget* widget)
 {
@@ -6,6 +7,7 @@ void Box::Add(Widget* widget)
 		return;
 	widgets.push_back(widget);
 	widget->Set_parent(this);
+	Organise();
 }
 
 const Widgets& Box::Get_widgets() const
@@ -36,6 +38,16 @@ bool Box::Add_child(Widget* c)
 {
 	Add(c);
 	return true;
+}
+
+void Box::Remove_child(Widget* c)
+{
+	Widgets::iterator i = std::find(widgets.begin(), widgets.end(), c);
+	if(i != widgets.end())
+	{
+		widgets.erase(i);
+	}
+	Organise();
 }
 
 const std::string& Box::Get_tooltip(float x, float y) const

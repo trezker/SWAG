@@ -11,6 +11,7 @@ public:
 	virtual void Organise() = 0;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual bool Add_child(Widget* c);
+	virtual void Remove_child(Widget* c);
 	virtual const std::string& Get_tooltip(float x, float y) const;
 protected:
 	Widgets widgets;

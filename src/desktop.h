@@ -13,6 +13,7 @@ public:
 	Vector2 Get_tooltip_position() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual bool Add_child(Widget* c);
+	virtual void Remove_child(Widget* c);
 private:
 	virtual void Resized();
 	Widget* child;

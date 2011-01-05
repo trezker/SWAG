@@ -140,6 +140,14 @@ bool Horizontal_paned::Add_child(Widget* c)
 	return false;
 }
 
+void Horizontal_paned::Remove_child(Widget* c)
+{
+	if(left == c)
+		left = NULL;
+	if(right == c)
+		right = NULL;
+}
+
 const std::string& Horizontal_paned::Get_tooltip(float x, float y) const
 {
 	if(left && left->Covers_point(x, y))
