@@ -3,6 +3,7 @@
 
 Desktop::Desktop()
 :child(NULL)
+,tooltip_countdown(0.5)
 {
 }
 
@@ -35,10 +36,26 @@ void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 
 	if (ALLEGRO_EVENT_MOUSE_AXES == event.type)
 	{
-		Set_tooltip(child->Get_tooltip(event.mouse.x, event.mouse.y));
-		tooltip_position.Set(event.mouse.x, event.mouse.y);
+		if(tooltip_countdown<=0
+		&& Get_tooltip(0,0) == child->Get_tooltip(event.mouse.x, event.mouse.y))
+		{
+		}
+		else
+		{
+			tooltip_countdown = 0.5;
+			Set_tooltip("");
+			tooltip_position.Set(event.mouse.x, event.mouse.y);
+		}
 	}
 
+	if(ALLEGRO_EVENT_TIMER == event.type)
+	{
+		if(tooltip_countdown <= 0)
+			Set_tooltip(child->Get_tooltip(tooltip_position.x, tooltip_position.y));
+		else
+			tooltip_countdown -= al_get_timer_speed(event.timer.source);
+	}
+	
 	if(child)
 	{
 		child->Handle_event(event);

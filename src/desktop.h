@@ -17,6 +17,7 @@ private:
 	virtual void Resized();
 	Widget* child;
 	Vector2 tooltip_position;
+	float tooltip_countdown;
 };
 
 #endif
