@@ -1,16 +1,16 @@
-#ifndef swag_expander_h
-#define swag_expander_h
+#ifndef swag_tree_h
+#define swag_tree_h
 
 #include "container.h"
 #include <string>
 
-class Expander;
-typedef std::vector<Expander*> Expanders;
+class Tree;
+typedef std::vector<Tree*> Trees;
 
-class Expander: public Container
+class Tree: public Container
 {
 public:
-	Expander();
+	Tree();
 	virtual Widget* Clone() const;
 	bool Is_open() const;
 	void Open();
@@ -18,10 +18,10 @@ public:
 	void Set_text(const std::string& t);
 	const std::string& Get_text() const;
 
-	void Add_child(Expander* c);
-	void Remove_child(Expander* c);
-	const Expanders& Get_children() const;
-	Expanders& Get_children();
+	void Add_child(Tree* c);
+	void Remove_child(Tree* c);
+	const Trees& Get_children() const;
+	Trees& Get_children();
 
 	bool Is_selected() const;
 	void Child_selected();
@@ -42,7 +42,7 @@ private:
 	virtual void Resized();
 	bool open;
 	std::string text;
-	Expanders children;
+	Trees children;
 	bool selected;
 };
 

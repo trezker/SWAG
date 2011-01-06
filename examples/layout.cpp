@@ -69,7 +69,7 @@ int main()
 	root->Set_size(Vector2(640, 480));
 
 
-	Expander* widget_tree = skin.Clone<Expander>("expander");
+	Tree* widget_tree = skin.Clone<Tree>("tree");
 	widget_tree->Set_text("Root");
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
@@ -112,9 +112,9 @@ int main()
 	Event_queue gui_events;
 	toolroot->Set_event_queue(&gui_events);
 
-	Expander* selected_expander = NULL;
+	Tree* selected_tree = NULL;
 
-	typedef std::map<Expander*, Widget*> Treemap;
+	typedef std::map<Tree*, Widget*> Treemap;
 	Treemap treemap;
 	treemap[widget_tree] = root;
 
@@ -164,27 +164,27 @@ int main()
 //			std::cout<<gui_event.type<<std::endl;
 			if(gui_event.type == "selected")
 			{
-				Expander* newsel = dynamic_cast<Expander*>(gui_event.source);
+				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
 				if(newsel)
 				{
-					selected_expander = newsel;
+					selected_tree = newsel;
 				}
 			}
 			else if(gui_event.type == "clicked")
 			{
-				if(selected_expander)
+				if(selected_tree)
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
 					if(i != create_buttons.end())
 					{
 						std::cout<<i->second<<std::endl;
 						Widget* child = skin.Clone<Widget>(i->second);
-						Container* parent = dynamic_cast<Container*>(treemap[selected_expander]);
+						Container* parent = dynamic_cast<Container*>(treemap[selected_tree]);
 						if(parent && parent->Add_child(child))
 						{
-							Expander* tree_child = skin.Clone<Expander>("expander");
+							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(i->second);
-							selected_expander->Add_child(tree_child);
+							selected_tree->Add_child(tree_child);
 							treemap[tree_child] = child;
 						}
 						else
@@ -192,22 +192,22 @@ int main()
 					}
 					if(gui_event.source == removebutton)
 					{
-						Expander* parent = dynamic_cast<Expander*>(selected_expander->Get_parent());
+						Tree* parent = dynamic_cast<Tree*>(selected_tree->Get_parent());
 						if(parent)
 						{
-							dynamic_cast<Container*>(treemap[parent])->Remove_child(treemap[selected_expander]);
+							dynamic_cast<Container*>(treemap[parent])->Remove_child(treemap[selected_tree]);
 
-							parent->Remove_child(selected_expander);
-							Expanders deadlist;
-							deadlist.push_back(selected_expander);
-							selected_expander = NULL;
+							parent->Remove_child(selected_tree);
+							Trees deadlist;
+							deadlist.push_back(selected_tree);
+							selected_tree = NULL;
 							int count = 0;
 							while(!deadlist.empty())
 							{
-								Expander* current = deadlist.back();
+								Tree* current = deadlist.back();
 								deadlist.erase(--deadlist.end());
-								Expanders& children = current->Get_children();
-								for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+								Trees& children = current->Get_children();
+								for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 								{
 									deadlist.push_back(*i);
 								}
@@ -221,11 +221,11 @@ int main()
 			}
 			else if(gui_event.type == "activated")
 			{
-				if(selected_expander)
+				if(selected_tree)
 				{
 					if(gui_event.source == inputbox)
 					{
-						selected_expander->Set_text(inputbox->Get_text());
+						selected_tree->Set_text(inputbox->Get_text());
 					}
 				}
 			}

@@ -1,45 +1,45 @@
-#include "expander.h"
+#include "tree.h"
 #include "widget_view.h"
 #include "event_queue.h"
 #include <algorithm>
 
-Expander::Expander()
+Tree::Tree()
 :open(false)
 ,selected(false)
 {
 }
 
-Widget* Expander::Clone() const
+Widget* Tree::Clone() const
 {
-	return new Expander(*this);
+	return new Tree(*this);
 }
 
-bool Expander::Is_open() const
+bool Tree::Is_open() const
 {
 	return open;
 }
 
-void Expander::Open()
+void Tree::Open()
 {
 	open = true;
 }
 
-void Expander::Close()
+void Tree::Close()
 {
 	open = false;
 }
 
-void Expander::Set_text(const std::string& t)
+void Tree::Set_text(const std::string& t)
 {
 	text = t;
 }
 
-const std::string& Expander::Get_text() const
+const std::string& Tree::Get_text() const
 {
 	return text;
 }
 
-void Expander::Add_child(Expander* c)
+void Tree::Add_child(Tree* c)
 {
 	if(!c)
 		return;
@@ -49,43 +49,43 @@ void Expander::Add_child(Expander* c)
 	Child_resized();
 }
 
-void Expander::Remove_child(Expander* c)
+void Tree::Remove_child(Tree* c)
 {
-	Expanders::iterator i = std::find(children.begin(), children.end(), c);
+	Trees::iterator i = std::find(children.begin(), children.end(), c);
 	if(i!=children.end())
 		children.erase(i);
 	Organise();
 	Child_resized();
 }
 
-const Expanders& Expander::Get_children() const
+const Trees& Tree::Get_children() const
 {
 	return children;
 }
 
-Expanders& Expander::Get_children()
+Trees& Tree::Get_children()
 {
 	return children;
 }
 
-bool Expander::Is_selected() const
+bool Tree::Is_selected() const
 {
 	return selected;
 }
 
-void Expander::Child_selected()
+void Tree::Child_selected()
 {
-	Expander* parent = dynamic_cast<Expander*>(Get_parent());
+	Tree* parent = dynamic_cast<Tree*>(Get_parent());
 	if(parent)
 		parent->Child_selected();
 	Deselect();
 }
 
-void Expander::Deselect()
+void Tree::Deselect()
 {
 	bool event_deselected = selected;
 	selected = false;
-	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+	for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 	{
 		(*i)->Deselect();
 	}
@@ -93,7 +93,7 @@ void Expander::Deselect()
 		Push_event(Event(this, "deselected"));
 }
 
-void Expander::Organise()
+void Tree::Organise()
 {
 	bool is_open = Is_open();
 	Close();
@@ -106,7 +106,7 @@ void Expander::Organise()
 	float x = Get_position().x + indent;
 	y += selfsize.y;
 
-	for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+	for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 	{
 		Vector2 size = (*i)->Request_size();
 		(*i)->Set_size(size);
@@ -115,11 +115,11 @@ void Expander::Organise()
 	}
 }
 
-void Expander::Handle_event(const ALLEGRO_EVENT& event)
+void Tree::Handle_event(const ALLEGRO_EVENT& event)
 {
 	if(Is_open())
 	{
-		for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+		for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 		{
 			(*i)->Handle_event(event);
 		}
@@ -163,20 +163,20 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 	}
 }
 
-void Expander::Resized()
+void Tree::Resized()
 {
 	Organise();
 }
 
-void Expander::Handle_child_resize()
+void Tree::Handle_child_resize()
 {
 	Resized();
 	Child_resized();
 }
 
-bool Expander::Add_child(Widget* c)
+bool Tree::Add_child(Widget* c)
 {
-	Expander* e = dynamic_cast<Expander*>(c);
+	Tree* e = dynamic_cast<Tree*>(c);
 	if(e)
 	{
 		Add_child(e);
@@ -185,9 +185,9 @@ bool Expander::Add_child(Widget* c)
 	return false;
 }
 
-void Expander::Remove_child(Widget* c)
+void Tree::Remove_child(Widget* c)
 {
-	Expanders::iterator i = std::find(children.begin(), children.end(), c);
+	Trees::iterator i = std::find(children.begin(), children.end(), c);
 	if(i != children.end())
 	{
 		children.erase(i);
@@ -195,9 +195,9 @@ void Expander::Remove_child(Widget* c)
 	Organise();
 }
 
-const std::string& Expander::Get_tooltip(float x, float y) const
+const std::string& Tree::Get_tooltip(float x, float y) const
 {
-	for(Expanders::const_iterator i = children.begin(); i != children.end(); ++i)
+	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
 	{
 		if((*i)->Covers_point(x, y))
 			return (*i)->Get_tooltip(x, y);

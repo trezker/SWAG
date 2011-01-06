@@ -152,23 +152,23 @@ public:
 	}
 };
 
-class Expander_view: public Widget_view
+class Tree_view: public Widget_view
 {
 public:
 	virtual Vector2 Request_size(const Widget& widget) const
 	{
-		const Expander& expander = dynamic_cast<const Expander&>(widget);
+		const Tree& tree = dynamic_cast<const Tree&>(widget);
 		Vector2 size;
-		const std::string& text = expander.Get_text();
+		const std::string& text = tree.Get_text();
 		size.x = al_get_text_width(font, text.c_str()) + 6;
 		size.y = al_get_font_line_height(font) + 6;
 		float lh = size.y/4+6;
 
-		Expanders children = expander.Get_children();
+		Trees children = tree.Get_children();
 		size.x += size.y/2;
-		if(expander.Is_open())
+		if(tree.Is_open())
 		{
-			for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+			for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 			{
 				Vector2 ws = (*i)->Request_size();
 				size.y += ws.y;
@@ -187,12 +187,12 @@ public:
 	
 	virtual void Render(const Widget& widget) const
 	{
-		const Expander& expander = dynamic_cast<const Expander&>(widget);
+		const Tree& tree = dynamic_cast<const Tree&>(widget);
 
-		Expanders children = expander.Get_children();
-		if(expander.Is_open())
+		Trees children = tree.Get_children();
+		if(tree.Is_open())
 		{
-			for(Expanders::iterator i = children.begin(); i != children.end(); ++i)
+			for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 			{
 				(*i)->Render();
 			}
@@ -205,11 +205,11 @@ public:
 		ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
 		ALLEGRO_COLOR select_color = al_map_rgb_f(0.0, 0, 0.8);
 
-		const std::string& text = expander.Get_text();
+		const std::string& text = tree.Get_text();
 		float h = al_get_font_line_height(font);
 
 		float text_width = al_get_text_width(font, text.c_str());
-		if(expander.Is_selected())
+		if(tree.Is_selected())
 			al_draw_filled_rectangle(p.x+3+h/2, p.y+1, p.x+6+h/2+text_width, p.y+h+6, select_color);
 
 		al_draw_text(font, text_color, p.x+6+h/2, p.y+3, 0, text.c_str());
@@ -219,7 +219,7 @@ public:
 			float middle = h*0.5;
 			float bottom = h*0.75;
 
-			if(expander.Is_open())
+			if(tree.Is_open())
 			{
 				al_draw_filled_triangle(p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, tri_color);
 				al_draw_triangle       (p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, edge_color, 0);
@@ -560,12 +560,12 @@ Hardcoded_skin::Hardcoded_skin()
 	Set_prototype("horizontal box", widget);
 	Add_view(hbox_view);
 
-	Expander_view* expander_view = new Expander_view;
-	expander_view->font = font;
-	widget = new Expander;
-	widget->Set_view(expander_view);
-	Set_prototype("expander", widget);
-	Add_view(expander_view);
+	Tree_view* tree_view = new Tree_view;
+	tree_view->font = font;
+	widget = new Tree;
+	widget->Set_view(tree_view);
+	Set_prototype("tree", widget);
+	Add_view(tree_view);
 
 	Button_view* button_view = new Button_view;
 	button_view->font = font;
