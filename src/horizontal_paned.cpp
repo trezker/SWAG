@@ -22,6 +22,7 @@ void Horizontal_paned::Set_left(Widget* widget)
 	else if(left)
 		left->Set_parent(NULL);
 	left = widget;
+	Organise();
 }
 
 void Horizontal_paned::Set_right(Widget* widget)
@@ -31,6 +32,7 @@ void Horizontal_paned::Set_right(Widget* widget)
 	else if(right)
 		right->Set_parent(NULL);
 	right = widget;
+	Organise();
 }
 
 Widget* Horizontal_paned::Get_left() const
@@ -158,4 +160,5 @@ const std::string& Horizontal_paned::Get_tooltip(float x, float y) const
 	{
 		return right->Get_tooltip(x, y);
 	}
+	return Widget::Get_tooltip(x, y);
 }

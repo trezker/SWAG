@@ -160,4 +160,5 @@ const std::string& Vertical_paned::Get_tooltip(float x, float y) const
 	{
 		return bottom->Get_tooltip(x, y);
 	}
+	return Widget::Get_tooltip(x, y);
 }
