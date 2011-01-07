@@ -249,7 +249,7 @@ public:
 
 		Widget* child = expander.Get_child();
 		size.x += size.y/2;
-		if(expander.Is_open())
+		if(child && expander.Is_open())
 		{
 			Vector2 ws = child->Request_size();
 			size.y += ws.y;

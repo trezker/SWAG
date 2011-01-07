@@ -52,15 +52,16 @@ void Expander::Organise()
 		Open();
 
 	float indent = Get_value(INDENT);
-	float y = Get_position().y;
-	float x = Get_position().x + indent;
-	y += selfsize.y;
+	Vector2 p = Get_position();
+	p.y += selfsize.y;
+	Vector2 s = Get_size();
+	s.y -= selfsize.y;
 
 	if(child)
 	{
-		Vector2 size = child->Request_size();
-		child->Set_size(size);
-		child->Set_position(Vector2(x, y));
+//		Vector2 size = child->Request_size();
+		child->Set_size(s);
+		child->Set_position(p);
 	}
 }
 
