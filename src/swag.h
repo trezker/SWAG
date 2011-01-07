@@ -6,6 +6,7 @@
 #include "horizontal_box.h"
 #include "vertical_paned.h"
 #include "horizontal_paned.h"
+#include "expander.h"
 #include "tree.h"
 #include "button.h"
 #include "inputbox.h"

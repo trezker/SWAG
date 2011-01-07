@@ -235,6 +235,81 @@ public:
 	ALLEGRO_FONT* font;
 };
 
+class Expander_view: public Widget_view
+{
+public:
+	virtual Vector2 Request_size(const Widget& widget) const
+	{
+		const Expander& expander = dynamic_cast<const Expander&>(widget);
+		Vector2 size;
+		const std::string& text = expander.Get_text();
+		size.x = al_get_text_width(font, text.c_str()) + 6;
+		size.y = al_get_font_line_height(font) + 6;
+		float lh = size.y/4+6;
+
+		Widget* child = expander.Get_child();
+		size.x += size.y/2;
+		if(expander.Is_open())
+		{
+			Vector2 ws = child->Request_size();
+			size.y += ws.y;
+			if(ws.x+lh>size.x)
+				size.x = ws.x+lh;
+		}
+		return size;
+	}
+	
+	virtual float Get_value(int id, const Widget& widget) const
+	{
+		float sizey = al_get_font_line_height(font) + 6;
+		return sizey/4+6;
+	}
+	
+	virtual void Render(const Widget& widget) const
+	{
+		const Expander& expander = dynamic_cast<const Expander&>(widget);
+
+		Widget *child = expander.Get_child();
+		if(child && expander.Is_open())
+		{
+			child->Render();
+		}
+
+		Vector2 p = widget.Get_position();
+		Vector2 s = widget.Get_size();
+		ALLEGRO_COLOR text_color = al_map_rgb_f(1, 1, 1);
+		ALLEGRO_COLOR tri_color = al_map_rgb_f(1, 1, 1);
+		ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
+		ALLEGRO_COLOR select_color = al_map_rgb_f(0.0, 0, 0.8);
+
+		const std::string& text = expander.Get_text();
+		float h = al_get_font_line_height(font);
+
+		float text_width = al_get_text_width(font, text.c_str());
+
+		al_draw_text(font, text_color, p.x+6+h/2, p.y+3, 0, text.c_str());
+//		if(child)
+		{
+			float top = h*0.25;
+			float middle = h*0.5;
+			float bottom = h*0.75;
+
+			if(expander.Is_open())
+			{
+				al_draw_filled_triangle(p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, tri_color);
+				al_draw_triangle       (p.x+3, p.y+3+middle, p.x+3+middle, p.y+3+middle, p.x+3+top, p.y+3+bottom, edge_color, 0);
+			}
+			else
+			{
+				al_draw_filled_triangle(p.x+3, p.y+3+top, p.x+3+top, p.y+3+middle, p.x+3, p.y+3+bottom, tri_color);
+				al_draw_triangle       (p.x+3, p.y+3+top, p.x+3+top, p.y+3+middle, p.x+3, p.y+3+bottom, edge_color, 0);
+			}
+		}
+	}
+public:
+	ALLEGRO_FONT* font;
+};
+
 class Vertical_paned_view: public Widget_view
 {
 public:
@@ -566,6 +641,13 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(tree_view);
 	Set_prototype("tree", widget);
 	Add_view(tree_view);
+
+	Expander_view* expander_view = new Expander_view;
+	expander_view->font = font;
+	widget = new Expander;
+	widget->Set_view(expander_view);
+	Set_prototype("expander", widget);
+	Add_view(expander_view);
 
 	Button_view* button_view = new Button_view;
 	button_view->font = font;
