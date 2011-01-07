@@ -84,10 +84,8 @@ int main()
 	inputbox->Enable_fixed_height();
 	inputbox->Set_tooltip("Change this text");
 
-	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
-	toolvbox->Add(widget_tree);
-	toolvbox->Add(removebutton);
-	toolvbox->Add(inputbox);
+
+	Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
 
 	typedef std::map<Widget*, std::string> Create_buttons;
 	Create_buttons create_buttons;
@@ -98,9 +96,19 @@ int main()
 		createbutton->Set_text(*i);
 		createbutton->Enable_fixed_height();
 		create_buttons[createbutton] = *i;
-		toolvbox->Add(createbutton);
+		create_vbox->Add(createbutton);
 		createbutton->Set_tooltip("Create a widget");
 	}
+
+	Expander* create_expander = skin.Clone<Expander>("expander");
+	create_expander->Add_child(create_vbox);
+	create_expander->Set_text("Create widgets");
+
+	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
+	toolvbox->Add(widget_tree);
+	toolvbox->Add(removebutton);
+	toolvbox->Add(inputbox);
+	toolvbox->Add(create_expander);
 
 	Desktop* desktop = skin.Clone<Desktop>("desktop");
 	desktop->Set_child(toolvbox);

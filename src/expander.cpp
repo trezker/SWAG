@@ -118,6 +118,8 @@ bool Expander::Add_child(Widget* c)
 	if(!child)
 	{
 		child = c;
+		child->Set_parent(this);
+		Organise();
 		return true;
 	}
 	return false;

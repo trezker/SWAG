@@ -36,7 +36,7 @@ void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 
 	if (ALLEGRO_EVENT_MOUSE_AXES == event.type)
 	{
-		if(tooltip_countdown<=0
+		if(child && tooltip_countdown<=0
 		&& Get_tooltip(0,0) == child->Get_tooltip(event.mouse.x, event.mouse.y))
 		{
 		}
@@ -51,7 +51,10 @@ void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 	if(ALLEGRO_EVENT_TIMER == event.type)
 	{
 		if(tooltip_countdown <= 0)
-			Set_tooltip(child->Get_tooltip(tooltip_position.x, tooltip_position.y));
+		{
+			if(child)
+				Set_tooltip(child->Get_tooltip(tooltip_position.x, tooltip_position.y));
+		}
 		else
 			tooltip_countdown -= al_get_timer_speed(event.timer.source);
 	}
