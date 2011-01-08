@@ -588,6 +588,38 @@ public:
 	ALLEGRO_FONT* font;
 	float cursor_flash;
 };
+class Label_view: public Widget_view
+{
+public:
+	virtual Vector2 Request_size(const Widget& widget) const
+	{
+		const Label& label = dynamic_cast<const Label&>(widget);
+		std::string text = label.Get_text();
+		Vector2 size;
+		size.x = al_get_text_width(font, text.c_str()) + 6;
+		size.y = al_get_font_line_height(font) + 6;
+		return size;
+	}
+	
+	virtual void Render(const Widget& widget) const
+	{
+		const Label& label = dynamic_cast<const Label&>(widget);
+
+		Vector2 p = widget.Get_position();
+		Vector2 s = widget.Get_size();
+		ALLEGRO_COLOR text_color = al_map_rgb_f(0, 0, 0);
+		ALLEGRO_COLOR bg_color = al_map_rgb_f(1, 1, 1);
+
+		al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
+
+		int y = p.y + 3;
+		int x = p.x + 3;
+		std::string text = label.Get_text();
+		al_draw_text(font, text_color, x, y, 0, text.c_str());
+	}
+public:
+	ALLEGRO_FONT* font;
+};
 
 Hardcoded_skin::Hardcoded_skin()
 {
@@ -655,6 +687,13 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(button_view);
 	Set_prototype("button", widget);
 	Add_view(button_view);
+
+	Label_view* label_view = new Label_view;
+	label_view->font = font;
+	widget = new Label;
+	widget->Set_view(label_view);
+	Set_prototype("label", widget);
+	Add_view(label_view);
 
 	Inputbox_view* inputbox_view = new Inputbox_view;
 	inputbox_view->font = font;

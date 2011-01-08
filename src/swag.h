@@ -9,6 +9,7 @@
 #include "expander.h"
 #include "tree.h"
 #include "button.h"
+#include "label.h"
 #include "inputbox.h"
 #include "desktop.h"
 #include "event_queue.h"

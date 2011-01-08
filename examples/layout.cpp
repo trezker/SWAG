@@ -42,28 +42,7 @@ int main()
 		font = al_load_font("examples/data/times.ttf", 12, 0);
 
 	Hardcoded_skin skin;
-/*	
-	Widget* dyn_child = skin.Clone<Widget>("size mode");
-	Widget* fix_child = skin.Clone<Widget>("size mode");
-	fix_child->Enable_fixed_height();
-	fix_child->Enable_fixed_width();
-	Widget* dyn_child2 = skin.Clone<Widget>("size mode");
-	Horizontal_paned* hpaned = skin.Clone<Horizontal_paned>("horizontal paned");
-	hpaned->Set_left(dyn_child2);
-	hpaned->Set_pane_fraction(0.5);
 
-	Vertical_box* vbox = skin.Clone<Vertical_box>("vertical box");
-	vbox->Add(hpaned);
-	vbox->Add(fix_child);
-
-	Vertical_paned* root = skin.Clone<Vertical_paned>("vertical paned");
-	root->Set_pane_fraction(0.5);
-	root->Set_position(Vector2(10, 10));
-	root->Set_size(Vector2(620, 460));
-	root->Set_top(dyn_child);
-	root->Set_bottom(vbox);
-	root->Organise();
-*/
 	Desktop* root = skin.Clone<Desktop>("desktop");
 	root->Set_position(Vector2(0, 0));
 	root->Set_size(Vector2(640, 480));
@@ -104,11 +83,19 @@ int main()
 	create_expander->Add_child(create_vbox);
 	create_expander->Set_text("Create widgets");
 
+	Label *label_fixed_width = skin.Clone<Label>("label");
+	label_fixed_width->Set_text("Fixed_width");
+
+	Expander* widget_properties = skin.Clone<Expander>("expander");
+	widget_properties->Add_child(label_fixed_width);
+	widget_properties->Set_text("Widget properties");
+
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
 	toolvbox->Add(inputbox);
 	toolvbox->Add(create_expander);
+	toolvbox->Add(widget_properties);
 
 	Desktop* desktop = skin.Clone<Desktop>("desktop");
 	desktop->Set_child(toolvbox);
