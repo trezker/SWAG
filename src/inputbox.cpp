@@ -7,6 +7,8 @@ Inputbox::Inputbox()
 ,mouse_over(false)
 ,text(al_ustr_new(""))
 ,cursor(0)
+,selection_start(0)
+,selection_end(0)
 {
 	Enable_fixed_height();
 }
@@ -22,6 +24,8 @@ Inputbox::Inputbox(const Inputbox& o)
 ,mouse_over(false)
 ,text(al_ustr_dup(o.text))
 ,cursor(0)
+,selection_start(0)
+,selection_end(0)
 {
 }
 
@@ -60,12 +64,20 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			mouse_over = false;
 			Push_event(Event(this, "leave"));
 		}
+		if(pressed)
+		{
+			selection_end = Get_value(POSITION);
+			cursor = selection_end;
+		}
 	}
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
 	{
 		if(mouse_over)
 		{
 			pressed = true;
+			selection_start = Get_value(POSITION);
+			cursor = selection_start;
+			selection_end = cursor;
 		}
 	}
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
@@ -76,7 +88,6 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			if(!has_focus)
 				Push_event(Event(this, "got focus"));
 			has_focus = true;
-			cursor = Get_value(POSITION);
 		}
 		else
 		{
@@ -87,9 +98,9 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 	}
 	if(has_focus)
 	{
-		Set_value(FLASH, 0);
 		if(ALLEGRO_EVENT_KEY_CHAR == event.type)
 		{
+			Set_value(FLASH, 0);
 			if(ALLEGRO_KEY_BACKSPACE == event.keyboard.keycode)
 			{
 				if(cursor>0)
@@ -160,4 +171,14 @@ bool Inputbox::Has_focus() const
 int Inputbox::Cursor_position() const
 {
 	return cursor;
+}
+
+int Inputbox::Get_selection_start() const
+{
+	return selection_start;
+}
+
+int Inputbox::Get_selection_end() const
+{
+	return selection_end;
 }

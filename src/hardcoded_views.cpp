@@ -601,15 +601,22 @@ public:
 		int y = p.y + 3;
 		int x = p.x + 3;
 		std::string text = inputbox.Get_text();
-		al_draw_text(font, text_color, x, y, 0, text.c_str());
 		
-		if(inputbox.Has_focus() && cursor_flash>0)
+		if(inputbox.Has_focus())
 		{
-			int cursor = inputbox.Cursor_position();
-			int cp = al_get_text_width(font, text.substr(0, cursor).c_str());
+			int sel_s = inputbox.Get_selection_start();
+			int sel_e = inputbox.Get_selection_end();
+
+			int cp_s = al_get_text_width(font, text.substr(0, sel_s).c_str());
+			int cp_e = al_get_text_width(font, text.substr(0, sel_e).c_str());
 			int h = al_get_font_line_height(font);
-			al_draw_line(x+cp-1, y, x+cp, y+h, al_map_rgb_f(0, 0, 0), 0);
+			if(sel_s != sel_e)
+				al_draw_filled_rectangle(x+cp_s-1, y, x+cp_e, y+h, al_map_rgb_f(0.5, 0.5, 1));
+			else if(cursor_flash>0)
+				al_draw_line(x+cp_e-1, y, x+cp_e, y+h, al_map_rgb_f(0, 0, 0), 0);
 		}
+
+		al_draw_text(font, text_color, x, y, 0, text.c_str());
 	}
 
 	virtual void Update(float t)

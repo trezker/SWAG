@@ -17,6 +17,8 @@ public:
 	bool Is_pressed() const;
 	bool Has_focus() const;
 	int Cursor_position() const;
+	int Get_selection_start() const;
+	int Get_selection_end() const;
 	
 	enum Value
 	{
@@ -29,6 +31,8 @@ private:
 	bool has_focus;
 	bool mouse_over;
 	int cursor;
+	int selection_start;
+	int selection_end;
 };
 
 #endif
