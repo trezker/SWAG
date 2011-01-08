@@ -25,6 +25,7 @@ public:
 
 	bool Is_selected() const;
 	void Child_selected();
+	void Select();
 	void Deselect();
 
 	virtual void Organise();

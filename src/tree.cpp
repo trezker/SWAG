@@ -91,6 +91,13 @@ void Tree::Child_selected()
 	Deselect();
 }
 
+void Tree::Select()
+{
+	Child_selected();
+	selected = true;
+	Push_event(Event(this, "selected"));
+}
+
 void Tree::Deselect()
 {
 	bool event_deselected = selected;

@@ -49,9 +49,10 @@ int main()
 
 
 	Tree* widget_tree = skin.Clone<Tree>("tree");
-	widget_tree->Set_text("Root");
+	widget_tree->Set_text("Desktop");
 	widget_tree->Enable_fixed_height();
 	widget_tree->Enable_fixed_width();
+	widget_tree->Select();
 
 	Button* removebutton = skin.Clone<Button>("button");
 	removebutton->Set_text("Remove");
