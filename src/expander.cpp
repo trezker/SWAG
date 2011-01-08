@@ -20,12 +20,20 @@ bool Expander::Is_open() const
 
 void Expander::Open()
 {
-	open = true;
+	if(!open)
+	{
+		open = true;
+		Child_resized();
+	}
 }
 
 void Expander::Close()
 {
-	open = false;
+	if(open)
+	{
+		open = false;
+		Child_resized();
+	}
 }
 
 void Expander::Set_text(const std::string& t)
@@ -45,21 +53,14 @@ Widget* Expander::Get_child() const
 
 void Expander::Organise()
 {
-	bool is_open = Is_open();
-	Close();
-	Vector2 selfsize = Request_size();
-	if(is_open)
-		Open();
-
 	float indent = Get_value(INDENT);
 	Vector2 p = Get_position();
-	p.y += selfsize.y;
+	p.y += Get_value(SELF_HEIGHT);
 	Vector2 s = Get_size();
-	s.y -= selfsize.y;
+	s.y -= Get_value(SELF_HEIGHT);
 
 	if(child)
 	{
-//		Vector2 size = child->Request_size();
 		child->Set_size(s);
 		child->Set_position(p);
 	}
@@ -72,27 +73,14 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
 	{
-		bool is_open = Is_open();
-		Vector2 ps = Get_size();
-		if(is_open)
-		{
-			Close();
-			Set_size(Request_size());
-		}
 		Vector2 p = Get_position();
-		Vector2 s = Get_size();
 		bool covers_point = Covers_point(event.mouse.x, event.mouse.y);
-		if(is_open)
-		{
-			Open();
-			Set_size(ps);
-		}
-		
-		if(covers_point)
+
+		if(covers_point && event.mouse.x<p.x+Get_value(SELF_HEIGHT))
 		{
 			if(event.mouse.x < p.x+Get_value(INDENT))
 			{
-				if(is_open)
+				if(Is_open())
 					Close();
 				else
 					Open();
