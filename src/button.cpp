@@ -5,6 +5,8 @@ Button::Button()
 :pressed(false)
 ,mouse_over(false)
 {
+	Enable_fixed_height();
+	Enable_fixed_width();
 }
 
 Widget* Button::Clone() const

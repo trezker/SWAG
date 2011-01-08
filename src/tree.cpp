@@ -7,6 +7,8 @@ Tree::Tree()
 :open(false)
 ,selected(false)
 {
+	Enable_fixed_height();
+	Enable_fixed_width();
 }
 
 Widget* Tree::Clone() const
@@ -21,12 +23,20 @@ bool Tree::Is_open() const
 
 void Tree::Open()
 {
-	open = true;
+	if(!open)
+	{
+		open = true;
+		Child_resized();
+	}
 }
 
 void Tree::Close()
 {
-	open = false;
+	if(open)
+	{
+		open = false;
+		Child_resized();
+	}
 }
 
 void Tree::Set_text(const std::string& t)
@@ -95,16 +105,10 @@ void Tree::Deselect()
 
 void Tree::Organise()
 {
-	bool is_open = Is_open();
-	Close();
-	Vector2 selfsize = Request_size();
-	if(is_open)
-		Open();
-
 	float indent = Get_value(INDENT);
 	float y = Get_position().y;
 	float x = Get_position().x + indent;
-	y += selfsize.y;
+	y += Get_value(SELF_HEIGHT);
 
 	for(Trees::iterator i = children.begin(); i != children.end(); ++i)
 	{
@@ -127,27 +131,14 @@ void Tree::Handle_event(const ALLEGRO_EVENT& event)
 
 	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
 	{
-		bool is_open = Is_open();
-		Vector2 ps = Get_size();
-		if(is_open)
-		{
-			Close();
-			Set_size(Request_size());
-		}
 		Vector2 p = Get_position();
-		Vector2 s = Get_size();
 		bool covers_point = Covers_point(event.mouse.x, event.mouse.y);
-		if(is_open)
-		{
-			Open();
-			Set_size(ps);
-		}
-		
-		if(covers_point)
+
+		if(covers_point && event.mouse.y < p.y+Get_value(SELF_HEIGHT))
 		{
 			if(event.mouse.x < p.x+Get_value(INDENT))
 			{
-				if(is_open)
+				if(Is_open())
 					Close();
 				else
 					Open();

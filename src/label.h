@@ -7,6 +7,7 @@
 class Label: public Widget
 {
 public:
+	Label();
 	virtual Widget* Clone() const;
 	void Set_text(const std::string& t);
 	std::string Get_text() const;

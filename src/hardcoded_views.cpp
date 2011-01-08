@@ -181,10 +181,27 @@ public:
 	
 	virtual float Get_value(int id, const Widget& widget) const
 	{
-		float sizey = al_get_font_line_height(font) + 6;
-		return sizey/4+6;
+		if(id == Expander::INDENT)
+		{
+			float sizey = al_get_font_line_height(font) + 6;
+			return sizey/4+6;
+		}
+		if(id == Expander::SELF_WIDTH)
+		{
+			const Tree& tree = dynamic_cast<const Tree&>(widget);
+			const std::string& text = tree.Get_text();
+			float x = al_get_text_width(font, text.c_str()) + 6;
+			float y = al_get_font_line_height(font) + 6;
+			x += y/2;
+			return x;
+		}
+		if(id == Expander::SELF_HEIGHT)
+		{
+			return al_get_font_line_height(font) + 6;
+		}
+		return 0;
 	}
-	
+
 	virtual void Render(const Widget& widget) const
 	{
 		const Tree& tree = dynamic_cast<const Tree&>(widget);
@@ -261,8 +278,25 @@ public:
 	
 	virtual float Get_value(int id, const Widget& widget) const
 	{
-		float sizey = al_get_font_line_height(font) + 6;
-		return sizey/4+6;
+		if(id == Expander::INDENT)
+		{
+			float sizey = al_get_font_line_height(font) + 6;
+			return sizey/4+6;
+		}
+		if(id == Expander::SELF_WIDTH)
+		{
+			const Expander& expander = dynamic_cast<const Expander&>(widget);
+			const std::string& text = expander.Get_text();
+			float x = al_get_text_width(font, text.c_str()) + 6;
+			float y = al_get_font_line_height(font) + 6;
+			x += y/2;
+			return x;
+		}
+		if(id == Expander::SELF_HEIGHT)
+		{
+			return al_get_font_line_height(font) + 6;
+		}
+		return 0;
 	}
 	
 	virtual void Render(const Widget& widget) const

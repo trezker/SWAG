@@ -5,7 +5,7 @@ Horizontal_paned::Horizontal_paned()
 :left(NULL)
 ,right(NULL)
 ,pane_position(0)
-,pane_reference(0)
+,pane_reference(0.5)
 ,holding_pane(-1)
 {
 }

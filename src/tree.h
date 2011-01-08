@@ -36,7 +36,9 @@ public:
 
 	enum Value
 	{
-		INDENT
+		INDENT,
+		SELF_WIDTH,
+		SELF_HEIGHT
 	};
 private:
 	virtual void Resized();

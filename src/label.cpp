@@ -1,5 +1,11 @@
 #include "label.h"
 
+Label::Label()
+{
+	Enable_fixed_width();
+	Enable_fixed_height();
+}
+
 Widget* Label::Clone() const
 {
 	return new Label(*this);

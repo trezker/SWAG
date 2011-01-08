@@ -55,12 +55,10 @@ int main()
 
 	Button* removebutton = skin.Clone<Button>("button");
 	removebutton->Set_text("Remove");
-	removebutton->Enable_fixed_height();
 	removebutton->Set_tooltip("Remove widget and its children");
 
 	Inputbox* inputbox = skin.Clone<Inputbox>("inputbox");
 	inputbox->Set_text("Change me");
-	inputbox->Enable_fixed_height();
 	inputbox->Set_tooltip("Change this text");
 
 
@@ -73,7 +71,6 @@ int main()
 	{
 		Button* createbutton = skin.Clone<Button>("button");
 		createbutton->Set_text(*i);
-		createbutton->Enable_fixed_height();
 		create_buttons[createbutton] = *i;
 		create_vbox->Add(createbutton);
 		createbutton->Set_tooltip("Create a widget");
@@ -82,6 +79,8 @@ int main()
 	Expander* create_expander = skin.Clone<Expander>("expander");
 	create_expander->Add_child(create_vbox);
 	create_expander->Set_text("Create widgets");
+	create_expander->Enable_fixed_height();
+	create_expander->Open();
 
 	Label *label_fixed_width = skin.Clone<Label>("label");
 	label_fixed_width->Set_text("Fixed_width");
@@ -89,6 +88,7 @@ int main()
 	Expander* widget_properties = skin.Clone<Expander>("expander");
 	widget_properties->Add_child(label_fixed_width);
 	widget_properties->Set_text("Widget properties");
+	widget_properties->Enable_fixed_height();
 
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
 	toolvbox->Add(widget_tree);
@@ -181,6 +181,7 @@ int main()
 							tree_child->Set_text(i->second);
 							selected_tree->Add_child(tree_child);
 							treemap[tree_child] = child;
+							selected_tree->Open();
 						}
 						else
 							delete child;

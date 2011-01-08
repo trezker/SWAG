@@ -8,6 +8,7 @@ Inputbox::Inputbox()
 ,text(al_ustr_new(""))
 ,cursor(0)
 {
+	Enable_fixed_height();
 }
 
 Inputbox::~Inputbox()

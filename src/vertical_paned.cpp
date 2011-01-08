@@ -5,7 +5,7 @@ Vertical_paned::Vertical_paned()
 :top(NULL)
 ,bottom(NULL)
 ,pane_position(0)
-,pane_reference(0)
+,pane_reference(0.5)
 ,holding_pane(-1)
 {
 }
