@@ -14,5 +14,6 @@
 #include "desktop.h"
 #include "event_queue.h"
 #include "skin.h"
+#include "clipboard.h"
 
 #endif

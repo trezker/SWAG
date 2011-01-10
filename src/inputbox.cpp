@@ -1,6 +1,7 @@
 #include "inputbox.h"
 #include "event_queue.h"
 #include <iostream>
+#include "clipboard.h"
 
 Inputbox::Inputbox()
 :pressed(false)
@@ -42,6 +43,27 @@ void Inputbox::Set_text(const std::string& t)
 std::string Inputbox::Get_text() const
 {
 	return al_cstr(text);
+}
+
+bool Inputbox::Remove_range()
+{
+	if(selection_start != selection_end)
+	{
+		if(selection_start < selection_end)
+		{
+			al_ustr_remove_range(text, selection_start, selection_end);
+			cursor = selection_start;
+		}
+		else
+		{
+			al_ustr_remove_range(text, selection_end, selection_start);
+			cursor = selection_end;
+		}
+		selection_start = cursor;
+		selection_end = cursor;
+		return true;
+	}
+	return false;
 }
 
 void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
@@ -103,18 +125,20 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			Set_value(FLASH, 0);
 			if(ALLEGRO_KEY_BACKSPACE == event.keyboard.keycode)
 			{
-				if(cursor>0)
+				if(!Remove_range() && cursor>0)
 				{
 					int pos = al_ustr_offset(text, cursor-1);
 					al_ustr_remove_chr(text, pos);
 					--cursor;
+					selection_start = cursor;
+					selection_end = cursor;
 					Push_event(Event(this, "changed"));
 				}
 				return;
 			}
 			else if(ALLEGRO_KEY_DELETE == event.keyboard.keycode)
 			{
-				if(cursor<al_ustr_length(text))
+				if(!Remove_range() && cursor<al_ustr_length(text))
 				{
 					int pos = al_ustr_offset(text, cursor);
 					al_ustr_remove_chr(text, pos);
@@ -130,27 +154,65 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			else if(ALLEGRO_KEY_LEFT == event.keyboard.keycode)
 			{
 				if(cursor>0)
+				{
 					--cursor;
+					if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
+						selection_start = cursor;
+					selection_end = cursor;
+				}
 			}
 			else if(ALLEGRO_KEY_RIGHT == event.keyboard.keycode)
 			{
 				if(cursor<al_ustr_length(text))
+				{
 					++cursor;
+					if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
+						selection_start = cursor;
+					selection_end = cursor;
+				}
 			}
 			else if(ALLEGRO_KEY_END == event.keyboard.keycode)
 			{
 				cursor = al_ustr_length(text);
+				if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
+					selection_start = cursor;
+				selection_end = cursor;
 			}
 			else if(ALLEGRO_KEY_HOME == event.keyboard.keycode)
 			{
 				cursor = 0;
+				if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
+					selection_start = cursor;
+				selection_end = cursor;
+			}
+			else if(ALLEGRO_KEY_C == event.keyboard.keycode)
+			{
+				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
+				{
+					const char *cstr = al_cstr(text);
+					Clipboard_copy_text(cstr);
+				}
+			}
+			else if(ALLEGRO_KEY_V == event.keyboard.keycode)
+			{
+				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
+				{
+					std::string paste = Clipboard_paste_text();
+					int pos = al_ustr_offset(text, cursor);
+					al_ustr_insert_cstr(text, pos, paste.c_str());
+				}
 			}
 			else
 			{
+//				std::cout<<event.keyboard.unichar<<std::endl;
+				if(event.keyboard.unichar != -1)
+					Remove_range();
 				int pos = al_ustr_offset(text, cursor);
 				if(al_ustr_insert_chr(text, pos, event.keyboard.unichar)>0)
 				{
 					++cursor;
+					selection_start = cursor;
+					selection_end = cursor;
 					Push_event(Event(this, "changed"));
 				}
 			}

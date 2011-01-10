@@ -26,6 +26,7 @@ public:
 		FLASH
 	};
 private:
+	bool Remove_range();
 	ALLEGRO_USTR *text;
 	bool pressed;
 	bool has_focus;
