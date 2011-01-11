@@ -70,6 +70,8 @@ int Set_clipboard_text(const char * const text, const int size)
 
     system(command);
 
+    unlink(filename);
+
     return 1;
 }
 
