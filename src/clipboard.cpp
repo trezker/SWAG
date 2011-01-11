@@ -2,19 +2,22 @@
 #include <cstdlib>
 #include <fstream>
 
-void Clipboard_copy_text(const char* text)
+void Set_clipboard_text(const char* text)
 {
-	std::string s = "echo ";
-	s += text;
-	s += " | xclip -selection c";
-	system(s.c_str());
+	std::ofstream f(".clipboard");
+	if(f.is_open())
+	{
+		f<<text;
+	}
+	f.close();
+	system("cat .clipboard | xclip -selection c");
 }
 
-std::string Clipboard_paste_text()
+const char* Get_clipboard_text()
 {
-	system("xclip -o -selection c > paste.txt");
+	system("xclip -o -selection c > .clipboard");
 	std::string text;
-	std::ifstream f("paste.txt");
+	std::ifstream f(".clipboard");
 	if(f.is_open())
 	{
 		char line[256];
@@ -22,5 +25,5 @@ std::string Clipboard_paste_text()
 		text = line;
 		f.close();
 	}
-	return text;
+	return text.c_str();
 }

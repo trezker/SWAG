@@ -2,7 +2,7 @@
 #define swag_clipboard_h
 #include <string>
 
-void Clipboard_copy_text(const char* text);
-std::string Clipboard_paste_text();
+void Set_clipboard_text(const char* text);
+const char* Get_clipboard_text();
 
 #endif

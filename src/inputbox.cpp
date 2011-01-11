@@ -190,14 +190,14 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
 				{
 					const char *cstr = al_cstr(text);
-					Clipboard_copy_text(cstr);
+					Set_clipboard_text(cstr);
 				}
 			}
 			else if(ALLEGRO_KEY_V == event.keyboard.keycode)
 			{
 				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
 				{
-					std::string paste = Clipboard_paste_text();
+					std::string paste = Get_clipboard_text();
 					int pos = al_ustr_offset(text, cursor);
 					al_ustr_insert_cstr(text, pos, paste.c_str());
 				}
