@@ -190,7 +190,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
 				{
 					const char *cstr = al_cstr(text);
-					Set_clipboard_text(cstr);
+					Set_clipboard_text(cstr, strlen(cstr) + 1);
 				}
 			}
 			else if(ALLEGRO_KEY_V == event.keyboard.keycode)
