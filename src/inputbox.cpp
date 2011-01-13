@@ -1,7 +1,7 @@
 #include "inputbox.h"
 #include "event_queue.h"
 #include <iostream>
-#include "clipboard.h"
+#include <clipboard/clipboard.h>
 
 Inputbox::Inputbox()
 :pressed(false)
@@ -189,8 +189,12 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			{
 				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
 				{
-					const char *cstr = al_cstr(text);
+					int start_pos = al_ustr_offset(text, selection_start);
+					int end_pos = al_ustr_offset(text, selection_end);
+					ALLEGRO_USTR *sub = al_ustr_dup_substr(text, start_pos, end_pos);
+					const char *cstr = al_cstr(sub);
 					Set_clipboard_text(cstr, strlen(cstr) + 1);
+					al_ustr_free(sub);
 				}
 			}
 			else if(ALLEGRO_KEY_V == event.keyboard.keycode)

@@ -20,7 +20,7 @@ solution (lib_name)
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 
-	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf","allegro_primitives","allegro_dialog" }
+	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf","allegro_primitives","allegro_dialog", "clipboard" }
 	examples = os.matchfiles("examples/*.cpp")
 	for index, name in pairs(examples) do
 		sname = name:sub(10, name:len()-4);
