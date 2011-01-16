@@ -127,18 +127,18 @@ int main()
 	while(!quit)
 	{
 		ALLEGRO_EVENT event;
-		if (al_get_next_event(event_queue, &event))
+		while (al_get_next_event(event_queue, &event))
 		{
 			if (ALLEGRO_EVENT_KEY_DOWN == event.type)
 			{
 				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
 				{
-					break;
+					quit=true;
 				}
 			}
 			if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)
 			{
-				break;
+				quit=true;
 			}
 			if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
 			{
