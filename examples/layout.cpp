@@ -108,7 +108,7 @@ int main()
 	Event_queue gui_events;
 	toolroot->Set_event_queue(&gui_events);
 
-	Tree* selected_tree = NULL;
+	Tree* selected_tree = widget_tree;
 
 	typedef std::map<Tree*, Widget*> Treemap;
 	Treemap treemap;
