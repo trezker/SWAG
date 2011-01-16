@@ -11,6 +11,7 @@ solution (lib_name)
 		files { "src/*.cpp" }
 		targetdir "build/lib"
 		includedirs { "include" }
+		links ("clipboard")
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -20,7 +21,24 @@ solution (lib_name)
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 
-	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf","allegro_primitives","allegro_dialog", "clipboard" }
+	project ("swag_hc")
+		kind "StaticLib"
+		language "C++"
+		location "build"
+		files { "hardcoded_views/*.cpp" }
+		targetdir "build/lib"
+		includedirs { "src" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+ 
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf",
+	"allegro_primitives","allegro_dialog", "clipboard" }
 	examples = os.matchfiles("examples/*.cpp")
 	for index, name in pairs(examples) do
 		sname = name:sub(10, name:len()-4);
@@ -29,8 +47,9 @@ solution (lib_name)
 			language "C++"
 			location "build"
 			files { name }
-			includedirs { "src" }
---			libdirs { "../lib" }
+			includedirs { "src", "hardcoded_views" }
+			libdirs { "build/lib" }
+			links ("swag_hc")
 			links (lib_name)
 			links (ex_dependencies)
 			targetdir "build/examples"
