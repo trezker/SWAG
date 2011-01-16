@@ -13,6 +13,10 @@ solution (lib_name)
 		includedirs { "include" }
 		links ("clipboard")
 
+		configuration { "linux", "gmake" }
+			buildoptions { "-pg" }
+			linkoptions { "-pg" }
+
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
@@ -28,6 +32,10 @@ solution (lib_name)
 		files { "hardcoded_views/*.cpp" }
 		targetdir "build/lib"
 		includedirs { "src" }
+
+		configuration { "linux", "gmake" }
+			buildoptions { "-pg" }
+			linkoptions { "-pg" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -54,6 +62,9 @@ solution (lib_name)
 			links (ex_dependencies)
 			targetdir "build/examples"
 --			postbuildcommands { "cd .. && build/examples/"..sname }
+			configuration { "linux", "gmake" }
+				buildoptions { "-pg" }
+				linkoptions { "-pg" }
 
 			configuration "Debug"
 				defines { "DEBUG" }

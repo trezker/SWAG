@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <list>
 
 int main()
@@ -91,12 +92,16 @@ int main()
 	widget_properties->Set_text("Widget properties");
 	widget_properties->Enable_fixed_height();
 
+	Label* fps_label = skin.Clone<Label>("label");
+	fps_label->Set_text("FPS: ");
+
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
 	toolvbox->Add(inputbox);
 	toolvbox->Add(create_expander);
 	toolvbox->Add(widget_properties);
+	toolvbox->Add(fps_label);
 
 	Desktop* desktop = skin.Clone<Desktop>("desktop");
 	desktop->Set_child(toolvbox);
@@ -114,6 +119,9 @@ int main()
 	Treemap treemap;
 	treemap[widget_tree] = root;
 
+	typedef std::list<double> Frametimes;
+	Frametimes frametimes;
+	double total_time = 0;
 	double last_time = al_current_time();
 	bool quit = false;
 	while(!quit)
@@ -247,6 +255,21 @@ int main()
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 
 		al_rest(0.001);
+		
+		
+		frametimes.push_back(dt);
+		total_time+=dt;
+		if(frametimes.size()>100)
+		{
+			total_time -= frametimes.front();
+			frametimes.erase(frametimes.begin());
+		}
+		int fps = frametimes.size()/total_time;
+		std::stringstream ss;
+		ss<<fps;
+		std::string fps_string;
+		ss>>fps_string;
+		fps_label->Set_text(std::string("FPS: ")+fps_string);
 	}
 
 //	delete root;

@@ -14,6 +14,7 @@ Widget* Label::Clone() const
 void Label::Set_text(const std::string& t)
 {
 	text = t;
+	Child_resized();
 }
 
 std::string Label::Get_text() const
