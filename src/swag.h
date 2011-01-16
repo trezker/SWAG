@@ -2,6 +2,7 @@
 #define swag_h
 
 #include "button.h"
+#include "context_menu.h"
 #include "desktop.h"
 #include "event_queue.h"
 #include "expander.h"
@@ -9,6 +10,7 @@
 #include "horizontal_paned.h"
 #include "inputbox.h"
 #include "label.h"
+#include "menu.h"
 #include "tree.h"
 #include "vertical_box.h"
 #include "vertical_paned.h"
