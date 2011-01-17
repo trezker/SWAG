@@ -18,6 +18,7 @@
 #include "button_view.h"
 #include "inputbox_view.h"
 #include "label_view.h"
+#include "menu_view.h"
 
 Hardcoded_skin::Hardcoded_skin()
 {
@@ -100,6 +101,13 @@ Hardcoded_skin::Hardcoded_skin()
 	Set_prototype("inputbox", widget);
 	Add_view(inputbox_view);
 	Add_animated_view(inputbox_view);
+
+	Menu_view* menu_view = new Menu_view;
+	menu_view->font = font;
+	widget = new Menu;
+	widget->Set_view(menu_view);
+	Set_prototype("menu", widget);
+	Add_view(menu_view);
 }
 
 Hardcoded_skin::~Hardcoded_skin()

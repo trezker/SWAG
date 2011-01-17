@@ -48,7 +48,6 @@ int main()
 	root->Set_position(Vector2(0, 0));
 	root->Set_size(Vector2(640, 480));
 
-
 	Tree* widget_tree = skin.Clone<Tree>("tree");
 	widget_tree->Set_text("Desktop");
 	widget_tree->Enable_fixed_height();
