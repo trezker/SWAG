@@ -91,9 +91,18 @@ int main()
 	Button *fixed_height = skin.Clone<Button>("checkbox");
 	fixed_height->Set_text("Fixed height");
 
+	Label *tooltip_label = skin.Clone<Label>("label");
+	tooltip_label->Set_text("Tooltip: ");
+	Inputbox *tooltip = skin.Clone<Inputbox>("inputbox");
+	
+	Horizontal_box* tooltip_hbox = skin.Clone<Horizontal_box>("horizontal box");
+	tooltip_hbox->Add_child(tooltip_label);
+	tooltip_hbox->Add_child(tooltip);
+
 	Vertical_box* widget_properties_vbox = skin.Clone<Vertical_box>("vertical box");
 	widget_properties_vbox->Add_child(fixed_width);
 	widget_properties_vbox->Add_child(fixed_height);
+	widget_properties_vbox->Add_child(tooltip_hbox);
 
 	Expander* widget_properties = skin.Clone<Expander>("expander");
 	widget_properties->Add_child(widget_properties_vbox);
@@ -194,7 +203,16 @@ int main()
 							fixed_height->Activate();
 						else
 							fixed_height->Deactivate();
+						tooltip->Set_text(tw->Get_tooltip());
 					}
+				}
+			}
+			else if(gui_event.type == "changed")
+			{
+				if(gui_event.source == tooltip)
+				{
+					Widget* tw = treemap[selected_tree];
+					tw->Set_tooltip(tooltip->Get_text());
 				}
 			}
 			else if(gui_event.type == "clicked")

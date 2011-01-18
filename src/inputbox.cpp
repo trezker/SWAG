@@ -5,6 +5,7 @@
 
 Inputbox::Inputbox()
 :pressed(false)
+,has_focus(false)
 ,mouse_over(false)
 ,text(al_ustr_new(""))
 ,cursor(0)
@@ -22,6 +23,7 @@ Inputbox::~Inputbox()
 Inputbox::Inputbox(const Inputbox& o)
 :Widget(o)
 ,pressed(false)
+,has_focus(false)
 ,mouse_over(false)
 ,text(al_ustr_dup(o.text))
 ,cursor(0)
@@ -185,26 +187,23 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 					selection_start = cursor;
 				selection_end = cursor;
 			}
-			else if(ALLEGRO_KEY_C == event.keyboard.keycode)
+			else if(ALLEGRO_KEY_C == event.keyboard.keycode
+			&& (event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL))
 			{
-				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
-				{
-					int start_pos = al_ustr_offset(text, selection_start);
-					int end_pos = al_ustr_offset(text, selection_end);
-					ALLEGRO_USTR *sub = al_ustr_dup_substr(text, start_pos, end_pos);
-					const char *cstr = al_cstr(sub);
-					Set_clipboard_text(cstr, strlen(cstr) + 1);
-					al_ustr_free(sub);
-				}
+				int start_pos = al_ustr_offset(text, selection_start);
+				int end_pos = al_ustr_offset(text, selection_end);
+				ALLEGRO_USTR *sub = al_ustr_dup_substr(text, start_pos, end_pos);
+				const char *cstr = al_cstr(sub);
+				Set_clipboard_text(cstr, strlen(cstr) + 1);
+				al_ustr_free(sub);
 			}
-			else if(ALLEGRO_KEY_V == event.keyboard.keycode)
+			else if(ALLEGRO_KEY_V == event.keyboard.keycode
+			&& (event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL))
 			{
-				if(event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL)
-				{
-					std::string paste = Get_clipboard_text();
-					int pos = al_ustr_offset(text, cursor);
-					al_ustr_insert_cstr(text, pos, paste.c_str());
-				}
+				std::string paste = Get_clipboard_text();
+				int pos = al_ustr_offset(text, cursor);
+				al_ustr_insert_cstr(text, pos, paste.c_str());
+				Push_event(Event(this, "changed"));
 			}
 			else
 			{

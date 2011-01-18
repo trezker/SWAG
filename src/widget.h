@@ -21,8 +21,6 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 
 	void Set_view(Widget_view* view);
-	float Get_value(int id) const;
-	void Set_value(int id, float v);
 //	Widget_view* Get_view() const;
 	Vector2 Request_size() const;
 	void Render() const;
@@ -33,6 +31,7 @@ public:
 	Vector2 Get_size() const;
 	
 	void Set_tooltip(const std::string& t);
+	const std::string& Get_tooltip() const;
 	virtual const std::string& Get_tooltip(float x, float y) const;
 
 	void Enable_fixed_height();
@@ -50,6 +49,8 @@ public:
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();
+	float Get_value(int id) const;
+	void Set_value(int id, float v);
 private:
 	virtual void Resized();
 	Vector2 position;
