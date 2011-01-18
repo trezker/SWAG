@@ -83,17 +83,24 @@ int main()
 	create_expander->Enable_fixed_height();
 	create_expander->Open();
 
-	Label *label_fixed_width = skin.Clone<Label>("label");
-	label_fixed_width->Set_text("Fixed_width");
+	//Widget properties
+
+	Button *fixed_width = skin.Clone<Button>("checkbox");
+	fixed_width->Set_text("Fixed width");
+
+	Vertical_box* widget_properties_vbox = skin.Clone<Vertical_box>("vertical box");
+	widget_properties_vbox->Add_child(fixed_width);
 
 	Expander* widget_properties = skin.Clone<Expander>("expander");
-	widget_properties->Add_child(label_fixed_width);
+	widget_properties->Add_child(widget_properties_vbox);
 	widget_properties->Set_text("Widget properties");
 	widget_properties->Enable_fixed_height();
 
+	//FPS
 	Label* fps_label = skin.Clone<Label>("label");
 	fps_label->Set_text("FPS: ");
 
+	//Main vbox
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);

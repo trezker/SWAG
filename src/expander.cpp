@@ -76,7 +76,7 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 		Vector2 p = Get_position();
 		bool covers_point = Covers_point(event.mouse.x, event.mouse.y);
 
-		if(covers_point && event.mouse.x<p.x+Get_value(SELF_HEIGHT))
+		if(covers_point && event.mouse.y<p.y+Get_value(SELF_HEIGHT))
 		{
 			if(event.mouse.x < p.x+Get_value(INDENT))
 			{

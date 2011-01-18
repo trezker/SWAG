@@ -10,8 +10,8 @@ Vector2 Checkbox_view::Request_size(const Widget& widget) const
 	const std::string& text = checkbox.Get_text();
 	Vector2 size;
 	int font_h = al_get_font_line_height(font);
-	size.x = font_h + al_get_text_width(font, text.c_str()) + 6;
 	size.y = font_h + 6;
+	size.x = size.y + al_get_text_width(font, text.c_str()) + 6;
 	return size;
 }
 
@@ -27,16 +27,16 @@ void Checkbox_view::Render(const Widget& widget) const
 	float h = al_get_font_line_height(font);
 
 	al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
-	al_draw_rectangle(p.x, p.y+1, p.x+s.y-1, p.y+s.y, edge_color, 0);
+	al_draw_rectangle(p.x+1, p.y+3, p.x+s.y-3, p.y+s.y-1, edge_color, 0);
 	if(checkbox.Is_active())
 	{
-		al_draw_line(p.x+2, p.y+3, p.x+s.y-3, p.y+s.y-2, edge_color, h/5);
-		al_draw_line(p.x+2, p.y+s.y-2, p.x+s.y-3, p.y+3, edge_color, h/5);
+		al_draw_line(p.x+3, p.y+5, p.x+s.y-4, p.y+s.y-4, edge_color, h/5);
+		al_draw_line(p.x+3, p.y+s.y-4, p.x+s.y-4, p.y+5, edge_color, h/5);
 	}
 
 	int font_h = al_get_font_line_height(font);
 	int y = p.y + 3;
-	int x = p.x + font_h + 3;
+	int x = p.x + s.y + 3;
 	const std::string& text = checkbox.Get_text();
 	al_draw_text(font, text_color, x, y, 0, text.c_str());
 }
