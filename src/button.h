@@ -14,10 +14,17 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;
 	bool Is_mouse_over() const;
+	void Set_toggle(bool t);
+	bool Is_toggle() const;
+	void Activate();
+	void Deactivate();
+	bool Is_active() const;
 private:
 	std::string text;
 	bool pressed;
 	bool mouse_over;
+	bool toggle;
+	bool active;
 };
 
 #endif

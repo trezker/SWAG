@@ -16,6 +16,7 @@
 #include "vertical_paned_view.h"
 #include "horizontal_paned_view.h"
 #include "button_view.h"
+#include "checkbox_view.h"
 #include "inputbox_view.h"
 #include "label_view.h"
 #include "menu_view.h"
@@ -86,6 +87,22 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(button_view);
 	Set_prototype("button", widget);
 	Add_view(button_view);
+
+	Button_view* toggle_view = new Button_view;
+	toggle_view->font = font;
+	widget = new Button;
+	widget->Set_view(toggle_view);
+	static_cast<Button*>(widget)->Set_toggle(true);
+	Set_prototype("toggle_button", widget);
+	Add_view(toggle_view);
+
+	Checkbox_view* checkbox_view = new Checkbox_view;
+	checkbox_view->font = font;
+	widget = new Button;
+	widget->Set_view(checkbox_view);
+	static_cast<Button*>(widget)->Set_toggle(true);
+	Set_prototype("checkbox", widget);
+	Add_view(checkbox_view);
 
 	Label_view* label_view = new Label_view;
 	label_view->font = font;

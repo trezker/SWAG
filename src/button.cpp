@@ -4,6 +4,8 @@
 Button::Button()
 :pressed(false)
 ,mouse_over(false)
+,toggle(false)
+,active(false)
 {
 	Enable_fixed_height();
 	Enable_fixed_width();
@@ -60,6 +62,13 @@ void Button::Handle_event(const ALLEGRO_EVENT& event)
 		if(mouse_over)
 		{
 			Push_event(Event(this, "clicked"));
+			if(toggle)
+			{
+				if(active)
+					Deactivate();
+				else
+					Activate();
+			}
 		}
 	}
 }
@@ -72,4 +81,31 @@ bool Button::Is_pressed() const
 bool Button::Is_mouse_over() const
 {
 	return mouse_over;
+}
+
+void Button::Set_toggle(bool t)
+{
+	toggle = t;
+}
+
+bool Button::Is_toggle() const
+{
+	return toggle;
+}
+
+void Button::Activate()
+{
+	active = true;
+	Push_event(Event(this, "activated"));
+}
+
+void Button::Deactivate()
+{
+	active = false;
+	Push_event(Event(this, "deactivated"));
+}
+
+bool Button::Is_active() const
+{
+	return active;
 }

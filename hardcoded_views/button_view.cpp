@@ -25,7 +25,7 @@ void Button_view::Render(const Widget& widget) const
 	ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
 	float h = al_get_font_line_height(font);
 
-	if(button.Is_pressed() && button.Is_mouse_over())
+	if((button.Is_pressed() && button.Is_mouse_over()) || (button.Is_toggle() && button.Is_active()))
 	{
 		al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color);
 		al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color, 0);
