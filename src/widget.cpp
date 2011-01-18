@@ -95,21 +95,25 @@ const std::string& Widget::Get_tooltip(float x, float y) const
 void Widget::Enable_fixed_height()
 {
 	fixed_height = true;
+	Child_resized();
 }
 
 void Widget::Enable_fixed_width()
 {
 	fixed_width = true;
+	Child_resized();
 }
 
 void Widget::Disable_fixed_height()
 {
 	fixed_height = false;
+	Child_resized();
 }
 
 void Widget::Disable_fixed_width()
 {
 	fixed_width = false;
+	Child_resized();
 }
 
 bool Widget::Has_fixed_height() const

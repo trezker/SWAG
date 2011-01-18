@@ -88,8 +88,12 @@ int main()
 	Button *fixed_width = skin.Clone<Button>("checkbox");
 	fixed_width->Set_text("Fixed width");
 
+	Button *fixed_height = skin.Clone<Button>("checkbox");
+	fixed_height->Set_text("Fixed height");
+
 	Vertical_box* widget_properties_vbox = skin.Clone<Vertical_box>("vertical box");
 	widget_properties_vbox->Add_child(fixed_width);
+	widget_properties_vbox->Add_child(fixed_height);
 
 	Expander* widget_properties = skin.Clone<Expander>("expander");
 	widget_properties->Add_child(widget_properties_vbox);
@@ -177,11 +181,40 @@ int main()
 				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
 				if(newsel)
 				{
-					selected_tree = newsel;
+					Treemap::iterator i = treemap.find(newsel);
+					if(i != treemap.end())
+					{
+						selected_tree = newsel;
+						Widget* tw = treemap[selected_tree];
+						if(tw->Has_fixed_width())
+							fixed_width->Activate();
+						else
+							fixed_width->Deactivate();
+						if(tw->Has_fixed_height())
+							fixed_height->Activate();
+						else
+							fixed_height->Deactivate();
+					}
 				}
 			}
 			else if(gui_event.type == "clicked")
 			{
+				if(gui_event.source == fixed_width)
+				{
+					Widget* tw = treemap[selected_tree];
+					if(fixed_width->Is_active())
+						tw->Enable_fixed_width();
+					else
+						tw->Disable_fixed_width();
+				}
+				if(gui_event.source == fixed_height)
+				{
+					Widget* tw = treemap[selected_tree];
+					if(fixed_height->Is_active())
+						tw->Enable_fixed_height();
+					else
+						tw->Disable_fixed_height();
+				}
 				if(selected_tree)
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
