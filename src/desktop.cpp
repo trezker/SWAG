@@ -27,30 +27,38 @@ Widget* Desktop::Get_child() const
 	return child;
 }
 
+void Desktop::Reset_tooltip()
+{
+	tooltip_countdown = 0.5;
+	Set_tooltip("");
+}
+
 void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 {
 	if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
 	{
 		Set_size(Vector2(event.display.width, event.display.height));
 	}
-
+	if(ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY == event.type)
+	{
+		Reset_tooltip();
+	}
 	if (ALLEGRO_EVENT_MOUSE_AXES == event.type)
 	{
-		if(child && tooltip_countdown<=0
-		&& Get_tooltip(0,0) == child->Get_tooltip(event.mouse.x, event.mouse.y))
+		if(!(child && tooltip_countdown<=0
+		&& Get_tooltip() == child->Get_tooltip(event.mouse.x, event.mouse.y)))
 		{
-		}
-		else
-		{
-			tooltip_countdown = 0.5;
-			Set_tooltip("");
+			Reset_tooltip();
 			tooltip_position.Set(event.mouse.x, event.mouse.y);
 		}
 	}
 
 	if(ALLEGRO_EVENT_TIMER == event.type)
 	{
-		if(tooltip_countdown <= 0)
+		ALLEGRO_MOUSE_STATE mouse_state;
+		al_get_mouse_state(&mouse_state);
+
+		if(tooltip_countdown <= 0 && Covers_point(mouse_state.x, mouse_state.y))
 		{
 			if(child)
 				Set_tooltip(child->Get_tooltip(tooltip_position.x, tooltip_position.y));

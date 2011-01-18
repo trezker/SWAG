@@ -15,6 +15,7 @@ public:
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
 private:
+	void Reset_tooltip();
 	virtual void Resized();
 	Widget* child;
 	Vector2 tooltip_position;
