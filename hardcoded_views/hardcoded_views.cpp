@@ -14,6 +14,7 @@
 #include "tree_view.h"
 #include "expander_view.h"
 #include "vertical_paned_view.h"
+#include "vertical_slider_view.h"
 #include "horizontal_paned_view.h"
 #include "button_view.h"
 #include "checkbox_view.h"
@@ -47,6 +48,12 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(vpaned_view);
 	Set_prototype("vertical paned", widget);
 	Add_view(vpaned_view);
+
+	Vertical_slider_view* vslider_view = new Vertical_slider_view;
+	widget = new Vertical_slider;
+	widget->Set_view(vslider_view);
+	Set_prototype("vertical slider", widget);
+	Add_view(vslider_view);
 
 	Desktop_view* desktop_view = new Desktop_view;
 	desktop_view->font = font;

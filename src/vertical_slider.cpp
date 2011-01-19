@@ -7,6 +7,7 @@ Vertical_slider::Vertical_slider()
 ,pane_size(10)
 ,holding_pane(-1)
 {
+	Enable_fixed_width();
 }
 
 Widget* Vertical_slider::Clone() const

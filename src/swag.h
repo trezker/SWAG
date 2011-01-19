@@ -14,6 +14,7 @@
 #include "tree.h"
 #include "vertical_box.h"
 #include "vertical_paned.h"
+#include "vertical_slider.h"
 
 #include "widget_view.h"
 #include "skin.h"
