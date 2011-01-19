@@ -1,4 +1,5 @@
 #include "vertical_slider.h"
+#include "event_queue.h"
 #include <iostream>
 
 Vertical_slider::Vertical_slider()
@@ -20,6 +21,7 @@ void Vertical_slider::Set_pane_position(float p)
 	float max_y = Get_size().y-pane_size;
 	pane_position = p<0?0:p>max_y?max_y:p;
 	pane_reference = pane_position/max_y;
+	Push_event(Event(this, "moved"));
 }
 
 void Vertical_slider::Set_pane_fraction(float p)
@@ -28,6 +30,7 @@ void Vertical_slider::Set_pane_fraction(float p)
 	float pp = p*max_y;
 	pane_position = pp<0?0:pp>max_y?max_y:pp;
 	pane_reference = p;
+	Push_event(Event(this, "moved"));
 }
 
 float Vertical_slider::Get_pane_position() const
@@ -69,6 +72,7 @@ void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
 			float new_y = (event.mouse.y - p.y) - holding_pane;
 			float max_y = Get_size().y-pane_size;
 			Set_pane_fraction(new_y/max_y);
+			Push_event(Event(this, "moved"));
 		}
 	}
 }
