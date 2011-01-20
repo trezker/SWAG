@@ -8,7 +8,7 @@ Vector2 Vertical_slider_view::Request_size(const Widget& widget) const
 {
 	const Vertical_slider& vertical_slider = dynamic_cast<const Vertical_slider&>(widget);
 
-	Vector2 size(10, vertical_slider.Get_pane_size());
+	Vector2 size(20, vertical_slider.Get_pane_size());
 	return size;
 }
 

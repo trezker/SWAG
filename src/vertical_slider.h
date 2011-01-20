@@ -11,6 +11,7 @@ public:
 	void Set_pane_position(float p);
 	void Set_pane_fraction(float p);
 	float Get_pane_position() const;
+	float Get_pane_fraction() const;
 	void Set_pane_size(int s);
 	int Get_pane_size() const;
 	

@@ -5,7 +5,7 @@
 Vertical_slider::Vertical_slider()
 :pane_position(0)
 ,pane_reference(0.5)
-,pane_size(10)
+,pane_size(30)
 ,holding_pane(-1)
 {
 	Enable_fixed_width();
@@ -36,6 +36,11 @@ void Vertical_slider::Set_pane_fraction(float p)
 float Vertical_slider::Get_pane_position() const
 {
 	return pane_position;
+}
+
+float Vertical_slider::Get_pane_fraction() const
+{
+	return pane_reference;
 }
 
 void Vertical_slider::Set_pane_size(int s)
