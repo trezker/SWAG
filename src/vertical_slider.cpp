@@ -77,6 +77,7 @@ void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
 			float new_y = (event.mouse.y - p.y) - holding_pane;
 			float max_y = Get_size().y-pane_size;
 			Set_pane_fraction(new_y/max_y);
+			//Todo: Only if actually moved
 			Push_event(Event(this, "moved"));
 		}
 	}
