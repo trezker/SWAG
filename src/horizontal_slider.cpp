@@ -1,5 +1,6 @@
 #include "horizontal_slider.h"
 #include <iostream>
+#include "event_queue.h"
 
 Horizontal_slider::Horizontal_slider()
 :pane_position(0)
@@ -7,6 +8,7 @@ Horizontal_slider::Horizontal_slider()
 ,pane_size(30)
 ,holding_pane(-1)
 {
+	Enable_fixed_height();
 }
 
 Widget* Horizontal_slider::Clone() const
@@ -36,7 +38,7 @@ float Horizontal_slider::Get_pane_position() const
 	return pane_position;
 }
 
-float Horizontal_slider::Get_pane_fration() const
+float Horizontal_slider::Get_pane_fraction() const
 {
 	return pane_reference;
 }

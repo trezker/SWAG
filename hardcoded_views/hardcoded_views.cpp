@@ -16,6 +16,7 @@
 #include "vertical_paned_view.h"
 #include "vertical_slider_view.h"
 #include "horizontal_paned_view.h"
+#include "horizontal_slider_view.h"
 #include "button_view.h"
 #include "checkbox_view.h"
 #include "inputbox_view.h"
@@ -42,6 +43,12 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(hpaned_view);
 	Set_prototype("horizontal paned", widget);
 	Add_view(hpaned_view);
+
+	Horizontal_slider_view* hslider_view = new Horizontal_slider_view;
+	widget = new Horizontal_slider;
+	widget->Set_view(hslider_view);
+	Set_prototype("horizontal slider", widget);
+	Add_view(hslider_view);
 
 	Vertical_paned_view* vpaned_view = new Vertical_paned_view;
 	widget = new Vertical_paned;
