@@ -72,13 +72,12 @@ void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
 	}
 	if(event.type == ALLEGRO_EVENT_MOUSE_AXES)
 	{
-		if(holding_pane != -1)
+		if(holding_pane != -1 && event.mouse.dy)
 		{
 			float new_y = (event.mouse.y - p.y) - holding_pane;
 			float max_y = Get_size().y-pane_size;
+			float new_f = new_y/max_y;
 			Set_pane_fraction(new_y/max_y);
-			//Todo: Only if actually moved
-			Push_event(Event(this, "moved"));
 		}
 	}
 }
