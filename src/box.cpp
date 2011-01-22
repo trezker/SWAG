@@ -8,6 +8,7 @@ void Box::Add(Widget* widget)
 	widgets.push_back(widget);
 	widget->Set_parent(this);
 	Organise();
+	Child_resized();
 }
 
 const Widgets& Box::Get_widgets() const

@@ -18,8 +18,7 @@ void Slider_box::Set_child(Widget* widget)
 	if(child)
 		child->Set_parent(NULL);
 	child = widget;
-	Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
-	child->Set_size(Get_size()-downsize);
+	Handle_child_resize();
 }
 
 Widget* Slider_box::Get_child() const
@@ -71,4 +70,14 @@ const Horizontal_slider& Slider_box::Get_hslider() const
 const Vertical_slider& Slider_box::Get_vslider() const
 {
 	return vslider;
+}
+
+void Slider_box::Handle_child_resize()
+{
+	Vector2 p = Get_position();
+	Vector2 s = Get_size();
+	Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
+	if(child)
+		child->Set_size(child->Request_size());
+	Child_resized();
 }

@@ -26,6 +26,7 @@ public:
 	const Vertical_slider& Get_vslider() const;
 private:
 	virtual void Resized();
+	virtual void Handle_child_resize();
 	Widget* child;
 	Horizontal_slider hslider;
 	Vertical_slider vslider;
