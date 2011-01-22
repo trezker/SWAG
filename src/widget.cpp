@@ -2,6 +2,7 @@
 #include "widget_view.h"
 #include "event_queue.h"
 #include "container.h"
+#include <iostream>
 
 Widget::Widget()
 :view(NULL)
@@ -150,6 +151,11 @@ void Widget::Push_event(const Event& event)
 void Widget::Set_event_queue(Event_queue* e)
 {
 	event_queue = e;
+}
+
+Event_queue* Widget::Get_event_queue() const
+{
+	return event_queue;
 }
 
 void Widget::Set_parent(Container* p)

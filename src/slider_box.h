@@ -4,11 +4,13 @@
 #include "container.h"
 #include "horizontal_slider.h"
 #include "vertical_slider.h"
+#include "event_queue.h"
 
 class Slider_box: public Container
 {
 public:
 	Slider_box();
+	Slider_box(const Slider_box& o);
 	virtual Widget* Clone() const;
 	void Set_child(Widget* widget);
 	Widget* Get_child() const;
@@ -30,6 +32,7 @@ private:
 	Widget* child;
 	Horizontal_slider hslider;
 	Vertical_slider vslider;
+	Event_queue slider_events;
 };
 
 #endif

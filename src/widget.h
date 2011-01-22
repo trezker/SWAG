@@ -42,6 +42,7 @@ public:
 	bool Has_fixed_width() const;
 
 	void Set_event_queue(Event_queue* event_queue);
+	Event_queue* Get_event_queue() const;
 	void Set_parent(Container* parent);
 	Container* Get_parent() const;
 	

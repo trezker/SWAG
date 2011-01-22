@@ -1,4 +1,5 @@
 #include "event_queue.h"
+#include <iostream>
 
 Event::Event(Widget* s, const std::string& t)
 :source(s)

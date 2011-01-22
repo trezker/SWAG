@@ -4,6 +4,16 @@
 Slider_box::Slider_box()
 :child(NULL)
 {
+	hslider.Set_event_queue(&slider_events);
+	vslider.Set_event_queue(&slider_events);
+}
+
+Slider_box::Slider_box(const Slider_box& o)
+:Container(o)
+,child(NULL)
+{
+	hslider.Set_event_queue(&slider_events);
+	vslider.Set_event_queue(&slider_events);
 }
 
 Widget* Slider_box::Clone() const
@@ -32,6 +42,23 @@ void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 		child->Handle_event(event);
 	hslider.Handle_event(event);
 	vslider.Handle_event(event);
+
+	while(!slider_events.Empty())
+	{
+		const Event& e = slider_events.Front();
+		if(e.type == "moved")
+		{
+			if(e.source == &hslider)
+			{
+				std::cout<<"Move H"<<std::endl;
+			}
+			if(e.source == &vslider)
+			{
+				std::cout<<"Move V"<<std::endl;
+			}
+		}
+		slider_events.Pop();
+	}
 }
 
 void Slider_box::Resized()
