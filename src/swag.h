@@ -9,6 +9,7 @@
 #include "horizontal_box.h"
 #include "horizontal_paned.h"
 #include "horizontal_slider.h"
+#include "slider_box.h"
 #include "inputbox.h"
 #include "label.h"
 #include "menu.h"

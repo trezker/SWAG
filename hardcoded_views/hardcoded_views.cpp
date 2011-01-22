@@ -17,6 +17,7 @@
 #include "vertical_slider_view.h"
 #include "horizontal_paned_view.h"
 #include "horizontal_slider_view.h"
+#include "slider_box_view.h"
 #include "button_view.h"
 #include "checkbox_view.h"
 #include "inputbox_view.h"
@@ -61,6 +62,14 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(vslider_view);
 	Set_prototype("vertical slider", widget);
 	Add_view(vslider_view);
+
+	Slider_box_view* slider_box_view = new Slider_box_view;
+	slider_box_view->hslider_view = hslider_view;
+	slider_box_view->vslider_view = vslider_view;
+	widget = new Slider_box;
+	widget->Set_view(slider_box_view);
+	Set_prototype("slider box", widget);
+	Add_view(slider_box_view);
 
 	Desktop_view* desktop_view = new Desktop_view;
 	desktop_view->font = font;
