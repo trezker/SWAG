@@ -29,7 +29,7 @@ void Horizontal_slider::Set_pane_fraction(float p)
 	float max_x = Get_size().x-pane_size;
 	float pp = p*max_x;
 	pane_position = pp<0?0:pp>max_x?max_x:pp;
-	pane_reference = p;
+	pane_reference = p<0?0:p>1?1:p;
 	Push_event(Event(this, "moved"));
 }
 

@@ -29,7 +29,7 @@ void Vertical_slider::Set_pane_fraction(float p)
 	float max_y = Get_size().y-pane_size;
 	float pp = p*max_y;
 	pane_position = pp<0?0:pp>max_y?max_y:pp;
-	pane_reference = p;
+	pane_reference = p<0?0:p>1?1:p;
 	Push_event(Event(this, "moved"));
 }
 

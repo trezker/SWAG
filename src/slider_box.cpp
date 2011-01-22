@@ -45,16 +45,17 @@ void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 
 	while(!slider_events.Empty())
 	{
-		const Event& e = slider_events.Front();
-		if(e.type == "moved")
+		if(child)
 		{
-			if(e.source == &hslider)
+			const Event& e = slider_events.Front();
+			if(e.type == "moved")
 			{
-				std::cout<<"Move H"<<std::endl;
-			}
-			if(e.source == &vslider)
-			{
-				std::cout<<"Move V"<<std::endl;
+				Vector2 p = Get_position();
+				Vector2 s = Get_size();
+				Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
+				Vector2 ds = child->Get_size()-s+downsize;
+				
+				child->Set_position(p-Vector2(ds.x*hslider.Get_pane_fraction(), ds.y*vslider.Get_pane_fraction()));
 			}
 		}
 		slider_events.Pop();
