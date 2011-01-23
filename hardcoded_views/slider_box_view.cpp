@@ -41,11 +41,11 @@ void Slider_box_view::Render(const Widget& widget) const
 		al_set_clipping_rectangle(p.x, p.y, s.x, s.y);
 		child->Render();
 		al_set_clipping_rectangle(clip_x, clip_y, clip_w, clip_h);
+		Vector2 ps = slider_box.Get_size();
+		Vector2 cs = child->Get_size();
+		if(cs.x>ps.x)
+			hslider_view->Render(slider_box.Get_hslider());
+		if(cs.y>ps.y)
+			vslider_view->Render(slider_box.Get_vslider());
 	}
-	Vector2 ps = slider_box.Get_size();
-	Vector2 cs = child->Get_size();
-	if(cs.x>ps.x)
-		hslider_view->Render(slider_box.Get_hslider());
-	if(cs.y>ps.y)
-		vslider_view->Render(slider_box.Get_vslider());
 }

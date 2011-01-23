@@ -42,15 +42,16 @@ Widget* Slider_box::Get_child() const
 
 void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 {
-	if(child)
-		child->Handle_event(event);
-
 	Vector2 s = Get_size();
-	Vector2 cs = child->Get_size();
-	if(cs.x>s.x)
-		hslider.Handle_event(event);
-	if(cs.y>s.y)
-		vslider.Handle_event(event);
+	if(child)
+	{
+		child->Handle_event(event);
+		Vector2 cs = child->Get_size();
+		if(cs.x>s.x)
+			hslider.Handle_event(event);
+		if(cs.y>s.y)
+			vslider.Handle_event(event);
+	}
 
 	while(!slider_events.Empty())
 	{
@@ -114,12 +115,14 @@ void Slider_box::Handle_child_resize()
 	Vector2 s = Get_size();
 	Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
 	if(child)
+	{
 		child->Set_size(child->Request_size());
-	Child_resized();
-	
-	Vector2 cs = child->Get_size();
-	if(cs.x<=s.x)
-		hslider.Set_pane_fraction(0);
-	if(cs.y<=s.y)
-		vslider.Set_pane_fraction(0);
+		Child_resized();
+		
+		Vector2 cs = child->Get_size();
+		if(cs.x<=s.x)
+			hslider.Set_pane_fraction(0);
+		if(cs.y<=s.y)
+			vslider.Set_pane_fraction(0);
+	}
 }

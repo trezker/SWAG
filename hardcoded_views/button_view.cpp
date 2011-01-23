@@ -9,7 +9,10 @@ Vector2 Button_view::Request_size(const Widget& widget) const
 	const Button& button = dynamic_cast<const Button&>(widget);
 	const std::string& text = button.Get_text();
 	Vector2 size;
+	int minwidth = al_get_text_width(font, "Button") + 6;
 	size.x = al_get_text_width(font, text.c_str()) + 6;
+	if(size.x<minwidth)
+		size.x = minwidth;
 	size.y = al_get_font_line_height(font) + 6;
 	return size;
 }
