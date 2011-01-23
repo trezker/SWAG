@@ -6,6 +6,8 @@ Slider_box::Slider_box()
 {
 	hslider.Set_event_queue(&slider_events);
 	vslider.Set_event_queue(&slider_events);
+	hslider.Set_pane_fraction(0);
+	vslider.Set_pane_fraction(0);
 }
 
 Slider_box::Slider_box(const Slider_box& o)
@@ -14,6 +16,8 @@ Slider_box::Slider_box(const Slider_box& o)
 {
 	hslider.Set_event_queue(&slider_events);
 	vslider.Set_event_queue(&slider_events);
+	hslider.Set_pane_fraction(0);
+	vslider.Set_pane_fraction(0);
 }
 
 Widget* Slider_box::Clone() const
@@ -40,8 +44,13 @@ void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 {
 	if(child)
 		child->Handle_event(event);
-	hslider.Handle_event(event);
-	vslider.Handle_event(event);
+
+	Vector2 s = Get_size();
+	Vector2 cs = child->Get_size();
+	if(cs.x>s.x)
+		hslider.Handle_event(event);
+	if(cs.y>s.y)
+		vslider.Handle_event(event);
 
 	while(!slider_events.Empty())
 	{
@@ -51,7 +60,6 @@ void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 			if(e.type == "moved")
 			{
 				Vector2 p = Get_position();
-				Vector2 s = Get_size();
 				Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
 				Vector2 ds = child->Get_size()-s+downsize;
 				
@@ -108,4 +116,10 @@ void Slider_box::Handle_child_resize()
 	if(child)
 		child->Set_size(child->Request_size());
 	Child_resized();
+	
+	Vector2 cs = child->Get_size();
+	if(cs.x<=s.x)
+		hslider.Set_pane_fraction(0);
+	if(cs.y<=s.y)
+		vslider.Set_pane_fraction(0);
 }

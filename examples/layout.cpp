@@ -122,8 +122,11 @@ int main()
 	toolvbox->Add(widget_properties);
 	toolvbox->Add(fps_label);
 
+	Slider_box* slider_box = skin.Clone<Slider_box>("slider box");
+	slider_box->Set_child(toolvbox);
+
 	Desktop* desktop = skin.Clone<Desktop>("desktop");
-	desktop->Set_child(toolvbox);
+	desktop->Set_child(slider_box);
 	desktop->Set_position(Vector2(0, 0));
 	desktop->Set_size(Vector2(200, 480));
 

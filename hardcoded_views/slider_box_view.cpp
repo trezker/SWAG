@@ -8,9 +8,11 @@ Vector2 Slider_box_view::Request_size(const Widget& widget) const
 {
 	Vector2 size;
 	const Slider_box& slider_box = dynamic_cast<const Slider_box&>(widget);
-	Vector2 downsize(	Get_value(Slider_box::SLIDER_WIDTH, slider_box),
+/*	Vector2 downsize(	Get_value(Slider_box::SLIDER_WIDTH, slider_box),
 						Get_value(Slider_box::SLIDER_HEIGHT, slider_box));
 	return slider_box.Get_child()->Request_size() + downsize;
+*/
+	return slider_box.Get_child()->Request_size();
 }
 
 float Slider_box_view::Get_value(int id, const Widget& widget) const
@@ -40,6 +42,10 @@ void Slider_box_view::Render(const Widget& widget) const
 		child->Render();
 		al_set_clipping_rectangle(clip_x, clip_y, clip_w, clip_h);
 	}
-	vslider_view->Render(slider_box.Get_vslider());
-	hslider_view->Render(slider_box.Get_hslider());
+	Vector2 ps = slider_box.Get_size();
+	Vector2 cs = child->Get_size();
+	if(cs.x>ps.x)
+		hslider_view->Render(slider_box.Get_hslider());
+	if(cs.y>ps.y)
+		vslider_view->Render(slider_box.Get_vslider());
 }
