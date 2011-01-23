@@ -44,9 +44,13 @@ int main()
 
 	Hardcoded_skin skin;
 
+	Layout layout;
+
 	Desktop* root = skin.Clone<Desktop>("desktop");
 	root->Set_position(Vector2(0, 0));
 	root->Set_size(Vector2(640, 480));
+	
+	layout.Add_widget("root", root, NULL);
 
 	Tree* widget_tree = skin.Clone<Tree>("tree");
 	widget_tree->Set_text("Desktop");
