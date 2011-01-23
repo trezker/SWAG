@@ -251,6 +251,9 @@ int main()
 							selected_tree->Add_child(tree_child);
 							treemap[tree_child] = child;
 							selected_tree->Open();
+							Text_interface* has_text = dynamic_cast<Text_interface*>(child);
+							if(has_text)
+								has_text->Set_text(i->second);
 						}
 						else
 							delete child;
