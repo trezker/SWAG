@@ -3,8 +3,9 @@
 
 #include "container.h"
 #include <string>
+#include "text_interface.h"
 
-class Expander: public Container
+class Expander: public Container, public Text_interface
 {
 public:
 	Expander();
@@ -12,7 +13,7 @@ public:
 	bool Is_open() const;
 	void Open();
 	void Close();
-	void Set_text(const std::string& t);
+	virtual void Set_text(const std::string& t);
 	const std::string& Get_text() const;
 
 	Widget* Get_child() const;

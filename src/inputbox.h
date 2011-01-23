@@ -3,15 +3,16 @@
 
 #include "widget.h"
 #include <string>
+#include "text_interface.h"
 
-class Inputbox: public Widget
+class Inputbox: public Widget, public Text_interface
 {
 public:
 	Inputbox();
 	virtual ~Inputbox();
 	Inputbox(const Inputbox& o);
 	virtual Widget* Clone() const;
-	void Set_text(const std::string& t);
+	virtual void Set_text(const std::string& t);
 	std::string Get_text() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;

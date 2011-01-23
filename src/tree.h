@@ -3,11 +3,12 @@
 
 #include "container.h"
 #include <string>
+#include "text_interface.h"
 
 class Tree;
 typedef std::vector<Tree*> Trees;
 
-class Tree: public Container
+class Tree: public Container, public Text_interface
 {
 public:
 	Tree();
@@ -15,7 +16,7 @@ public:
 	bool Is_open() const;
 	void Open();
 	void Close();
-	void Set_text(const std::string& t);
+	virtual void Set_text(const std::string& t);
 	const std::string& Get_text() const;
 
 	void Add_child(Tree* c);

@@ -19,6 +19,7 @@ Widget* Button::Clone() const
 void Button::Set_text(const std::string& t)
 {
 	text = t;
+	Child_resized();
 }
 
 const std::string& Button::Get_text() const

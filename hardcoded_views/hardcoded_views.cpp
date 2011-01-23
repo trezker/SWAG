@@ -116,7 +116,7 @@ Hardcoded_skin::Hardcoded_skin()
 	widget = new Button;
 	widget->Set_view(toggle_view);
 	static_cast<Button*>(widget)->Set_toggle(true);
-	Set_prototype("toggle_button", widget);
+	Set_prototype("toggle button", widget);
 	Add_view(toggle_view);
 
 	Checkbox_view* checkbox_view = new Checkbox_view;
