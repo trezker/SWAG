@@ -1,6 +1,7 @@
 #include "layout.h"
 #include "widget.h"
 #include <sstream>
+#include <sinxml/sinxml.h>
 
 Layout::Layout()
 :root(NULL)
@@ -32,6 +33,14 @@ bool Layout::Load()
 
 bool Layout::Save() const
 {
+	if(root==NULL)
+		return false;
+	if(filename=="")
+		return false;
+	sinxml::Document document("1.0");
+	document.Set_root(root->Build_xml(*this));
+	document.Save_file(filename);
+	return true;
 }
 
 Widget* Layout::Get_root() const
@@ -42,8 +51,6 @@ Widget* Layout::Get_root() const
 std::string Layout::Add_widget(const std::string& name, Widget* widget, Widget* parent)
 {
 	if(name == "")
-		return "";
-	if(widget_to_name.find(widget) != widget_to_name.end())
 		return "";
 	std::string tryname = name;
 	int instance = 1;
@@ -62,7 +69,6 @@ std::string Layout::Add_widget(const std::string& name, Widget* widget, Widget* 
 		root = parent;
 	}
 	name_to_widget[tryname] = widget;
-	widget_to_name[widget] = tryname;
 	return tryname;
 }
 
@@ -79,9 +85,8 @@ void Layout::Delete_widget(Widget* widget)
 	}
 	else
 	{
+		name_to_widget.erase(name_to_widget.find(widget->Get_name()));
 		delete widget;
-		name_to_widget.erase(name_to_widget.find(widget_to_name[widget]));
-		widget_to_name.erase(widget_to_name.find(widget));
 	}
 }
 
@@ -93,5 +98,4 @@ void Layout::Clear()
 		delete i->second;
 	}
 	name_to_widget.clear();
-	widget_to_name.clear();
 }

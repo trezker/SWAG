@@ -3,6 +3,8 @@
 #include "event_queue.h"
 #include "container.h"
 #include <iostream>
+#include <sinxml/sinxml.h>
+#include "layout.h"
 
 Widget::Widget()
 :view(NULL)
@@ -86,6 +88,16 @@ Vector2 Widget::Get_size() const
 void Widget::Set_tooltip(const std::string& t)
 {
 	tooltip = t;
+}
+
+void Widget::Set_name(const std::string& n)
+{
+	name = n;
+}
+
+const std::string& Widget::Get_name() const
+{
+	return name;
 }
 
 const std::string& Widget::Get_tooltip() const
@@ -180,4 +192,17 @@ void Widget::Child_resized()
 {
 	if(parent)
 		parent->Handle_child_resize();
+}
+
+using namespace sinxml;
+sinxml::Element* Widget::Build_xml(const Layout& layout) const
+{
+	if(name == "")
+	{
+		throw("Widget has no name");
+	}
+	Element* e_base = new Element("widget");
+	Element* e_name = new Element("name", name);
+	e_base->Add_child(e_name);
+	return e_base;
 }

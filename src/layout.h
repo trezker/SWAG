@@ -25,8 +25,6 @@ private:
 	const Layout& operator=(Layout&){}
 	typedef std::map<std::string, Widget*> Name_to_widget;
 	Name_to_widget name_to_widget;
-	typedef std::map<Widget*, std::string> Widget_to_name;
-	Widget_to_name widget_to_name;
 	Widget* root;
 	std::string filename;
 };

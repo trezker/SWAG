@@ -10,6 +10,11 @@ class Widget_view;
 class Event_queue;
 class Event;
 class Container;
+namespace sinxml
+{
+	class Element;
+}
+class Layout;
 
 class Widget
 {
@@ -30,6 +35,9 @@ public:
 	Vector2 Get_position() const;
 	Vector2 Get_size() const;
 	
+	void Set_name(const std::string& n);
+	const std::string& Get_name() const;
+
 	void Set_tooltip(const std::string& t);
 	const std::string& Get_tooltip() const;
 	virtual const std::string& Get_tooltip(float x, float y) const;
@@ -47,6 +55,8 @@ public:
 	Container* Get_parent() const;
 	
 	bool Covers_point(float x, float y);
+	
+	virtual sinxml::Element* Build_xml(const Layout& layout) const;
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();
@@ -62,6 +72,7 @@ private:
 	Container* parent;
 	Event_queue* event_queue;
 	std::string tooltip;
+	std::string name;
 };
 
 typedef std::vector<Widget*> Widgets;
