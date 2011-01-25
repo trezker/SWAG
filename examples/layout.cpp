@@ -52,6 +52,16 @@ int main()
 	
 	layout.Add_widget("root", root, NULL);
 
+	Button* save_button = skin.Clone<Button>("button");
+	save_button->Set_text("Save");
+
+	Button* load_button = skin.Clone<Button>("button");
+	load_button->Set_text("Load");
+	
+	Horizontal_box* file_box = skin.Clone<Horizontal_box>("horizontal box");
+	file_box->Add_child(save_button);
+	file_box->Add_child(load_button);
+
 	Tree* widget_tree = skin.Clone<Tree>("tree");
 	widget_tree->Set_text("Desktop");
 	widget_tree->Enable_fixed_height();
@@ -119,6 +129,7 @@ int main()
 
 	//Main vbox
 	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
+	toolvbox->Add(file_box);
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
 	toolvbox->Add(inputbox);
@@ -224,6 +235,12 @@ int main()
 			}
 			else if(gui_event.type == "clicked")
 			{
+				if(gui_event.source == save_button)
+				{
+					layout.Set_filename("testlayout.xml");
+					bool s = layout.Save();
+					std::cout<<(s?"Saved":"Save failed")<<std::endl;
+				}
 				if(gui_event.source == fixed_width)
 				{
 					Widget* tw = treemap[selected_tree];

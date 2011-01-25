@@ -2,6 +2,7 @@
 #include "widget.h"
 #include <sstream>
 #include <sinxml/sinxml.h>
+#include <iostream>
 
 Layout::Layout()
 :root(NULL)
@@ -34,9 +35,15 @@ bool Layout::Load()
 bool Layout::Save() const
 {
 	if(root==NULL)
+	{
+		std::cout<<"No root widget"<<std::endl;
 		return false;
+	}
 	if(filename=="")
+	{
+		std::cout<<"No filename"<<std::endl;
 		return false;
+	}
 	sinxml::Document document("1.0");
 	document.Set_root(root->Build_xml(*this));
 	document.Save_file(filename);
@@ -66,9 +73,10 @@ std::string Layout::Add_widget(const std::string& name, Widget* widget, Widget* 
 	if(parent == NULL)
 	{
 		Clear();
-		root = parent;
+		root = widget;
 	}
 	name_to_widget[tryname] = widget;
+	widget->Set_name(tryname);
 	return tryname;
 }
 
