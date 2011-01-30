@@ -1,5 +1,6 @@
 #include "box.h"
 #include <algorithm>
+#include <sinxml/sinxml.h>
 
 void Box::Add(Widget* widget)
 {
@@ -59,4 +60,25 @@ const std::string& Box::Get_tooltip(float x, float y) const
 			return (*i)->Get_tooltip(x, y);
 	}
 	return Widget::Get_tooltip(x, y);
+}
+
+using namespace sinxml;
+sinxml::Element* Box::To_xml() const
+{
+	Element* e_widget = Widget::To_xml();
+	if(!e_widget)
+		return NULL;
+	Element* e_self = new Element("box");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_widget);
+	Element* e_children = new Element("children");
+	e_self->Add_child(e_children);
+	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
+	{
+		Element* e_child = (*i)->To_xml();
+		if(e_child)
+			e_children->Add_child(e_child);
+	}
+	return e_self;
 }

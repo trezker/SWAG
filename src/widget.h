@@ -56,7 +56,7 @@ public:
 	
 	bool Covers_point(float x, float y);
 	
-	virtual sinxml::Element* Build_xml(const Layout& layout) const;
+	virtual sinxml::Element* To_xml() const;
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();

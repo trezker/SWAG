@@ -14,6 +14,7 @@ public:
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
+	virtual sinxml::Element* To_xml() const;
 private:
 	void Reset_tooltip();
 	virtual void Resized();

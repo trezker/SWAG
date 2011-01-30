@@ -31,7 +31,7 @@ bool Layout::Load()
 {
 	
 }
-
+//TODO: Figure out how to save skin info and prototype name.
 bool Layout::Save() const
 {
 	if(root==NULL)
@@ -44,8 +44,11 @@ bool Layout::Save() const
 		std::cout<<"No filename"<<std::endl;
 		return false;
 	}
+	sinxml::Element* e_root = root->To_xml();
+	if(!e_root)
+		return false;
 	sinxml::Document document("1.0");
-	document.Set_root(root->Build_xml(*this));
+	document.Set_root(e_root);
 	document.Save_file(filename);
 	return true;
 }

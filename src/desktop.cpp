@@ -1,5 +1,6 @@
 #include "desktop.h"
 #include <iostream>
+#include <sinxml/sinxml.h>
 
 Desktop::Desktop()
 :child(NULL)
@@ -99,4 +100,28 @@ void Desktop::Remove_child(Widget* c)
 Vector2 Desktop::Get_tooltip_position() const
 {
 	return tooltip_position;
+}
+
+using namespace sinxml;
+sinxml::Element* Desktop::To_xml() const
+{
+	Element* e_container = Container::To_xml();
+	if(!e_container)
+		return NULL;
+	Element* e_self = new Element("desktop");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_container);
+
+	Element* e_child_wrapper = new Element("child");
+	e_self->Add_child(e_child_wrapper);
+	if(child)
+	{
+		Element* e_child = child->To_xml();
+		if(e_child)
+		{
+			e_child_wrapper->Add_child(e_child);
+		}
+	}
+	return e_self;
 }

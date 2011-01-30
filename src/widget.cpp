@@ -195,20 +195,20 @@ void Widget::Child_resized()
 }
 
 using namespace sinxml;
-sinxml::Element* Widget::Build_xml(const Layout& layout) const
+sinxml::Element* Widget::To_xml() const
 {
 	if(name == "")
 	{
-		throw("Widget has no name");
+		return NULL;
 	}
-	Element* e_base = new Element("widget");
+	Element* e_self = new Element("widget");
 	Element* e_name = new Element("name", name);
 	Element* e_tooltip = new Element("tooltip", tooltip);
 	Element* e_fixed_width = new Element("fixed_width", fixed_width?"true":"false");
 	Element* e_fixed_height = new Element("fixed_height", fixed_height?"true":"false");
-	e_base->Add_child(e_name);
-	e_base->Add_child(e_tooltip);
-	e_base->Add_child(e_fixed_width);
-	e_base->Add_child(e_fixed_height);
-	return e_base;
+	e_self->Add_child(e_name);
+	e_self->Add_child(e_tooltip);
+	e_self->Add_child(e_fixed_width);
+	e_self->Add_child(e_fixed_height);
+	return e_self;
 }
