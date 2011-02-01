@@ -1,6 +1,7 @@
 #include "expander.h"
 #include "widget_view.h"
 #include "event_queue.h"
+#include <sinxml/sinxml.h>
 
 Expander::Expander()
 :open(false)
@@ -124,4 +125,30 @@ const std::string& Expander::Get_tooltip(float x, float y) const
 	if(child && child->Covers_point(x, y))
 		return child->Get_tooltip(x, y);
 	return Widget::Get_tooltip(x, y);
+}
+
+using namespace sinxml;
+sinxml::Element* Expander::To_xml() const
+{
+	Element* e_container = Container::To_xml();
+	if(!e_container)
+		return NULL;
+	Element* e_self = new Element("expander");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_container);
+
+	Element* e_child_wrapper = new Element("child");
+	e_self->Add_child(e_child_wrapper);
+	if(child)
+	{
+		Element* e_child = child->To_xml();
+		if(e_child)
+		{
+			e_child_wrapper->Add_child(e_child);
+		}
+	}
+	Element* e_text = new Element("text", text);
+	e_self->Add_child(e_text);
+	return e_self;
 }
