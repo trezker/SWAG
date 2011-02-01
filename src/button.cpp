@@ -1,5 +1,6 @@
 #include "button.h"
 #include "event_queue.h"
+#include <sinxml/sinxml.h>
 
 Button::Button()
 :pressed(false)
@@ -109,4 +110,23 @@ void Button::Deactivate()
 bool Button::Is_active() const
 {
 	return active;
+}
+
+using namespace sinxml;
+sinxml::Element* Button::To_xml() const
+{
+	Element* e_widget = Widget::To_xml();
+	if(!e_widget)
+		return NULL;
+	Element* e_self = new Element("button");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_widget);
+
+	Element* e_text = new Element("text", text);
+	Element* e_toggle = new Element("toggle", (toggle?"true":"false"));
+	e_self->Add_child(e_text);
+	e_self->Add_child(e_toggle);
+
+	return e_self;
 }

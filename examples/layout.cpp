@@ -265,16 +265,19 @@ int main()
 						std::cout<<i->second<<std::endl;
 						Widget* child = skin.Clone<Widget>(i->second);
 						Container* parent = dynamic_cast<Container*>(treemap[selected_tree]);
+
 						if(parent && parent->Add_child(child))
 						{
+							std::string name = layout.Add_widget(i->second, child, parent);
 							Tree* tree_child = skin.Clone<Tree>("tree");
-							tree_child->Set_text(i->second);
+							tree_child->Set_text(name);
 							selected_tree->Add_child(tree_child);
 							treemap[tree_child] = child;
 							selected_tree->Open();
 							Text_interface* has_text = dynamic_cast<Text_interface*>(child);
 							if(has_text)
-								has_text->Set_text(i->second);
+								has_text->Set_text(name);
+
 						}
 						else
 							delete child;

@@ -20,6 +20,7 @@ public:
 	void Activate();
 	void Deactivate();
 	bool Is_active() const;
+	virtual sinxml::Element* To_xml() const;
 private:
 	std::string text;
 	bool pressed;
