@@ -303,6 +303,7 @@ int main()
 								{
 									deadlist.push_back(*i);
 								}
+								layout.Remove_widget(treemap[current]);
 								delete treemap[current];
 								delete current;
 								++count;

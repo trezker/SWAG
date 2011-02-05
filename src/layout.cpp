@@ -104,6 +104,11 @@ void Layout::Delete_widget(const std::string& name)
 	Delete_widget(name_to_widget[name]);
 }
 
+void Layout::Remove_widget(Widget* widget)
+{
+	name_to_widget.erase(name_to_widget.find(widget->Get_name()));
+}
+
 void Layout::Delete_widget(Widget* widget)
 {
 	if(widget == root)

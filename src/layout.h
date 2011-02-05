@@ -19,6 +19,7 @@ public:
 	std::string Add_widget(const std::string& name, Widget* widget, Widget* parent);
 	void Delete_widget(const std::string& name);
 	void Delete_widget(Widget* widget);
+	void Remove_widget(Widget* widget);
 	void Clear();
 private:
 	Layout(const Layout&){}
