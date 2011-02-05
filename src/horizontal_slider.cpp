@@ -4,7 +4,7 @@
 
 Horizontal_slider::Horizontal_slider()
 :pane_position(0)
-,pane_reference(0.5)
+,pane_reference(0.0)
 ,pane_size(30)
 ,holding_pane(-1)
 {
