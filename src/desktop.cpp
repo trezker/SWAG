@@ -108,7 +108,7 @@ sinxml::Element* Desktop::To_xml() const
 	Element* e_container = Container::To_xml();
 	if(!e_container)
 		return NULL;
-	Element* e_self = new Element("desktop");
+	Element* e_self = new Element("Desktop");
 	Element* e_base = new Element("base");
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_container);
