@@ -32,6 +32,11 @@ bool Layout::Load()
 	
 }
 //TODO: Figure out how to save skin info and prototype name.
+/*Check for errors:
+ * Child with the same name occuring more than once
+ * Reference to child that does not exist
+ * Orphan widgets
+*/
 using namespace sinxml;
 bool Layout::Save() const
 {

@@ -13,13 +13,11 @@ public:
 	virtual Widget* Clone() const;
 	void Set_context(Widget* widget);
 	Widget* Get_context() const;
-	void Set_text(const std::string& t);
-	std::string Get_text() const;
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
+	virtual sinxml::Element* To_xml() const;
 private:
 	Widget* context;
-	std::string text;
 	//Menu is a separate class that holds the menu structure and info for rendering
 	//Since context menu is only a container for the context.
 	//The menu class can also be used for popping up from a Menu_bar

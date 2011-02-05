@@ -1,4 +1,5 @@
 #include "context_menu.h"
+#include <sinxml/sinxml.h>
 
 Context_menu::Context_menu()
 {
@@ -26,16 +27,6 @@ Widget* Context_menu::Get_context() const
 	return context;
 }
 
-void Context_menu::Set_text(const std::string& t)
-{
-	text = t;
-}
-
-std::string Context_menu::Get_text() const
-{
-	return text;
-}
-
 bool Context_menu::Add_child(Widget* c)
 {
 	if(!context)
@@ -49,4 +40,23 @@ bool Context_menu::Add_child(Widget* c)
 void Context_menu::Remove_child(Widget* c)
 {
 	context = NULL;
+}
+
+using namespace sinxml;
+sinxml::Element* Context_menu::To_xml() const
+{
+	Element* e_container = Container::To_xml();
+	if(!e_container)
+		return NULL;
+	Element* e_self = new Element("Context_menu");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_container);
+
+	if(context && context->Get_name() != "")
+	{
+		Element* e_child = new Element("child", context->Get_name());
+		e_self->Add_child(e_child);
+	}
+	return e_self;
 }
