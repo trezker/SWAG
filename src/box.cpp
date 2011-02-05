@@ -1,6 +1,7 @@
 #include "box.h"
 #include <algorithm>
 #include <sinxml/sinxml.h>
+#include <iostream>
 
 void Box::Add(Widget* widget)
 {
@@ -72,13 +73,22 @@ sinxml::Element* Box::To_xml() const
 	Element* e_base = new Element("base");
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_widget);
-	Element* e_children = new Element("children");
-	e_self->Add_child(e_children);
 	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
 	{
-		Element* e_child = (*i)->To_xml();
+		const std::string &child_name = (*i)->Get_name();
+		if(child_name != "")
+		{
+			Element* e_child = new Element("child", child_name);
+			e_self->Add_child(e_child);
+		}
+/*		Element* e_child = (*i)->To_xml();
 		if(e_child)
-			e_children->Add_child(e_child);
+		{
+			Element* e_child_wrapper = new Element("child");
+			e_self->Add_child(e_child_wrapper);
+			e_child_wrapper->Add_child(e_child);
+		}
+*/
 	}
 	return e_self;
 }

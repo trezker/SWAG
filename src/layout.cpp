@@ -32,6 +32,7 @@ bool Layout::Load()
 	
 }
 //TODO: Figure out how to save skin info and prototype name.
+using namespace sinxml;
 bool Layout::Save() const
 {
 	if(root==NULL)
@@ -44,11 +45,21 @@ bool Layout::Save() const
 		std::cout<<"No filename"<<std::endl;
 		return false;
 	}
-	sinxml::Element* e_root = root->To_xml();
-	if(!e_root)
-		return false;
+	Element* e_layout = new Element("layout");
+	sinxml::Element* e_root = new Element("root", root->Get_name());
+	e_layout->Add_child(e_root);
+
+	Element* e_widgets = new Element("widgets");
+	e_layout->Add_child(e_widgets);
+	for(Name_to_widget::const_iterator i = name_to_widget.begin(); i != name_to_widget.end(); ++i)
+	{
+		Element* e_widget = i->second->To_xml();
+		if(e_widget)
+			e_widgets->Add_child(e_widget);
+	}
+
 	sinxml::Document document("1.0");
-	document.Set_root(e_root);
+	document.Set_root(e_layout);
 	document.Save_file(filename);
 	return true;
 }

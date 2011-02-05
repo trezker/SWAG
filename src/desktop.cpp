@@ -113,15 +113,10 @@ sinxml::Element* Desktop::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_container);
 
-	Element* e_child_wrapper = new Element("child");
-	e_self->Add_child(e_child_wrapper);
-	if(child)
+	if(child && child->Get_name() != "")
 	{
-		Element* e_child = child->To_xml();
-		if(e_child)
-		{
-			e_child_wrapper->Add_child(e_child);
-		}
+		Element* e_child = new Element("child", child->Get_name());
+		e_self->Add_child(e_child);
 	}
 	return e_self;
 }
