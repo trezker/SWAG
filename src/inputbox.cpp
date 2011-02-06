@@ -2,6 +2,7 @@
 #include "event_queue.h"
 #include <iostream>
 #include <clipboard/clipboard.h>
+#include <sinxml/sinxml.h>
 
 Inputbox::Inputbox()
 :pressed(false)
@@ -246,4 +247,21 @@ int Inputbox::Get_selection_start() const
 int Inputbox::Get_selection_end() const
 {
 	return selection_end;
+}
+
+using namespace sinxml;
+sinxml::Element* Inputbox::To_xml() const
+{
+	Element* e_widget = Widget::To_xml();
+	if(!e_widget)
+		return NULL;
+	Element* e_self = new Element("Inputbox");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_widget);
+
+	Element* e_text = new Element("text", al_cstr(text));
+	e_self->Add_child(e_text);
+
+	return e_self;
 }

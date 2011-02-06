@@ -118,7 +118,7 @@ sinxml::Element* Button::To_xml() const
 	Element* e_widget = Widget::To_xml();
 	if(!e_widget)
 		return NULL;
-	Element* e_self = new Element("button");
+	Element* e_self = new Element("Button");
 	Element* e_base = new Element("base");
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_widget);

@@ -20,7 +20,8 @@ public:
 	int Cursor_position() const;
 	int Get_selection_start() const;
 	int Get_selection_end() const;
-	
+	virtual sinxml::Element* To_xml() const;
+
 	enum Value
 	{
 		POSITION,
