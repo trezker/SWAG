@@ -12,6 +12,7 @@ public:
 	virtual Widget* Clone() const;
 	virtual void Set_text(const std::string& t);
 	std::string Get_text() const;
+	virtual sinxml::Element* To_xml() const;
 private:
 	std::string text;
 };
