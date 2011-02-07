@@ -13,6 +13,7 @@ public:
 	int Get_option_count() const;
 	std::string Get_option(int i) const;
 	int Get_selected_option() const;
+	virtual sinxml::Element* To_xml() const;
 private:
 	typedef std::vector<std::string> Options;
 	Options options;
