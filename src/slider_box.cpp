@@ -1,5 +1,6 @@
 #include "slider_box.h"
 #include <iostream>
+#include <sinxml/sinxml.h>
 
 Slider_box::Slider_box()
 :child(NULL)
@@ -125,4 +126,23 @@ void Slider_box::Handle_child_resize()
 		if(cs.y<=s.y)
 			vslider.Set_pane_fraction(0);
 	}
+}
+
+using namespace sinxml;
+sinxml::Element* Slider_box::To_xml() const
+{
+	Element* e_container = Container::To_xml();
+	if(!e_container)
+		return NULL;
+	Element* e_self = new Element("Slider_box");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_container);
+
+	if(child && child->Get_name() != "")
+	{
+		Element* e_child = new Element("child", child->Get_name());
+		e_self->Add_child(e_child);
+	}
+	return e_self;
 }
