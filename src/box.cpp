@@ -81,14 +81,6 @@ sinxml::Element* Box::To_xml() const
 			Element* e_child = new Element("child", child_name);
 			e_self->Add_child(e_child);
 		}
-/*		Element* e_child = (*i)->To_xml();
-		if(e_child)
-		{
-			Element* e_child_wrapper = new Element("child");
-			e_self->Add_child(e_child_wrapper);
-			e_child_wrapper->Add_child(e_child);
-		}
-*/
 	}
 	return e_self;
 }
