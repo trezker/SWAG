@@ -1,5 +1,6 @@
 #include "vertical_paned.h"
 #include <iostream>
+#include <sinxml/sinxml.h>
 
 Vertical_paned::Vertical_paned()
 :top(NULL)
@@ -161,4 +162,22 @@ const std::string& Vertical_paned::Get_tooltip(float x, float y) const
 		return bottom->Get_tooltip(x, y);
 	}
 	return Widget::Get_tooltip(x, y);
+}
+
+using namespace sinxml;
+sinxml::Element* Vertical_paned::To_xml() const
+{
+	Element* e_container = Container::To_xml();
+	if(!e_container)
+		return NULL;
+	Element* e_self = new Element("Vertical_paned");
+	Element* e_base = new Element("base");
+	e_self->Add_child(e_base);
+	e_base->Add_child(e_container);
+
+	Element* e_top = new Element("child", top?top->Get_name():"");
+	e_self->Add_child(e_top);
+	Element* e_bottom = new Element("child", bottom?bottom->Get_name():"");
+	e_self->Add_child(e_bottom);
+	return e_self;
 }
