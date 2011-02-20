@@ -37,6 +37,8 @@ public:
 	
 	void Set_name(const std::string& n);
 	const std::string& Get_name() const;
+	void Set_prototype_name(const std::string& n);
+	const std::string& Get_prototype_name() const;
 
 	void Set_tooltip(const std::string& t);
 	const std::string& Get_tooltip() const;
@@ -73,6 +75,7 @@ private:
 	Event_queue* event_queue;
 	std::string tooltip;
 	std::string name;
+	std::string prototype_name;
 };
 
 typedef std::vector<Widget*> Widgets;

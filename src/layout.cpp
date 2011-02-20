@@ -60,7 +60,16 @@ bool Layout::Save() const
 	{
 		Element* e_widget = i->second->To_xml();
 		if(e_widget)
+		{
 			e_widgets->Add_child(e_widget);
+			e_widget->Set_attribute("name", i->second->Get_name());
+			e_widget->Set_attribute("prototype_name", i->second->Get_prototype_name());
+
+/*			Element* e_name = new Element("name", i->second->Get_name());
+			Element* e_prototype_name = new Element("prototype_name", i->second->Get_prototype_name());
+			e_widget->Add_child(e_name);
+			e_widget->Add_child(e_prototype_name);
+*/		}
 	}
 
 	sinxml::Document document("1.0");

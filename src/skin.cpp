@@ -18,6 +18,7 @@ void Skin::Set_prototype(const std::string& name, Widget* prototype)
 	{
 		delete i->second;
 	}
+	prototype->Set_prototype_name(name);
 	prototypes[name] = prototype;
 }
 

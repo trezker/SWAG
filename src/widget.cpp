@@ -100,6 +100,16 @@ const std::string& Widget::Get_name() const
 	return name;
 }
 
+void Widget::Set_prototype_name(const std::string& n)
+{
+	prototype_name = n;
+}
+
+const std::string& Widget::Get_prototype_name() const
+{
+	return prototype_name;
+}
+
 const std::string& Widget::Get_tooltip() const
 {
 	return tooltip;
@@ -197,16 +207,16 @@ void Widget::Child_resized()
 using namespace sinxml;
 sinxml::Element* Widget::To_xml() const
 {
-	if(name == "")
+/*	if(name == "")
 	{
 		return NULL;
 	}
-	Element* e_self = new Element("widget");
-	Element* e_name = new Element("name", name);
+*/	Element* e_self = new Element("widget");
+//	Element* e_name = new Element("name", name);
 	Element* e_tooltip = new Element("tooltip", tooltip);
 	Element* e_fixed_width = new Element("fixed_width", fixed_width?"true":"false");
 	Element* e_fixed_height = new Element("fixed_height", fixed_height?"true":"false");
-	e_self->Add_child(e_name);
+//	e_self->Add_child(e_name);
 	e_self->Add_child(e_tooltip);
 	e_self->Add_child(e_fixed_width);
 	e_self->Add_child(e_fixed_height);
