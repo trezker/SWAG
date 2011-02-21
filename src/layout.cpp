@@ -1,11 +1,13 @@
 #include "layout.h"
 #include "widget.h"
+#include "skin.h"
 #include <sstream>
 #include <sinxml/sinxml.h>
 #include <iostream>
 
 Layout::Layout()
 :root(NULL)
+,skin(NULL)
 {
 }
 
@@ -15,6 +17,11 @@ Layout::~Layout()
 	{
 		delete i->second;
 	}
+}
+
+void Layout::Set_skin(Skin* s)
+{
+	skin = s;
 }
 
 void Layout::Set_filename(const std::string& fn)
@@ -29,9 +36,35 @@ const std::string& Layout::Get_filename() const
 
 bool Layout::Load()
 {
-	
+	for(Name_to_widget::iterator i = name_to_widget.begin(); i != name_to_widget.end(); ++i)
+	{
+		delete i->second;
+	}
+	root = NULL;
+	if(filename=="")
+	{
+		std::cout<<"No filename"<<std::endl;
+		return false;
+	}
+	if(!skin)
+	{
+		std::cout<<"No skin"<<std::endl;
+		return false;
+	}
+	sinxml::Document document("1.0");
+	if(!document.Load_file(filename))
+	{
+		std::cout<<"Failed to load xml file"<<std::endl;
+		return false;
+	}
+	sinxml::Element* root_e = document.Get_root();
+	sinxml::Children widget_es = root_e->Get_child("widgets")->Get_children();
+	for(sinxml::Children::iterator i = widget_es.begin(); i != widget_es.end(); ++i)
+	{
+		std::cout<<(*i)->Get_name()<<"/"<<(*i)->Get_attribute("name")<<"/"<<(*i)->Get_attribute("prototype_name")<<std::endl;
+	}
 }
-//TODO: Figure out how to save skin info and prototype name.
+//TODO: Figure out how to save skin info.
 /*Check for errors:
  * Child with the same name occuring more than once
  * Reference to child that does not exist

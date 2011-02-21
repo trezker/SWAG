@@ -241,6 +241,14 @@ int main()
 					bool s = layout.Save();
 					std::cout<<(s?"Saved":"Save failed")<<std::endl;
 				}
+				if(gui_event.source == load_button)
+				{
+					Layout layout2;
+					layout2.Set_filename("testlayout.xml");
+					layout2.Set_skin(&skin);
+					bool s = layout2.Load();
+					std::cout<<(s?"Loaded":"Load failed")<<std::endl;
+				}
 				if(gui_event.source == fixed_width)
 				{
 					Widget* tw = treemap[selected_tree];

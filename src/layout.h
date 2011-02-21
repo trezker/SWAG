@@ -4,12 +4,14 @@
 #include <string>
 #include <map>
 class Widget;
+class Skin;
 
 class Layout
 {
 public:
 	Layout();
 	~Layout();
+	void Set_skin(Skin* skin);
 	void Set_filename(const std::string& fn);
 	const std::string& Get_filename() const;
 	bool Load();
@@ -28,6 +30,7 @@ private:
 	Name_to_widget name_to_widget;
 	Widget* root;
 	std::string filename;
+	Skin* skin;
 };
 
 #endif
