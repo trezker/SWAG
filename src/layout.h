@@ -6,6 +6,8 @@
 class Widget;
 class Skin;
 
+typedef std::map<std::string, Widget*> Name_to_widget;
+
 class Layout
 {
 public:
@@ -23,10 +25,10 @@ public:
 	void Delete_widget(Widget* widget);
 	void Remove_widget(Widget* widget);
 	void Clear();
+	const Name_to_widget& Get_widgets() const;
 private:
 	Layout(const Layout&){}
 	const Layout& operator=(Layout&){}
-	typedef std::map<std::string, Widget*> Name_to_widget;
 	Name_to_widget name_to_widget;
 	Widget* root;
 	std::string filename;

@@ -46,7 +46,7 @@ int main()
 
 	Layout layout;
 
-	Desktop* root = skin.Clone<Desktop>("desktop");
+	Widget* root = skin.Clone<Desktop>("desktop");
 	root->Set_position(Vector2(0, 0));
 	root->Set_size(Vector2(640, 480));
 	
@@ -243,11 +243,35 @@ int main()
 				}
 				if(gui_event.source == load_button)
 				{
-					Layout layout2;
-					layout2.Set_filename("testlayout.xml");
-					layout2.Set_skin(&skin);
-					bool s = layout2.Load();
+					//Todo: delete old treemap objects.
+					layout.Set_filename("testlayout.xml");
+					layout.Set_skin(&skin);
+					bool s = layout.Load();
 					std::cout<<(s?"Loaded":"Load failed")<<std::endl;
+					const Name_to_widget& layout_widgets = layout.Get_widgets();
+					root = layout.Get_root();
+					root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
+					treemap[widget_tree] = root;
+					
+					typedef std::map<Widget*, Tree*> WTM;
+					WTM wtm;
+					wtm[root] = widget_tree;
+					for(Name_to_widget::const_iterator i = layout_widgets.begin(); i != layout_widgets.end(); ++i)
+					{
+						if(i->second == root)
+							continue;
+						Tree* tree_child = skin.Clone<Tree>("tree");
+						tree_child->Set_text(i->first);
+						treemap[tree_child] = i->second;
+						wtm[i->second] = tree_child;
+					}
+					for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
+					{
+						if(i->second->Get_parent())
+						{
+							wtm[i->second->Get_parent()]->Add_child(i->first);
+						}
+					}
 				}
 				if(gui_event.source == fixed_width)
 				{

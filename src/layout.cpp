@@ -4,6 +4,7 @@
 #include <sstream>
 #include <sinxml/sinxml.h>
 #include <iostream>
+#include "container.h"
 
 Layout::Layout()
 :root(NULL)
@@ -36,11 +37,7 @@ const std::string& Layout::Get_filename() const
 
 bool Layout::Load()
 {
-	for(Name_to_widget::iterator i = name_to_widget.begin(); i != name_to_widget.end(); ++i)
-	{
-		delete i->second;
-	}
-	root = NULL;
+	Clear();
 	if(filename=="")
 	{
 		std::cout<<"No filename"<<std::endl;
@@ -57,11 +54,64 @@ bool Layout::Load()
 		std::cout<<"Failed to load xml file"<<std::endl;
 		return false;
 	}
+	typedef std::map<Container*, sinxml::Children> Widget_children;
+	Widget_children widget_children;
 	sinxml::Element* root_e = document.Get_root();
 	sinxml::Children widget_es = root_e->Get_child("widgets")->Get_children();
 	for(sinxml::Children::iterator i = widget_es.begin(); i != widget_es.end(); ++i)
 	{
-		std::cout<<(*i)->Get_name()<<"/"<<(*i)->Get_attribute("name")<<"/"<<(*i)->Get_attribute("prototype_name")<<std::endl;
+		const std::string& name = (*i)->Get_attribute("name");
+		const std::string& prototype_name = (*i)->Get_attribute("prototype_name");
+		std::cout<<"DEBUG: "<<(*i)->Get_name()<<"/"<<name<<"/"<<prototype_name<<std::endl;
+		//Skip if name is taken
+		if(name_to_widget.find(name) != name_to_widget.end())
+		{
+			std::cout<<"ERROR: Name clash, skipping"<<std::endl;
+			continue;
+		}
+		Widget* w = skin->Clone<Widget>(prototype_name);
+		if(!w)
+		{
+			std::cout<<"ERROR: Prototype missing, skipping"<<std::endl;
+			continue;
+		}
+		//Todo: Call widgets loading function
+		name_to_widget[name] = w;
+		w->Set_name(name);
+		Container* container = dynamic_cast<Container*>(w);
+		if(container)
+			widget_children[container] = (*i)->Get_children();
+	}
+	
+	//Set root widget
+	sinxml::Element* rootinfo_e = root_e->Get_child("root");
+	const std::string& rootname = rootinfo_e->Get_value();
+	std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
+	//Check validity of root name
+	if(name_to_widget.find(rootname) != name_to_widget.end())
+		root = name_to_widget[rootname];
+	else
+		std::cout<<"ERROR: Root name invalid"<<std::endl;
+
+	//Adding widget children
+	for(Widget_children::iterator i = widget_children.begin(); i != widget_children.end(); ++i)
+	{
+		Container* parent = i->first;
+		for(sinxml::Children::iterator e = i->second.begin(); e != i->second.end(); ++e)
+		{
+			if((*e)->Get_name() == "child")
+			{
+				const std::string &name = (*e)->Get_value();
+				std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
+				if(name_to_widget.find(name) != name_to_widget.end())
+				{
+					if(!parent->Add_child(name_to_widget[name]))
+						std::cout<<"ERROR: Failed to add"<<std::endl;
+				}
+				else
+					std::cout<<"ERROR: Widget missing"<<std::endl;
+			}
+		}
 	}
 }
 //TODO: Figure out how to save skin info.
@@ -172,4 +222,9 @@ void Layout::Clear()
 		delete i->second;
 	}
 	name_to_widget.clear();
+}
+
+const Name_to_widget& Layout::Get_widgets() const
+{
+	return name_to_widget;
 }
