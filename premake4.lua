@@ -46,7 +46,7 @@ solution (lib_name)
 			flags { "Optimize" }
 
 	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf",
-	"allegro_primitives","allegro_dialog", "clipboard", "sinxml" }
+	"allegro_primitives","allegro_dialog", "clipboard", "sinxml", "yaml-cpp" }
 	examples = os.matchfiles("examples/*.cpp")
 	for index, name in pairs(examples) do
 		sname = name:sub(10, name:len()-4);

@@ -5,6 +5,7 @@
 #include <sinxml/sinxml.h>
 #include <iostream>
 #include "container.h"
+#include <yaml-cpp/yaml.h>
 
 Layout::Layout()
 :root(NULL)
@@ -158,6 +159,50 @@ bool Layout::Save() const
 	sinxml::Document document("1.0");
 	document.Set_root(e_layout);
 	document.Save_file(filename);
+	return true;
+}
+
+bool Layout::Save_yaml() const
+{
+	if(root==NULL)
+	{
+		std::cout<<"No root widget"<<std::endl;
+		return false;
+	}
+	if(filename=="")
+	{
+		std::cout<<"No filename"<<std::endl;
+		return false;
+	}
+	
+	YAML::Emitter out;
+	
+	out << YAML::BeginMap;
+		out << YAML::Key << "root";
+		out << YAML::Value << root->Get_name();
+
+		out << YAML::Key << "widgets";
+		out << YAML::Value << YAML::BeginMap;
+
+		for(Name_to_widget::const_iterator i = name_to_widget.begin(); i != name_to_widget.end(); ++i)
+		{
+			out << YAML::Key << "widget";
+			out << YAML::Value << YAML::BeginMap;
+				out << YAML::Key << "name";
+				out << YAML::Value << i->second->Get_name();
+				out << YAML::Key << "prototype_name";
+				out << YAML::Value << i->second->Get_prototype_name();
+
+				i->second->To_yaml(out);
+			out << YAML::EndMap;
+		}
+
+		out << YAML::EndMap;
+	out << YAML::EndMap;
+
+	std::ofstream fout(filename.c_str());
+	fout << out.c_str();
+
 	return true;
 }
 

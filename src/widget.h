@@ -6,6 +6,7 @@
 
 #include <allegro5/allegro.h>
 #include "vector2.h"
+
 class Widget_view;
 class Event_queue;
 class Event;
@@ -15,6 +16,11 @@ namespace sinxml
 	class Element;
 }
 class Layout;
+
+namespace YAML
+{
+	class Emitter;
+}
 
 class Widget
 {
@@ -59,6 +65,7 @@ public:
 	bool Covers_point(float x, float y);
 	
 	virtual sinxml::Element* To_xml() const;
+	YAML::Emitter& To_yaml(YAML::Emitter& out) const;
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();

@@ -18,6 +18,7 @@ public:
 	const std::string& Get_filename() const;
 	bool Load();
 	bool Save() const;
+	bool Save_yaml() const;
 	
 	Widget* Get_root() const;
 	std::string Add_widget(const std::string& name, Widget* widget, Widget* parent);

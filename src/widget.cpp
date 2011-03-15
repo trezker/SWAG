@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sinxml/sinxml.h>
 #include "layout.h"
+#include <yaml-cpp/yaml.h>
 
 Widget::Widget()
 :view(NULL)
@@ -221,4 +222,19 @@ sinxml::Element* Widget::To_xml() const
 	e_self->Add_child(e_fixed_width);
 	e_self->Add_child(e_fixed_height);
 	return e_self;
+}
+
+YAML::Emitter& Widget::To_yaml(YAML::Emitter& out) const
+{
+//	out << YAML::Key << "widget";
+//	out << YAML::Value << YAML::BeginMap;
+		out << YAML::Key << "tooltip";
+		out << YAML::Value << tooltip;
+		out << YAML::Key << "fixed_width";
+		out << YAML::Value << (fixed_width?"true":"false");
+		out << YAML::Key << "fixed_height";
+		out << YAML::Value << (fixed_height?"true":"false");
+//	out << YAML::EndMap;
+	
+	return out;
 }
