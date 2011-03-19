@@ -265,3 +265,13 @@ sinxml::Element* Inputbox::To_xml() const
 
 	return e_self;
 }
+
+void Inputbox::To_yaml(YAML::Emitter& out) const
+{
+	Widget::To_yaml(out);
+	out << YAML::Key << "Inputbox";
+	out << YAML::Value << YAML::BeginMap;
+		out << YAML::Key << "text";
+		out << YAML::Value << al_cstr(text);
+	out << YAML::EndMap;
+}

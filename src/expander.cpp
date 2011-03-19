@@ -149,3 +149,22 @@ sinxml::Element* Expander::To_xml() const
 	e_self->Add_child(e_text);
 	return e_self;
 }
+
+void Expander::To_yaml(YAML::Emitter& out) const
+{
+	Container::To_yaml(out);
+	out << YAML::Key << "Expander";
+	out << YAML::Value << YAML::BeginMap;
+		out << YAML::Key << "text";
+		out << YAML::Value << text;
+	out << YAML::EndMap;
+
+	out << YAML::Key << "children";
+	out << YAML::Value << YAML::BeginSeq;
+	if(child && child->Get_name() != "")
+	{
+		out << child->Get_name();
+	}
+
+	out << YAML::EndSeq;
+}

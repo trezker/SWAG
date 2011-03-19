@@ -39,3 +39,13 @@ sinxml::Element* Label::To_xml() const
 
 	return e_self;
 }
+
+void Label::To_yaml(YAML::Emitter& out) const
+{
+	Widget::To_yaml(out);
+	out << YAML::Key << "Label";
+	out << YAML::Value << YAML::BeginMap;
+		out << YAML::Key << "text";
+		out << YAML::Value << text;
+	out << YAML::EndMap;
+}

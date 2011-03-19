@@ -15,6 +15,7 @@ public:
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
 	virtual sinxml::Element* To_xml() const;
+	virtual void To_yaml(YAML::Emitter& out) const;
 private:
 	void Reset_tooltip();
 	virtual void Resized();
