@@ -53,3 +53,20 @@ sinxml::Element* Menu::To_xml() const
 
 	return e_self;
 }
+
+void Menu::To_yaml(YAML::Emitter& out) const
+{
+	Widget::To_yaml(out);
+/*	out << YAML::Key << "Slider_box";
+	out << YAML::Value << YAML::BeginMap;
+	out << YAML::EndMap;
+*/
+	out << YAML::Key << "options";
+	out << YAML::Value << YAML::BeginSeq;
+	for(Options::const_iterator i = options.begin(); i != options.end(); ++i)
+	{
+		out << *i;
+	}
+
+	out << YAML::EndSeq;
+}

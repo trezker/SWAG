@@ -14,6 +14,7 @@ public:
 	std::string Get_option(int i) const;
 	int Get_selected_option() const;
 	virtual sinxml::Element* To_xml() const;
+	virtual void To_yaml(YAML::Emitter& out) const;
 private:
 	typedef std::vector<std::string> Options;
 	Options options;
