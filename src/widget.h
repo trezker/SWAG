@@ -6,6 +6,8 @@
 
 #include <allegro5/allegro.h>
 #include "vector2.h"
+//TODO: Don't include yaml here when the widgets are ready
+#include <yaml-cpp/yaml.h>
 
 class Widget_view;
 class Event_queue;
@@ -65,7 +67,7 @@ public:
 	bool Covers_point(float x, float y);
 	
 	virtual sinxml::Element* To_xml() const;
-	YAML::Emitter& To_yaml(YAML::Emitter& out) const;
+	virtual void To_yaml(YAML::Emitter& out) const;
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();

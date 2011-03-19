@@ -224,17 +224,12 @@ sinxml::Element* Widget::To_xml() const
 	return e_self;
 }
 
-YAML::Emitter& Widget::To_yaml(YAML::Emitter& out) const
+void Widget::To_yaml(YAML::Emitter& out) const
 {
-//	out << YAML::Key << "widget";
-//	out << YAML::Value << YAML::BeginMap;
-		out << YAML::Key << "tooltip";
-		out << YAML::Value << tooltip;
-		out << YAML::Key << "fixed_width";
-		out << YAML::Value << (fixed_width?"true":"false");
-		out << YAML::Key << "fixed_height";
-		out << YAML::Value << (fixed_height?"true":"false");
-//	out << YAML::EndMap;
-	
-	return out;
+	out << YAML::Key << "tooltip";
+	out << YAML::Value << tooltip;
+	out << YAML::Key << "fixed_width";
+	out << YAML::Value << (fixed_width?"true":"false");
+	out << YAML::Key << "fixed_height";
+	out << YAML::Value << (fixed_height?"true":"false");
 }
