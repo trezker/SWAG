@@ -184,12 +184,12 @@ sinxml::Element* Vertical_paned::To_xml() const
 
 void Vertical_paned::To_yaml(YAML::Emitter& out) const
 {
-	out << YAML::Key << "Vertical_paned";
+/*	out << YAML::Key << "Vertical_paned";
 	out << YAML::Value << YAML::BeginMap;
-		out << YAML::Key << "children";
-		out << YAML::Value << YAML::BeginSeq;
-			if(top) out << top->Get_name();
-			if(bottom) out << bottom->Get_name();
-		out << YAML::EndSeq;
 	out << YAML::EndMap;
+*/	out << YAML::Key << "children";
+	out << YAML::Value << YAML::BeginSeq;
+		if(top) out << top->Get_name();
+		if(bottom) out << bottom->Get_name();
+	out << YAML::EndSeq;
 }

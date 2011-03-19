@@ -146,3 +146,20 @@ sinxml::Element* Slider_box::To_xml() const
 	}
 	return e_self;
 }
+
+void Slider_box::To_yaml(YAML::Emitter& out) const
+{
+	Container::To_yaml(out);
+/*	out << YAML::Key << "Slider_box";
+	out << YAML::Value << YAML::BeginMap;
+	out << YAML::EndMap;
+*/
+	out << YAML::Key << "children";
+	out << YAML::Value << YAML::BeginSeq;
+	if(child && child->Get_name() != "")
+	{
+		out << child->Get_name();
+	}
+
+	out << YAML::EndSeq;
+}

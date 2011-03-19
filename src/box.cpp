@@ -91,19 +91,19 @@ void Box::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Button";
 	out << YAML::Value << YAML::BeginMap;
 		Widget::To_yaml(out);
-		
-		out << YAML::Key << "children";
-		out << YAML::Value << YAML::BeginSeq;
-
-		for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
-		{
-			const std::string &child_name = (*i)->Get_name();
-			if(child_name != "")
-			{
-				out << child_name;
-			}
-		}
-
-		out << YAML::EndSeq;
 	out << YAML::EndMap;
+
+	out << YAML::Key << "children";
+	out << YAML::Value << YAML::BeginSeq;
+
+	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
+	{
+		const std::string &child_name = (*i)->Get_name();
+		if(child_name != "")
+		{
+			out << child_name;
+		}
+	}
+
+	out << YAML::EndSeq;
 }

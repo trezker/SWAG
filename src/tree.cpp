@@ -230,3 +230,26 @@ sinxml::Element* Tree::To_xml() const
 	
 	return e_self;
 }
+
+void Tree::To_yaml(YAML::Emitter& out) const
+{
+	Container::To_yaml(out);
+	out << YAML::Key << "Tree";
+	out << YAML::Value << YAML::BeginMap;
+		out << YAML::Key << "text";
+		out << YAML::Value << text;
+	out << YAML::EndMap;
+
+	out << YAML::Key << "children";
+	out << YAML::Value << YAML::BeginSeq;
+	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
+	{
+		const std::string &child_name = (*i)->Get_name();
+		if(child_name != "")
+		{
+			out << child_name;
+		}
+	}
+
+	out << YAML::EndSeq;
+}
