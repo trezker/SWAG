@@ -21,6 +21,7 @@ public:
 	void Deactivate();
 	bool Is_active() const;
 	virtual sinxml::Element* To_xml() const;
+	virtual void To_yaml(YAML::Emitter& out) const;
 private:
 	std::string text;
 	bool pressed;

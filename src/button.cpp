@@ -130,3 +130,15 @@ sinxml::Element* Button::To_xml() const
 
 	return e_self;
 }
+
+void Button::To_yaml(YAML::Emitter& out) const
+{
+	out << YAML::Key << "Button";
+	out << YAML::Value << YAML::BeginMap;
+		Widget::To_yaml(out);
+		out << YAML::Key << "text";
+		out << YAML::Value << text;
+		out << YAML::Key << "toggle";
+		out << YAML::Value << (toggle?"true":"false");
+	out << YAML::EndMap;
+}

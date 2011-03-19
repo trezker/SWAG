@@ -88,24 +88,22 @@ sinxml::Element* Box::To_xml() const
 
 void Box::To_yaml(YAML::Emitter& out) const
 {
-	out << YAML::Key << "base";
+	out << YAML::Key << "Button";
 	out << YAML::Value << YAML::BeginMap;
-	Widget::To_yaml(out);
-	out << YAML::EndMap;
-	
-	
-	out << YAML::Key << "children";
-	out << YAML::Value << YAML::BeginMap;
+		Widget::To_yaml(out);
+		
+		out << YAML::Key << "children";
+		out << YAML::Value << YAML::BeginSeq;
 
-	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
-	{
-		const std::string &child_name = (*i)->Get_name();
-		if(child_name != "")
+		for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
 		{
-			out << YAML::Key << "child";
-			out << YAML::Value << child_name;
+			const std::string &child_name = (*i)->Get_name();
+			if(child_name != "")
+			{
+				out << child_name;
+			}
 		}
-	}
 
+		out << YAML::EndSeq;
 	out << YAML::EndMap;
 }
