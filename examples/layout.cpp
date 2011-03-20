@@ -247,9 +247,11 @@ int main()
 				if(gui_event.source == load_button)
 				{
 					//Todo: delete old treemap objects.
-					layout.Set_filename("testlayout.xml");
+					layout.Set_filename("testlayout.yaml");
+//					layout.Set_filename("testlayout.xml");
 					layout.Set_skin(&skin);
-					bool s = layout.Load();
+//					bool s = layout.Load();
+					bool s = layout.Load_yaml();
 					std::cout<<(s?"Loaded":"Load failed")<<std::endl;
 					const Name_to_widget& layout_widgets = layout.Get_widgets();
 					root = layout.Get_root();

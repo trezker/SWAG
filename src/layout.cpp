@@ -6,6 +6,7 @@
 #include <iostream>
 #include "container.h"
 #include <yaml-cpp/yaml.h>
+#include <fstream>
 
 Layout::Layout()
 :root(NULL)
@@ -36,6 +37,89 @@ const std::string& Layout::Get_filename() const
 	return filename;
 }
 
+bool Layout::Load_yaml()
+{
+	Clear();
+	if(filename=="")
+	{
+		std::cout<<"No filename"<<std::endl;
+		return false;
+	}
+	if(!skin)
+	{
+		std::cout<<"No skin"<<std::endl;
+		return false;
+	}
+	std::ifstream fin(filename.c_str());
+	YAML::Parser parser(fin);
+
+	YAML::Node doc;
+	parser.GetNextDocument(doc);
+
+	typedef std::map<Container*, const YAML::Node*> Widget_children;
+	Widget_children widget_children;
+	for(unsigned i=0; i<doc["widgets"].size(); i++)
+	{
+		const YAML::Node &n = doc["widgets"][i];
+		std::string scalar;
+
+		std::string name;
+		n["name"] >> name;
+		std::string prototype_name;
+		n["prototype_name"] >> prototype_name;
+
+		std::cout<<"DEBUG: "<<name<<"/"<<prototype_name<<std::endl;
+		//Skip if name is taken
+		if(name_to_widget.find(name) != name_to_widget.end())
+		{
+			std::cout<<"ERROR: Name clash, skipping"<<std::endl;
+			continue;
+		}
+		Widget* w = skin->Clone<Widget>(prototype_name);
+		if(!w)
+		{
+			std::cout<<"ERROR: Prototype missing, skipping"<<std::endl;
+			continue;
+		}
+		//Todo: Call widgets loading function
+		name_to_widget[name] = w;
+		w->Set_name(name);
+		Container* container = dynamic_cast<Container*>(w);
+		if(container)
+			widget_children[container] = &(n["children"]);
+	}
+	//Set root widget
+	std::string rootname;
+	doc["root"]>>rootname;
+	std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
+	//Check validity of root name
+	if(name_to_widget.find(rootname) != name_to_widget.end())
+		root = name_to_widget[rootname];
+	else
+		std::cout<<"ERROR: Root name invalid"<<std::endl;
+
+	//Adding widget children
+	for(Widget_children::iterator i = widget_children.begin(); i != widget_children.end(); ++i)
+	{
+		Container* parent = i->first;
+		for(unsigned j=0; j<i->second->size(); j++)
+		{
+			const YAML::Node &n = *i->second;
+			std::string name;
+			n[j]>>name;
+			std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
+			if(name_to_widget.find(name) != name_to_widget.end())
+			{
+				if(!parent->Add_child(name_to_widget[name]))
+					std::cout<<"ERROR: Failed to add"<<std::endl;
+			}
+			else
+				std::cout<<"ERROR: Widget missing"<<std::endl;
+		}
+	}
+	return true;
+}
+
 bool Layout::Load()
 {
 	Clear();
@@ -49,6 +133,7 @@ bool Layout::Load()
 		std::cout<<"No skin"<<std::endl;
 		return false;
 	}
+
 	sinxml::Document document("1.0");
 	if(!document.Load_file(filename))
 	{
@@ -182,12 +267,11 @@ bool Layout::Save_yaml() const
 		out << YAML::Value << root->Get_name();
 
 		out << YAML::Key << "widgets";
-		out << YAML::Value << YAML::BeginMap;
+		out << YAML::Value << YAML::BeginSeq;
 
 		for(Name_to_widget::const_iterator i = name_to_widget.begin(); i != name_to_widget.end(); ++i)
 		{
-			out << YAML::Key << "widget";
-			out << YAML::Value << YAML::BeginMap;
+			out << YAML::BeginMap;
 				out << YAML::Key << "name";
 				out << YAML::Value << i->second->Get_name();
 				out << YAML::Key << "prototype_name";
@@ -197,7 +281,7 @@ bool Layout::Save_yaml() const
 			out << YAML::EndMap;
 		}
 
-		out << YAML::EndMap;
+		out << YAML::EndSeq;
 	out << YAML::EndMap;
 
 	std::ofstream fout(filename.c_str());

@@ -17,6 +17,7 @@ public:
 	void Set_filename(const std::string& fn);
 	const std::string& Get_filename() const;
 	bool Load();
+	bool Load_yaml();
 	bool Save() const;
 	bool Save_yaml() const;
 	
