@@ -3,6 +3,7 @@
 #include <iostream>
 #include <clipboard/clipboard.h>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Inputbox::Inputbox()
 :pressed(false)

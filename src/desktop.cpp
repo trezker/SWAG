@@ -1,6 +1,7 @@
 #include "desktop.h"
 #include <iostream>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Desktop::Desktop()
 :child(NULL)

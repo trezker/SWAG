@@ -1,6 +1,7 @@
 #include "slider_box.h"
 #include <iostream>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Slider_box::Slider_box()
 :child(NULL)

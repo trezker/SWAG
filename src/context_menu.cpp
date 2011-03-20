@@ -1,5 +1,6 @@
 #include "context_menu.h"
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Context_menu::Context_menu()
 {

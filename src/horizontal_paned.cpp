@@ -1,6 +1,7 @@
 #include "horizontal_paned.h"
 #include <iostream>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Horizontal_paned::Horizontal_paned()
 :left(NULL)

@@ -6,8 +6,6 @@
 
 #include <allegro5/allegro.h>
 #include "vector2.h"
-//TODO: Don't include yaml here when the widgets are ready
-#include <yaml-cpp/yaml.h>
 
 class Widget_view;
 class Event_queue;

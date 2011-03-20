@@ -3,6 +3,7 @@
 #include "event_queue.h"
 #include <algorithm>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Tree::Tree()
 :open(false)

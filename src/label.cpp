@@ -1,5 +1,6 @@
 #include "label.h"
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Label::Label()
 {

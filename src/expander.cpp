@@ -2,6 +2,7 @@
 #include "widget_view.h"
 #include "event_queue.h"
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Expander::Expander()
 :open(false)

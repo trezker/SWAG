@@ -1,6 +1,7 @@
 #include "vertical_paned.h"
 #include <iostream>
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Vertical_paned::Vertical_paned()
 :top(NULL)

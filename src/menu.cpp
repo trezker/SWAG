@@ -1,5 +1,6 @@
 #include "menu.h"
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Menu::Menu()
 {

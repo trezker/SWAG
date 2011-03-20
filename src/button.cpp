@@ -1,6 +1,7 @@
 #include "button.h"
 #include "event_queue.h"
 #include <sinxml/sinxml.h>
+#include <yaml-cpp/yaml.h>
 
 Button::Button()
 :pressed(false)
