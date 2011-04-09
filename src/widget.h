@@ -20,6 +20,7 @@ class Layout;
 namespace YAML
 {
 	class Emitter;
+	class Node;
 }
 
 class Widget
@@ -66,6 +67,7 @@ public:
 	
 	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
+	virtual void From_yaml(const YAML::Node& in);
 protected:	
 	void Push_event(const Event& event);
 	void Child_resized();

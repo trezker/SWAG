@@ -80,6 +80,11 @@ Trees& Tree::Get_children()
 	return children;
 }
 
+void Tree::Clear_children()
+{
+	children.clear();
+}
+
 bool Tree::Is_selected() const
 {
 	return selected;

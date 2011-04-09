@@ -236,3 +236,8 @@ void Widget::To_yaml(YAML::Emitter& out) const
 		out << YAML::Value << (fixed_height?"true":"false");
 	out << YAML::EndMap;
 }
+
+void Widget::From_yaml(const YAML::Node& in)
+{
+	
+}

@@ -23,6 +23,7 @@ public:
 	void Remove_child(Tree* c);
 	const Trees& Get_children() const;
 	Trees& Get_children();
+	void Clear_children();
 
 	bool Is_selected() const;
 	void Child_selected();
