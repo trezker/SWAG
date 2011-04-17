@@ -11,7 +11,7 @@
 #include <sstream>
 #include <list>
 
-int main()
+int main(int argc, char **argv)
 {
 	al_init();
 	al_install_mouse();
@@ -24,7 +24,9 @@ int main()
 	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
 	ALLEGRO_DISPLAY *display = al_create_display(640, 480);
 	ALLEGRO_DISPLAY *tooldisplay = al_create_display(200, 480);
-
+    al_set_window_position(tooldisplay, 10, 0);
+    al_set_window_position(display, 220, 0);
+    
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
 
 

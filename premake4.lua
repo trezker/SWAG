@@ -45,7 +45,7 @@ solution (lib_name)
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 
-	ex_dependencies = {"allegro","allegro_image","allegro_font","allegro_ttf",
+	ex_dependencies = {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf",
 	"allegro_primitives","allegro_dialog", "clipboard", "sinxml", "yaml-cpp" }
 	examples = os.matchfiles("examples/*.cpp")
 	for index, name in pairs(examples) do
