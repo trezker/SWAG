@@ -78,6 +78,12 @@ void Horizontal_slider::Handle_event(const ALLEGRO_EVENT& event)
 			float max_x = Get_size().x-pane_size;
 			Set_pane_fraction(new_x/max_x);
 		}
+        if(event.mouse.dw)
+        {
+			float max_x = Get_size().x-pane_size;
+            float new_x = Get_pane_position() - event.mouse.dw;
+			Set_pane_fraction(new_x/max_x);
+        }
 	}
 }
 
