@@ -3,10 +3,6 @@
 #include "event_queue.h"
 
 Horizontal_slider::Horizontal_slider()
-:pane_position(0)
-,pane_reference(0.0)
-,pane_size(30)
-,holding_pane(-1)
 {
 	Enable_fixed_height();
 }
@@ -31,26 +27,6 @@ void Horizontal_slider::Set_pane_fraction(float p)
 	pane_position = pp<0?0:pp>max_x?max_x:pp;
 	pane_reference = p<0?0:p>1?1:p;
 	Push_event(Event(this, "moved"));
-}
-
-float Horizontal_slider::Get_pane_position() const
-{
-	return pane_position;
-}
-
-float Horizontal_slider::Get_pane_fraction() const
-{
-	return pane_reference;
-}
-
-void Horizontal_slider::Set_pane_size(int s)
-{
-	pane_size = s;
-}
-
-int Horizontal_slider::Get_pane_size() const
-{
-	return pane_size;
 }
 
 void Horizontal_slider::Handle_event(const ALLEGRO_EVENT& event)
@@ -85,9 +61,4 @@ void Horizontal_slider::Handle_event(const ALLEGRO_EVENT& event)
 			Set_pane_fraction(new_x/max_x);
         }
 	}
-}
-
-void Horizontal_slider::Resized()
-{
-	Set_pane_fraction(pane_reference);
 }

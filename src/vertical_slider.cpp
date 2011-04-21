@@ -3,10 +3,6 @@
 #include <iostream>
 
 Vertical_slider::Vertical_slider()
-:pane_position(0)
-,pane_reference(0.0)
-,pane_size(30)
-,holding_pane(-1)
 {
 	Enable_fixed_width();
 }
@@ -31,26 +27,6 @@ void Vertical_slider::Set_pane_fraction(float p)
 	pane_position = pp<0?0:pp>max_y?max_y:pp;
 	pane_reference = p<0?0:p>1?1:p;
 	Push_event(Event(this, "moved"));
-}
-
-float Vertical_slider::Get_pane_position() const
-{
-	return pane_position;
-}
-
-float Vertical_slider::Get_pane_fraction() const
-{
-	return pane_reference;
-}
-
-void Vertical_slider::Set_pane_size(int s)
-{
-	pane_size = s;
-}
-
-int Vertical_slider::Get_pane_size() const
-{
-	return pane_size;
 }
 
 void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
@@ -85,9 +61,4 @@ void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
 			Set_pane_fraction(new_y/max_y);
         }
 	}
-}
-
-void Vertical_slider::Resized()
-{
-	Set_pane_fraction(pane_reference);
 }
