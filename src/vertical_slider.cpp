@@ -56,9 +56,9 @@ void Vertical_slider::Handle_event(const ALLEGRO_EVENT& event)
 		}
         if(event.mouse.dz)
         {
-			float max_y = Get_size().y-pane_size;
-            float new_y = Get_pane_position() - event.mouse.dz;
-			Set_pane_fraction(new_y/max_y);
-        }
+			float p = Get_pane_fraction();
+			p -= event.mouse.dz/scroll_units;
+			Set_pane_fraction(p);
+		}
 	}
 }

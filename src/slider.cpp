@@ -7,6 +7,7 @@ Slider::Slider()
 ,pane_reference(0.0)
 ,pane_size(30)
 ,holding_pane(-1)
+,scroll_units(10)
 {
 }
 
@@ -28,6 +29,16 @@ void Slider::Set_pane_size(int s)
 int Slider::Get_pane_size() const
 {
 	return pane_size;
+}
+
+void Slider::Set_scroll_units(float su)
+{
+	scroll_units = su;
+}
+
+float Slider::Get_scroll_units() const
+{
+	return scroll_units;
 }
 
 void Slider::Resized()

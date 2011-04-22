@@ -13,12 +13,15 @@ public:
 	float Get_pane_fraction() const;
 	void Set_pane_size(int s);
 	int Get_pane_size() const;
+	void Set_scroll_units(float su);
+	float Get_scroll_units() const;
 protected:
 	virtual void Resized();
 	float pane_position;
 	float pane_reference;
 	int pane_size;
 	int holding_pane;
+	float scroll_units;
 };
 
 #endif

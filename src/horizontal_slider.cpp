@@ -56,9 +56,9 @@ void Horizontal_slider::Handle_event(const ALLEGRO_EVENT& event)
 		}
         if(event.mouse.dw)
         {
-			float max_x = Get_size().x-pane_size;
-            float new_x = Get_pane_position() - event.mouse.dw;
-			Set_pane_fraction(new_x/max_x);
+			float p = Get_pane_fraction();
+			p -= event.mouse.dz/scroll_units;
+			Set_pane_fraction(p);
         }
 	}
 }
