@@ -40,9 +40,9 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_start_timer(timer);
 
-	ALLEGRO_FONT* font = al_load_font("data/times.ttf", 12, 0);
+	ALLEGRO_FONT* font = al_load_font("data/DejaVuSans.ttf", 12, 0);
 	if(!font)
-		font = al_load_font("examples/data/times.ttf", 12, 0);
+		font = al_load_font("examples/data/DejaVuSans.ttf", 12, 0);
 
 	Hardcoded_skin skin;
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
 	{
 		Button* createbutton = skin.Clone<Button>("button");
-		createbutton->Set_text(*i);
+		createbutton->Set_text((*i).c_str());
 		create_buttons[createbutton] = *i;
 		create_vbox->Add(createbutton);
 		createbutton->Set_tooltip("Create a widget");
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
 							fixed_height->Activate();
 						else
 							fixed_height->Deactivate();
-						tooltip->Set_text(tw->Get_tooltip());
+						tooltip->Set_text(tw->Get_tooltip().c_str());
 					}
 				}
 			}
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
 				if(gui_event.source == tooltip)
 				{
 					Widget* tw = treemap[selected_tree];
-					tw->Set_tooltip(tooltip->Get_text());
+					tw->Set_tooltip(tooltip->Get_text().Cstring());
 				}
 			}
 			else if(gui_event.type == "clicked")
@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 						if(i->second == root)
 							continue;
 						Tree* tree_child = skin.Clone<Tree>("tree");
-						tree_child->Set_text(i->first);
+						tree_child->Set_text((i->first).c_str());
 						treemap[tree_child] = i->second;
 						wtm[i->second] = tree_child;
 					}
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
 
 						if(parent && parent->Add_child(child))
 						{
-							std::string name = layout.Add_widget(i->second, child, parent);
+							Ustring name = layout.Add_widget(i->second, child, parent).c_str();
 							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(name);
 							selected_tree->Add_child(tree_child);
@@ -403,7 +403,7 @@ int main(int argc, char **argv)
 		ss<<fps;
 		std::string fps_string;
 		ss>>fps_string;
-		fps_label->Set_text(std::string("FPS: ")+fps_string);
+		fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
 	}
 
 //	delete root;

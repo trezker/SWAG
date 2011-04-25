@@ -11,9 +11,9 @@ Inputbox_view::Inputbox_view()
 Vector2 Inputbox_view::Request_size(const Widget& widget) const
 {
 	const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
-	std::string text = inputbox.Get_text();
+	const Ustring& text = inputbox.Get_text();
 	Vector2 size;
-	size.x = al_get_text_width(font, text.c_str()) + 6;
+	size.x = al_get_ustr_width(font, text.Astring()) + 6;
 	size.y = al_get_font_line_height(font) + 6;
 	return size;
 }
@@ -21,33 +21,33 @@ Vector2 Inputbox_view::Request_size(const Widget& widget) const
 float Inputbox_view::Get_value(int id, const Widget& widget) const
 {
 	const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
-	std::string text = inputbox.Get_text();
+	const Ustring& text = inputbox.Get_text();
 	ALLEGRO_MOUSE_STATE mouse;
 	al_get_mouse_state(&mouse);
 	int char_w = al_get_text_width(font, " ");
 	int x = mouse.x - widget.Get_position().x-6;
 	int guess = x/char_w;
-	int diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+	int diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
 	//First back up if needed
 	while(diff<0 && guess > 0)
 	{
 		--guess;
-		diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+		diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
 	}
 	//Then check forth
 	int diff2;
-	while(diff>0 && guess < text.length())
+	while(diff>0 && guess < text.Length())
 	{
 		diff2 = diff;
 		++guess;
-		diff = x-al_get_text_width(font, text.substr(0, guess).c_str());
+		diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
 	}
 	if(diff>diff2)
 		--guess;
 	if(guess<0)
 		guess=0;
-	if(guess>text.length())
-		guess=text.length();
+	if(guess>text.Length())
+		guess=text.Length();
 	return guess;
 }
 
@@ -71,15 +71,15 @@ void Inputbox_view::Render(const Widget& widget) const
 
 	int y = p.y + 3;
 	int x = p.x + 3;
-	std::string text = inputbox.Get_text();
+	const Ustring& text = inputbox.Get_text();
 	
 	if(inputbox.Has_focus())
 	{
 		int sel_s = inputbox.Get_selection_start();
 		int sel_e = inputbox.Get_selection_end();
 
-		int cp_s = al_get_text_width(font, text.substr(0, sel_s).c_str());
-		int cp_e = al_get_text_width(font, text.substr(0, sel_e).c_str());
+		int cp_s = al_get_ustr_width(font, text.Substring(0, sel_s).Astring());
+		int cp_e = al_get_ustr_width(font, text.Substring(0, sel_e).Astring());
 		int h = al_get_font_line_height(font);
 		if(sel_s != sel_e)
 			al_draw_filled_rectangle(x+cp_s-1, y, x+cp_e, y+h, al_map_rgb_f(0.5, 0.5, 1));
@@ -87,7 +87,7 @@ void Inputbox_view::Render(const Widget& widget) const
 			al_draw_line(x+cp_e-1, y, x+cp_e, y+h, al_map_rgb_f(0, 0, 0), 0);
 	}
 
-	al_draw_text(font, text_color, x, y, 0, text.c_str());
+	al_draw_ustr(font, text_color, x, y, 0, text.Astring());
 }
 
 void Inputbox_view::Update(float t)

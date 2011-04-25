@@ -18,13 +18,13 @@ Widget* Button::Clone() const
 	return new Button(*this);
 }
 
-void Button::Set_text(const std::string& t)
+void Button::Set_text(const Ustring& t)
 {
 	text = t;
 	Child_resized();
 }
 
-const std::string& Button::Get_text() const
+const Ustring& Button::Get_text() const
 {
 	return text;
 }
@@ -124,7 +124,7 @@ sinxml::Element* Button::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_widget);
 
-	Element* e_text = new Element("text", text);
+	Element* e_text = new Element("text", text.Cstring());
 	Element* e_toggle = new Element("toggle", (toggle?"true":"false"));
 	e_self->Add_child(e_text);
 	e_self->Add_child(e_toggle);
@@ -138,7 +138,7 @@ void Button::To_yaml(YAML::Emitter& out) const
 	out << YAML::Value << YAML::BeginMap;
 		Widget::To_yaml(out);
 		out << YAML::Key << "text";
-		out << YAML::Value << text;
+		out << YAML::Value << text.Cstring();
 		out << YAML::Key << "toggle";
 		out << YAML::Value << (toggle?"true":"false");
 	out << YAML::EndMap;

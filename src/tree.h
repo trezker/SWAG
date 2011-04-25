@@ -16,8 +16,8 @@ public:
 	bool Is_open() const;
 	void Open();
 	void Close();
-	virtual void Set_text(const std::string& t);
-	const std::string& Get_text() const;
+	virtual void Set_text(const Ustring& t);
+	const Ustring& Get_text() const;
 
 	void Add_child(Tree* c);
 	void Remove_child(Tree* c);
@@ -48,7 +48,7 @@ public:
 private:
 	virtual void Resized();
 	bool open;
-	std::string text;
+	Ustring text;
 	Trees children;
 	bool selected;
 };

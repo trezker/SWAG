@@ -7,10 +7,10 @@
 Vector2 Button_view::Request_size(const Widget& widget) const
 {
 	const Button& button = dynamic_cast<const Button&>(widget);
-	const std::string& text = button.Get_text();
+	const Ustring& text = button.Get_text();
 	Vector2 size;
 	int minwidth = al_get_text_width(font, "Button") + 6;
-	size.x = al_get_text_width(font, text.c_str()) + 6;
+	size.x = al_get_ustr_width(font, text.Astring()) + 6;
 	if(size.x<minwidth)
 		size.x = minwidth;
 	size.y = al_get_font_line_height(font) + 6;
@@ -42,6 +42,6 @@ void Button_view::Render(const Widget& widget) const
 	int font_h = al_get_font_line_height(font);
 	int y = p.y + (s.y - font_h)/2;
 	int x = p.x + s.x/2;
-	const std::string& text = button.Get_text();
-	al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, text.c_str());
+	const Ustring& text = button.Get_text();
+	al_draw_ustr(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, text.Astring());
 }

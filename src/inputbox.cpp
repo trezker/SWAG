@@ -39,14 +39,14 @@ Widget* Inputbox::Clone() const
 	return new Inputbox(*this);
 }
 
-void Inputbox::Set_text(const std::string& t)
+void Inputbox::Set_text(const Ustring& t)
 {
-	al_ustr_assign_cstr(text, t.c_str());
+	al_ustr_assign(text, t.Astring());
 }
 
-std::string Inputbox::Get_text() const
+Ustring Inputbox::Get_text() const
 {
-	return al_cstr(text);
+	return text;
 }
 
 bool Inputbox::Remove_range()

@@ -12,8 +12,8 @@ public:
 	virtual ~Inputbox();
 	Inputbox(const Inputbox& o);
 	virtual Widget* Clone() const;
-	virtual void Set_text(const std::string& t);
-	std::string Get_text() const;
+	virtual void Set_text(const Ustring& t);
+	Ustring Get_text() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;
 	bool Has_focus() const;

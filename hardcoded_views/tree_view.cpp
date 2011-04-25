@@ -8,8 +8,8 @@ Vector2 Tree_view::Request_size(const Widget& widget) const
 {
 	const Tree& tree = dynamic_cast<const Tree&>(widget);
 	Vector2 size;
-	const std::string& text = tree.Get_text();
-	size.x = al_get_text_width(font, text.c_str()) + 6;
+	const Ustring& text = tree.Get_text();
+	size.x = al_get_ustr_width(font, text.Astring()) + 6;
 	size.y = al_get_font_line_height(font) + 6;
 	float lh = size.y/4+6;
 
@@ -38,8 +38,8 @@ float Tree_view::Get_value(int id, const Widget& widget) const
 	if(id == Tree::SELF_WIDTH)
 	{
 		const Tree& tree = dynamic_cast<const Tree&>(widget);
-		const std::string& text = tree.Get_text();
-		float x = al_get_text_width(font, text.c_str()) + 6;
+		const Ustring& text = tree.Get_text();
+		float x = al_get_ustr_width(font, text.Astring()) + 6;
 		float y = al_get_font_line_height(font) + 6;
 		x += y/2;
 		return x;
@@ -71,14 +71,14 @@ void Tree_view::Render(const Widget& widget) const
 	ALLEGRO_COLOR edge_color = al_map_rgb_f(0.5, 0.5, 0.5);
 	ALLEGRO_COLOR select_color = al_map_rgb_f(0.0, 0, 0.8);
 
-	const std::string& text = tree.Get_text();
+	const Ustring& text = tree.Get_text();
 	float h = al_get_font_line_height(font);
 
-	float text_width = al_get_text_width(font, text.c_str());
+	float text_width = al_get_ustr_width(font, text.Astring());
 	if(tree.Is_selected())
 		al_draw_filled_rectangle(p.x+3+h/2, p.y+1, p.x+6+h/2+text_width, p.y+h+6, select_color);
 
-	al_draw_text(font, text_color, p.x+6+h/2, p.y+3, 0, text.c_str());
+	al_draw_ustr(font, text_color, p.x+6+h/2, p.y+3, 0, text.Astring());
 	if(!children.empty())
 	{
 		float top = h*0.25;

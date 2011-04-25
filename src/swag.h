@@ -21,5 +21,6 @@
 
 #include "widget_view.h"
 #include "skin.h"
+#include "ustring.h"
 
 #endif

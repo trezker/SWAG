@@ -10,8 +10,8 @@ class Button: public Widget, public Text_interface
 public:
 	Button();
 	virtual Widget* Clone() const;
-	virtual void Set_text(const std::string& t);
-	const std::string& Get_text() const;
+	virtual void Set_text(const Ustring& t);
+	const Ustring& Get_text() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;
 	bool Is_mouse_over() const;
@@ -23,7 +23,7 @@ public:
 	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 private:
-	std::string text;
+	Ustring text;
 	bool pressed;
 	bool mouse_over;
 	bool toggle;

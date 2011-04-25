@@ -13,13 +13,13 @@ Widget* Label::Clone() const
 	return new Label(*this);
 }
 
-void Label::Set_text(const std::string& t)
+void Label::Set_text(const Ustring& t)
 {
 	text = t;
 	Child_resized();
 }
 
-std::string Label::Get_text() const
+Ustring Label::Get_text() const
 {
 	return text;
 }
@@ -35,7 +35,7 @@ sinxml::Element* Label::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_widget);
 
-	Element* e_text = new Element("text", text);
+	Element* e_text = new Element("text", text.Cstring());
 	e_self->Add_child(e_text);
 
 	return e_self;
@@ -47,6 +47,6 @@ void Label::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Label";
 	out << YAML::Value << YAML::BeginMap;
 		out << YAML::Key << "text";
-		out << YAML::Value << text;
+		out << YAML::Value << text.Cstring();
 	out << YAML::EndMap;
 }

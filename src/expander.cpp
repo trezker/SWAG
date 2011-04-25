@@ -38,12 +38,12 @@ void Expander::Close()
 	}
 }
 
-void Expander::Set_text(const std::string& t)
+void Expander::Set_text(const Ustring& t)
 {
 	text = t;
 }
 
-const std::string& Expander::Get_text() const
+const Ustring& Expander::Get_text() const
 {
 	return text;
 }
@@ -146,7 +146,7 @@ sinxml::Element* Expander::To_xml() const
 		e_self->Add_child(e_child);
 	}
 	
-	Element* e_text = new Element("text", text);
+	Element* e_text = new Element("text", text.Cstring());
 	e_self->Add_child(e_text);
 	return e_self;
 }
@@ -157,7 +157,7 @@ void Expander::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Expander";
 	out << YAML::Value << YAML::BeginMap;
 		out << YAML::Key << "text";
-		out << YAML::Value << text;
+		out << YAML::Value << text.Cstring();
 	out << YAML::EndMap;
 
 	out << YAML::Key << "children";

@@ -7,11 +7,11 @@
 Vector2 Checkbox_view::Request_size(const Widget& widget) const
 {
 	const Button& checkbox = dynamic_cast<const Button&>(widget);
-	const std::string& text = checkbox.Get_text();
+	const Ustring& text = checkbox.Get_text();
 	Vector2 size;
 	int font_h = al_get_font_line_height(font);
 	size.y = font_h + 6;
-	size.x = size.y + al_get_text_width(font, text.c_str()) + 6;
+	size.x = size.y + al_get_ustr_width(font, text.Astring()) + 6;
 	return size;
 }
 
@@ -37,6 +37,6 @@ void Checkbox_view::Render(const Widget& widget) const
 	int font_h = al_get_font_line_height(font);
 	int y = p.y + 3;
 	int x = p.x + s.y + 3;
-	const std::string& text = checkbox.Get_text();
-	al_draw_text(font, text_color, x, y, 0, text.c_str());
+	const Ustring& text = checkbox.Get_text();
+	al_draw_ustr(font, text_color, x, y, 0, text.Astring());
 }

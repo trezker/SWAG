@@ -7,9 +7,9 @@
 Vector2 Label_view::Request_size(const Widget& widget) const
 {
 	const Label& label = dynamic_cast<const Label&>(widget);
-	std::string text = label.Get_text();
+	const Ustring& text = label.Get_text();
 	Vector2 size;
-	size.x = al_get_text_width(font, text.c_str()) + 6;
+	size.x = al_get_ustr_width(font, text.Astring()) + 6;
 	size.y = al_get_font_line_height(font) + 6;
 	return size;
 }
@@ -27,6 +27,6 @@ void Label_view::Render(const Widget& widget) const
 
 	int y = p.y + 3;
 	int x = p.x + 3;
-	std::string text = label.Get_text();
-	al_draw_text(font, text_color, x, y, 0, text.c_str());
+	const Ustring& text = label.Get_text();
+	al_draw_ustr(font, text_color, x, y, 0, text.Astring());
 }

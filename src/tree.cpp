@@ -41,12 +41,12 @@ void Tree::Close()
 	}
 }
 
-void Tree::Set_text(const std::string& t)
+void Tree::Set_text(const Ustring& t)
 {
 	text = t;
 }
 
-const std::string& Tree::Get_text() const
+const Ustring& Tree::Get_text() const
 {
 	return text;
 }
@@ -221,7 +221,7 @@ sinxml::Element* Tree::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_container);
 
-	Element* e_text = new Element("text", text);
+	Element* e_text = new Element("text", text.Cstring());
 	e_self->Add_child(e_text);
 
 	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
@@ -243,7 +243,7 @@ void Tree::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Tree";
 	out << YAML::Value << YAML::BeginMap;
 		out << YAML::Key << "text";
-		out << YAML::Value << text;
+		out << YAML::Value << text.Cstring();
 	out << YAML::EndMap;
 
 	out << YAML::Key << "children";
