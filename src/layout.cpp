@@ -64,7 +64,7 @@ bool Layout::Load_yaml()
 
 		Ustring name;
 		n["name"] >> name;
-		std::string prototype_name;
+		Ustring prototype_name;
 		n["prototype_name"] >> prototype_name;
 
 		std::cout<<"DEBUG: "<<name<<"/"<<prototype_name<<std::endl;
@@ -146,7 +146,7 @@ bool Layout::Load()
 	for(sinxml::Children::iterator i = widget_es.begin(); i != widget_es.end(); ++i)
 	{
 		const Ustring& name = (*i)->Get_attribute("name").c_str();
-		const std::string& prototype_name = (*i)->Get_attribute("prototype_name");
+		const Ustring& prototype_name = (*i)->Get_attribute("prototype_name").c_str();
 		std::cout<<"DEBUG: "<<(*i)->Get_name()<<"/"<<name<<"/"<<prototype_name<<std::endl;
 		//Skip if name is taken
 		if(name_to_widget.find(name) != name_to_widget.end())
@@ -231,7 +231,7 @@ bool Layout::Save() const
 		{
 			e_widgets->Add_child(e_widget);
 			e_widget->Set_attribute("name", i->second->Get_name().Cstring());
-			e_widget->Set_attribute("prototype_name", i->second->Get_prototype_name());
+			e_widget->Set_attribute("prototype_name", i->second->Get_prototype_name().Cstring());
 
 /*			Element* e_name = new Element("name", i->second->Get_name());
 			Element* e_prototype_name = new Element("prototype_name", i->second->Get_prototype_name());

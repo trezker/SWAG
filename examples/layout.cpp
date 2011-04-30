@@ -79,13 +79,13 @@ int main(int argc, char **argv)
 
 	Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
 
-	typedef std::map<Widget*, std::string> Create_buttons;
+	typedef std::map<Widget*, Ustring> Create_buttons;
 	Create_buttons create_buttons;
 	Namelist protlist = skin.Get_prototype_list();
 	for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
 	{
 		Button* createbutton = skin.Clone<Button>("button");
-		createbutton->Set_text((*i).c_str());
+		createbutton->Set_text(*i);
 		create_buttons[createbutton] = *i;
 		create_vbox->Add(createbutton);
 		createbutton->Set_tooltip("Create a widget");
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
 
 						if(parent && parent->Add_child(child))
 						{
-							Ustring name = layout.Add_widget(i->second.c_str(), child, parent);
+							Ustring name = layout.Add_widget(i->second, child, parent);
 							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(name);
 							selected_tree->Add_child(tree_child);

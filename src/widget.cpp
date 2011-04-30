@@ -101,12 +101,12 @@ const Ustring& Widget::Get_name() const
 	return name;
 }
 
-void Widget::Set_prototype_name(const std::string& n)
+void Widget::Set_prototype_name(const Ustring& n)
 {
 	prototype_name = n;
 }
 
-const std::string& Widget::Get_prototype_name() const
+const Ustring& Widget::Get_prototype_name() const
 {
 	return prototype_name;
 }

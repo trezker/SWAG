@@ -11,7 +11,7 @@ Skin::~Skin()
 		delete *i;
 }
 
-void Skin::Set_prototype(const std::string& name, Widget* prototype)
+void Skin::Set_prototype(const Ustring& name, Widget* prototype)
 {
 	Prototypes::iterator i = prototypes.find(name);
 	if(i != prototypes.end())
@@ -22,7 +22,7 @@ void Skin::Set_prototype(const std::string& name, Widget* prototype)
 	prototypes[name] = prototype;
 }
 
-void Skin::Remove_prototype(const std::string& name)
+void Skin::Remove_prototype(const Ustring& name)
 {
 	Prototypes::iterator i = prototypes.find(name);
 	if(i != prototypes.end())

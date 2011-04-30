@@ -45,8 +45,8 @@ public:
 	
 	void Set_name(const Ustring& n);
 	const Ustring& Get_name() const;
-	void Set_prototype_name(const std::string& n);
-	const std::string& Get_prototype_name() const;
+	void Set_prototype_name(const Ustring& n);
+	const Ustring& Get_prototype_name() const;
 
 	void Set_tooltip(const Ustring& t);
 	const Ustring& Get_tooltip() const;
@@ -85,7 +85,7 @@ private:
 	Event_queue* event_queue;
 	Ustring tooltip;
 	Ustring name;
-	std::string prototype_name;
+	Ustring prototype_name;
 };
 
 typedef std::vector<Widget*> Widgets;

@@ -6,7 +6,7 @@
 #include <list>
 #include "widget.h"
 
-typedef std::list<std::string> Namelist;
+typedef std::list<Ustring> Namelist;
 
 /* Class: Skin
  * */
@@ -21,7 +21,7 @@ public:
 	 * Clones the prototype that is mapped to name.
 	 * If no prototype is mapped to name, this functions returns NULL.
 	 * */
-	template <typename T> T* Clone(const std::string& name)
+	template <typename T> T* Clone(const Ustring& name)
 	{
 		Prototypes::iterator i = prototypes.find(name);
 		if(i != prototypes.end())
@@ -38,12 +38,12 @@ protected:
 	/* Function: Set_prototype
 	 * Maps the prototype to a name. If a prototype was already mapped to the given name, the old prototype is deleted.
 	 * */
-	void Set_prototype(const std::string& name, Widget* prototype);
+	void Set_prototype(const Ustring& name, Widget* prototype);
 
 	/* Function: Remove_prototype
 	 * Removes a previously mapped prototype from the factory.
 	 * */
-	void Remove_prototype(const std::string& name);
+	void Remove_prototype(const Ustring& name);
 
 	/* Function: Add_view
 	 * Add a view to the list of views to be deleted when the skin is destroyed.
@@ -55,7 +55,7 @@ protected:
 	 * */
 	void Add_animated_view(Widget_view* view);
 private:
-	typedef std::map<std::string, Widget*> Prototypes;
+	typedef std::map<Ustring, Widget*> Prototypes;
 	Prototypes prototypes;
 	typedef std::list<Widget_view*> Views;
 	Views views;
