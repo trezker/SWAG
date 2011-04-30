@@ -54,7 +54,7 @@ void Box::Remove_child(Widget* c)
 	Organise();
 }
 
-const std::string& Box::Get_tooltip(float x, float y) const
+const Ustring& Box::Get_tooltip(float x, float y) const
 {
 	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
 	{

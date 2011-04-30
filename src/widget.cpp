@@ -86,7 +86,7 @@ Vector2 Widget::Get_size() const
 	return size;
 }
 
-void Widget::Set_tooltip(const std::string& t)
+void Widget::Set_tooltip(const Ustring& t)
 {
 	tooltip = t;
 }
@@ -111,12 +111,12 @@ const std::string& Widget::Get_prototype_name() const
 	return prototype_name;
 }
 
-const std::string& Widget::Get_tooltip() const
+const Ustring& Widget::Get_tooltip() const
 {
 	return tooltip;
 }
 
-const std::string& Widget::Get_tooltip(float x, float y) const
+const Ustring& Widget::Get_tooltip(float x, float y) const
 {
 	return tooltip;
 }
@@ -214,7 +214,7 @@ sinxml::Element* Widget::To_xml() const
 	}
 */	Element* e_self = new Element("widget");
 //	Element* e_name = new Element("name", name);
-	Element* e_tooltip = new Element("tooltip", tooltip);
+	Element* e_tooltip = new Element("tooltip", tooltip.Cstring());
 	Element* e_fixed_width = new Element("fixed_width", fixed_width?"true":"false");
 	Element* e_fixed_height = new Element("fixed_height", fixed_height?"true":"false");
 //	e_self->Add_child(e_name);
@@ -229,7 +229,7 @@ void Widget::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Widget";
 	out << YAML::Value << YAML::BeginMap;
 		out << YAML::Key << "tooltip";
-		out << YAML::Value << tooltip;
+		out << YAML::Value << tooltip.Cstring();
 		out << YAML::Key << "fixed_width";
 		out << YAML::Value << (fixed_width?"true":"false");
 		out << YAML::Key << "fixed_height";

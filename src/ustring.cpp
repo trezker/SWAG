@@ -56,6 +56,16 @@ Ustring& Ustring::operator= (int32_t c)
 	return *this;
 }
 
+bool Ustring::operator== (const Ustring& str) const
+{
+	return al_ustr_equal(ustr, str.ustr);
+}
+
+bool Ustring::operator!= (const Ustring& str) const
+{
+	return !((*this)==str);
+}
+
 const char* Ustring::Cstring() const
 {
 	return al_cstr(ustr);

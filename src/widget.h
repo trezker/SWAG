@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "ustring.h"
 
 #include <allegro5/allegro.h>
 #include "vector2.h"
@@ -47,9 +48,9 @@ public:
 	void Set_prototype_name(const std::string& n);
 	const std::string& Get_prototype_name() const;
 
-	void Set_tooltip(const std::string& t);
-	const std::string& Get_tooltip() const;
-	virtual const std::string& Get_tooltip(float x, float y) const;
+	void Set_tooltip(const Ustring& t);
+	const Ustring& Get_tooltip() const;
+	virtual const Ustring& Get_tooltip(float x, float y) const;
 
 	void Enable_fixed_height();
 	void Enable_fixed_width();
@@ -82,7 +83,7 @@ private:
 	Widget_view* view;
 	Container* parent;
 	Event_queue* event_queue;
-	std::string tooltip;
+	Ustring tooltip;
 	std::string name;
 	std::string prototype_name;
 };

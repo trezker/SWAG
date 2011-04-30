@@ -152,7 +152,7 @@ void Vertical_paned::Remove_child(Widget* c)
 		bottom = NULL;
 }
 
-const std::string& Vertical_paned::Get_tooltip(float x, float y) const
+const Ustring& Vertical_paned::Get_tooltip(float x, float y) const
 {
 	if(top && top->Covers_point(x, y))
 	{

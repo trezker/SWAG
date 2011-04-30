@@ -221,7 +221,7 @@ int main(int argc, char **argv)
 							fixed_height->Activate();
 						else
 							fixed_height->Deactivate();
-						tooltip->Set_text(tw->Get_tooltip().c_str());
+						tooltip->Set_text(tw->Get_tooltip());
 					}
 				}
 			}

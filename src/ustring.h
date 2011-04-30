@@ -17,6 +17,9 @@ public:
 	Ustring& operator= (const char* s);
 	Ustring& operator= (int c);
 	
+	bool operator== (const Ustring& str) const;
+	bool operator!= (const Ustring& str) const;
+	
 	const char* Cstring() const;
 	const ALLEGRO_USTR *Astring() const;
 	ALLEGRO_USTR *Astring();

@@ -200,7 +200,7 @@ void Tree::Remove_child(Widget* c)
 	Organise();
 }
 
-const std::string& Tree::Get_tooltip(float x, float y) const
+const Ustring& Tree::Get_tooltip(float x, float y) const
 {
 	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
 	{
