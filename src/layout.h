@@ -15,8 +15,8 @@ public:
 	Layout();
 	~Layout();
 	void Set_skin(Skin* skin);
-	void Set_filename(const std::string& fn);
-	const std::string& Get_filename() const;
+	void Set_filename(const Ustring& fn);
+	const Ustring& Get_filename() const;
 	bool Load();
 	bool Load_yaml();
 	bool Save() const;
@@ -34,7 +34,7 @@ private:
 	const Layout& operator=(Layout&){}
 	Name_to_widget name_to_widget;
 	Widget* root;
-	std::string filename;
+	Ustring filename;
 	Skin* skin;
 };
 

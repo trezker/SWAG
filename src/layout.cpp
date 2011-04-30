@@ -27,12 +27,12 @@ void Layout::Set_skin(Skin* s)
 	skin = s;
 }
 
-void Layout::Set_filename(const std::string& fn)
+void Layout::Set_filename(const Ustring& fn)
 {
 	filename = fn;
 }
 
-const std::string& Layout::Get_filename() const
+const Ustring& Layout::Get_filename() const
 {
 	return filename;
 }
@@ -50,7 +50,7 @@ bool Layout::Load_yaml()
 		std::cout<<"No skin"<<std::endl;
 		return false;
 	}
-	std::ifstream fin(filename.c_str());
+	std::ifstream fin(filename.Cstring());
 	YAML::Parser parser(fin);
 
 	YAML::Node doc;
@@ -61,7 +61,6 @@ bool Layout::Load_yaml()
 	for(unsigned i=0; i<doc["widgets"].size(); i++)
 	{
 		const YAML::Node &n = doc["widgets"][i];
-		std::string scalar;
 
 		Ustring name;
 		n["name"] >> name;
@@ -135,7 +134,7 @@ bool Layout::Load()
 	}
 
 	sinxml::Document document("1.0");
-	if(!document.Load_file(filename))
+	if(!document.Load_file(filename.Cstring()))
 	{
 		std::cout<<"Failed to load xml file"<<std::endl;
 		return false;
@@ -243,7 +242,7 @@ bool Layout::Save() const
 
 	sinxml::Document document("1.0");
 	document.Set_root(e_layout);
-	document.Save_file(filename);
+	document.Save_file(filename.Cstring());
 	return true;
 }
 
@@ -284,7 +283,7 @@ bool Layout::Save_yaml() const
 		out << YAML::EndSeq;
 	out << YAML::EndMap;
 
-	std::ofstream fout(filename.c_str());
+	std::ofstream fout(filename.Cstring());
 	fout << out.c_str();
 
 	return true;
