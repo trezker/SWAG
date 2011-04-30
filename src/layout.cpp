@@ -63,7 +63,7 @@ bool Layout::Load_yaml()
 		const YAML::Node &n = doc["widgets"][i];
 		std::string scalar;
 
-		std::string name;
+		Ustring name;
 		n["name"] >> name;
 		std::string prototype_name;
 		n["prototype_name"] >> prototype_name;
@@ -89,7 +89,7 @@ bool Layout::Load_yaml()
 			widget_children[container] = &(n["children"]);
 	}
 	//Set root widget
-	std::string rootname;
+	Ustring rootname;
 	doc["root"]>>rootname;
 	std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
 	//Check validity of root name
@@ -105,7 +105,7 @@ bool Layout::Load_yaml()
 		for(unsigned j=0; j<i->second->size(); j++)
 		{
 			const YAML::Node &n = *i->second;
-			std::string name;
+			Ustring name;
 			n[j]>>name;
 			std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
 			if(name_to_widget.find(name) != name_to_widget.end())
@@ -146,7 +146,7 @@ bool Layout::Load()
 	sinxml::Children widget_es = root_e->Get_child("widgets")->Get_children();
 	for(sinxml::Children::iterator i = widget_es.begin(); i != widget_es.end(); ++i)
 	{
-		const std::string& name = (*i)->Get_attribute("name");
+		const Ustring& name = (*i)->Get_attribute("name").c_str();
 		const std::string& prototype_name = (*i)->Get_attribute("prototype_name");
 		std::cout<<"DEBUG: "<<(*i)->Get_name()<<"/"<<name<<"/"<<prototype_name<<std::endl;
 		//Skip if name is taken
@@ -171,7 +171,7 @@ bool Layout::Load()
 	
 	//Set root widget
 	sinxml::Element* rootinfo_e = root_e->Get_child("root");
-	const std::string& rootname = rootinfo_e->Get_value();
+	const Ustring& rootname = rootinfo_e->Get_value().c_str();
 	std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
 	//Check validity of root name
 	if(name_to_widget.find(rootname) != name_to_widget.end())
@@ -187,7 +187,7 @@ bool Layout::Load()
 		{
 			if((*e)->Get_name() == "child")
 			{
-				const std::string &name = (*e)->Get_value();
+				const Ustring &name = (*e)->Get_value().c_str();
 				std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
 				if(name_to_widget.find(name) != name_to_widget.end())
 				{
@@ -220,7 +220,7 @@ bool Layout::Save() const
 		return false;
 	}
 	Element* e_layout = new Element("layout");
-	sinxml::Element* e_root = new Element("root", root->Get_name());
+	sinxml::Element* e_root = new Element("root", root->Get_name().Cstring());
 	e_layout->Add_child(e_root);
 
 	Element* e_widgets = new Element("widgets");
@@ -231,7 +231,7 @@ bool Layout::Save() const
 		if(e_widget)
 		{
 			e_widgets->Add_child(e_widget);
-			e_widget->Set_attribute("name", i->second->Get_name());
+			e_widget->Set_attribute("name", i->second->Get_name().Cstring());
 			e_widget->Set_attribute("prototype_name", i->second->Get_prototype_name());
 
 /*			Element* e_name = new Element("name", i->second->Get_name());
@@ -264,7 +264,7 @@ bool Layout::Save_yaml() const
 	
 	out << YAML::BeginMap;
 		out << YAML::Key << "root";
-		out << YAML::Value << root->Get_name();
+		out << YAML::Value << root->Get_name().Cstring();
 
 		out << YAML::Key << "widgets";
 		out << YAML::Value << YAML::BeginSeq;
@@ -273,7 +273,7 @@ bool Layout::Save_yaml() const
 		{
 			out << YAML::BeginMap;
 				out << YAML::Key << "name";
-				out << YAML::Value << i->second->Get_name();
+				out << YAML::Value << i->second->Get_name().Cstring();
 				out << YAML::Key << "prototype_name";
 				out << YAML::Value << i->second->Get_prototype_name();
 
@@ -295,18 +295,18 @@ Widget* Layout::Get_root() const
 	return root;
 }
 
-std::string Layout::Add_widget(const std::string& name, Widget* widget, Widget* parent)
+Ustring Layout::Add_widget(const Ustring& name, Widget* widget, Widget* parent)
 {
 	if(name == "")
 		return "";
-	std::string tryname = name;
+	Ustring tryname = name;
 	int instance = 1;
 	while(name_to_widget.find(tryname) != name_to_widget.end())
 	{
 		++instance;
 		std::stringstream ss;
 		ss<<instance;
-		std::string is;
+		Ustring is;
 		ss>>is;
 		tryname = name + is;
 	}
@@ -320,7 +320,7 @@ std::string Layout::Add_widget(const std::string& name, Widget* widget, Widget* 
 	return tryname;
 }
 
-void Layout::Delete_widget(const std::string& name)
+void Layout::Delete_widget(const Ustring& name)
 {
 	Delete_widget(name_to_widget[name]);
 }

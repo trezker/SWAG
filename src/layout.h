@@ -3,10 +3,11 @@
 
 #include <string>
 #include <map>
+#include "ustring.h"
 class Widget;
 class Skin;
 
-typedef std::map<std::string, Widget*> Name_to_widget;
+typedef std::map<Ustring, Widget*> Name_to_widget;
 
 class Layout
 {
@@ -22,8 +23,8 @@ public:
 	bool Save_yaml() const;
 	
 	Widget* Get_root() const;
-	std::string Add_widget(const std::string& name, Widget* widget, Widget* parent);
-	void Delete_widget(const std::string& name);
+	Ustring Add_widget(const Ustring& name, Widget* widget, Widget* parent);
+	void Delete_widget(const Ustring& name);
 	void Delete_widget(Widget* widget);
 	void Remove_widget(Widget* widget);
 	void Clear();

@@ -226,10 +226,10 @@ sinxml::Element* Tree::To_xml() const
 
 	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
 	{
-		const std::string &child_name = (*i)->Get_name();
+		const Ustring &child_name = (*i)->Get_name();
 		if(child_name != "")
 		{
-			Element* e_child = new Element("child", child_name);
+			Element* e_child = new Element("child", child_name.Cstring());
 			e_self->Add_child(e_child);
 		}
 	}
@@ -250,7 +250,7 @@ void Tree::To_yaml(YAML::Emitter& out) const
 	out << YAML::Value << YAML::BeginSeq;
 	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
 	{
-		const std::string &child_name = (*i)->Get_name();
+		const Ustring &child_name = (*i)->Get_name();
 		if(child_name != "")
 		{
 			out << child_name;

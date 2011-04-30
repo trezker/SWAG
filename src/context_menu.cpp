@@ -56,7 +56,7 @@ sinxml::Element* Context_menu::To_xml() const
 
 	if(context && context->Get_name() != "")
 	{
-		Element* e_child = new Element("child", context->Get_name());
+		Element* e_child = new Element("child", context->Get_name().Cstring());
 		e_self->Add_child(e_child);
 	}
 	return e_self;

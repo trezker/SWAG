@@ -176,9 +176,9 @@ sinxml::Element* Vertical_paned::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_container);
 
-	Element* e_top = new Element("child", top?top->Get_name():"");
+	Element* e_top = new Element("child", top?top->Get_name().Cstring():"");
 	e_self->Add_child(e_top);
-	Element* e_bottom = new Element("child", bottom?bottom->Get_name():"");
+	Element* e_bottom = new Element("child", bottom?bottom->Get_name().Cstring():"");
 	e_self->Add_child(e_bottom);
 	return e_self;
 }

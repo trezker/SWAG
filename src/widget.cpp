@@ -91,12 +91,12 @@ void Widget::Set_tooltip(const Ustring& t)
 	tooltip = t;
 }
 
-void Widget::Set_name(const std::string& n)
+void Widget::Set_name(const Ustring& n)
 {
 	name = n;
 }
 
-const std::string& Widget::Get_name() const
+const Ustring& Widget::Get_name() const
 {
 	return name;
 }

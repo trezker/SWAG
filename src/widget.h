@@ -43,8 +43,8 @@ public:
 	Vector2 Get_position() const;
 	Vector2 Get_size() const;
 	
-	void Set_name(const std::string& n);
-	const std::string& Get_name() const;
+	void Set_name(const Ustring& n);
+	const Ustring& Get_name() const;
 	void Set_prototype_name(const std::string& n);
 	const std::string& Get_prototype_name() const;
 
@@ -84,7 +84,7 @@ private:
 	Container* parent;
 	Event_queue* event_queue;
 	Ustring tooltip;
-	std::string name;
+	Ustring name;
 	std::string prototype_name;
 };
 

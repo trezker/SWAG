@@ -56,6 +56,22 @@ Ustring& Ustring::operator= (int32_t c)
 	return *this;
 }
 
+Ustring& Ustring::operator+= (const Ustring& str)
+{
+	al_ustr_append(ustr, str.ustr);
+	return *this;
+}
+
+const Ustring Ustring::operator+ (const Ustring& str) const
+{
+	return Ustring(*this) += str;
+}
+
+int Ustring::Compare(const Ustring& str) const
+{
+	return al_ustr_compare(ustr, str.ustr);
+}
+
 bool Ustring::operator== (const Ustring& str) const
 {
 	return al_ustr_equal(ustr, str.ustr);
@@ -64,6 +80,26 @@ bool Ustring::operator== (const Ustring& str) const
 bool Ustring::operator!= (const Ustring& str) const
 {
 	return !((*this)==str);
+}
+
+bool Ustring::operator< (const Ustring& str) const
+{
+	return Compare(str)<0;
+}
+
+bool Ustring::operator> (const Ustring& str) const
+{
+	return Compare(str)>0;
+}
+
+bool Ustring::operator<= (const Ustring& str) const
+{
+	return Compare(str)<=0;
+}
+
+bool Ustring::operator>= (const Ustring& str) const
+{
+	return Compare(str)>=0;
 }
 
 const char* Ustring::Cstring() const
@@ -91,4 +127,30 @@ Ustring Ustring::Substring(int start_pos, int end_pos) const
 int Ustring::Length() const
 {
 	return al_ustr_length(ustr);
+}
+
+std::ostream& operator<< (std::ostream& os, const Ustring& str)
+{
+	os<<str.Cstring();
+	return os;
+}
+
+void operator>> (std::istream& os, Ustring& str)
+{
+	std::string temp;
+	os>>temp;
+	str = temp.c_str();
+}
+
+YAML::Emitter& operator<< (YAML::Emitter& os, const Ustring& str)
+{
+	os<<str.Cstring();
+	return os;
+}
+
+void operator>>(const YAML::Node& node, Ustring& str)
+{
+	std::string temp;
+	node>>temp;
+	str = temp.c_str();
 }

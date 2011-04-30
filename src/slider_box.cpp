@@ -142,7 +142,7 @@ sinxml::Element* Slider_box::To_xml() const
 
 	if(child && child->Get_name() != "")
 	{
-		Element* e_child = new Element("child", child->Get_name());
+		Element* e_child = new Element("child", child->Get_name().Cstring());
 		e_self->Add_child(e_child);
 	}
 	return e_self;

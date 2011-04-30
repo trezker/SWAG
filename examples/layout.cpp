@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 						if(i->second == root)
 							continue;
 						Tree* tree_child = skin.Clone<Tree>("tree");
-						tree_child->Set_text((i->first).c_str());
+						tree_child->Set_text(i->first);
 						treemap[tree_child] = i->second;
 						wtm[i->second] = tree_child;
 					}
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
 
 						if(parent && parent->Add_child(child))
 						{
-							Ustring name = layout.Add_widget(i->second, child, parent).c_str();
+							Ustring name = layout.Add_widget(i->second.c_str(), child, parent);
 							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(name);
 							selected_tree->Add_child(tree_child);

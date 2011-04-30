@@ -76,10 +76,10 @@ sinxml::Element* Box::To_xml() const
 	e_base->Add_child(e_widget);
 	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
 	{
-		const std::string &child_name = (*i)->Get_name();
+		const Ustring &child_name = (*i)->Get_name();
 		if(child_name != "")
 		{
-			Element* e_child = new Element("child", child_name);
+			Element* e_child = new Element("child", child_name.Cstring());
 			e_self->Add_child(e_child);
 		}
 	}
@@ -98,7 +98,7 @@ void Box::To_yaml(YAML::Emitter& out) const
 
 	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
 	{
-		const std::string &child_name = (*i)->Get_name();
+		const Ustring &child_name = (*i)->Get_name();
 		if(child_name != "")
 		{
 			out << child_name;

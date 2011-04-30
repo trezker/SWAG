@@ -176,9 +176,9 @@ sinxml::Element* Horizontal_paned::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_container);
 
-	Element* e_left = new Element("child", left?left->Get_name():"");
+	Element* e_left = new Element("child", left?left->Get_name().Cstring():"");
 	e_self->Add_child(e_left);
-	Element* e_right = new Element("child", right?right->Get_name():"");
+	Element* e_right = new Element("child", right?right->Get_name().Cstring():"");
 	e_self->Add_child(e_right);
 	return e_self;
 }

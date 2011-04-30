@@ -2,6 +2,9 @@
 #define swag_ustring_h
 
 #include <allegro5/allegro5.h>
+#include <ostream>
+#include <istream>
+#include <yaml-cpp/yaml.h>
 
 class Ustring
 {
@@ -17,8 +20,17 @@ public:
 	Ustring& operator= (const char* s);
 	Ustring& operator= (int c);
 	
+	Ustring& operator+= (const Ustring& str);
+	const Ustring operator+ (const Ustring& str) const;
+
+	int Compare(const Ustring& str) const;
 	bool operator== (const Ustring& str) const;
 	bool operator!= (const Ustring& str) const;
+	bool operator< (const Ustring& str) const;
+	bool operator> (const Ustring& str) const;
+	bool operator<= (const Ustring& str) const;
+	bool operator>= (const Ustring& str) const;
+
 	
 	const char* Cstring() const;
 	const ALLEGRO_USTR *Astring() const;
@@ -29,5 +41,11 @@ public:
 private:
 	ALLEGRO_USTR *ustr;
 };
+
+std::ostream& operator<< (std::ostream& os, const Ustring& str);
+void operator>> (std::istream& os, Ustring& str);
+
+YAML::Emitter& operator<< (YAML::Emitter& os, const Ustring& str);
+void operator>>(const YAML::Node& node, Ustring& str);
 
 #endif
