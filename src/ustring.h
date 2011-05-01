@@ -41,6 +41,7 @@ public:
 	bool Remove_chr(int pos);
 	bool Remove_range(int start_pos, int end_pos);
 	bool Insert(int pos, const Ustring& str);
+	int Insert(int pos, int c);
 private:
 	ALLEGRO_USTR *ustr;
 };

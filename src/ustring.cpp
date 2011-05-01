@@ -148,6 +148,12 @@ bool Ustring::Insert(int pos, const Ustring& str)
 	return al_ustr_insert(ustr, offset_pos, str.ustr);
 }
 
+int Ustring::Insert(int pos, int c)
+{
+	int offset_pos = al_ustr_offset(ustr, pos);
+	return al_ustr_insert_chr(ustr, offset_pos, c);
+}
+
 std::ostream& operator<< (std::ostream& os, const Ustring& str)
 {
 	os<<str.Cstring();
