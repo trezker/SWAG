@@ -9,11 +9,10 @@ class Inputbox: public Widget, public Text_interface
 {
 public:
 	Inputbox();
-	virtual ~Inputbox();
 	Inputbox(const Inputbox& o);
 	virtual Widget* Clone() const;
 	virtual void Set_text(const Ustring& t);
-	Ustring Get_text() const;
+	const Ustring& Get_text() const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	bool Is_pressed() const;
 	bool Has_focus() const;
@@ -30,7 +29,7 @@ public:
 	};
 private:
 	bool Remove_range();
-	ALLEGRO_USTR *text;
+	Ustring text;
 	bool pressed;
 	bool has_focus;
 	bool mouse_over;

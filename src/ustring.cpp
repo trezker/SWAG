@@ -129,6 +129,25 @@ int Ustring::Length() const
 	return al_ustr_length(ustr);
 }
 
+bool Ustring::Remove_chr(int pos)
+{
+	int offset_pos = al_ustr_offset(ustr, pos);
+	return al_ustr_remove_chr(ustr, offset_pos);
+}
+
+bool Ustring::Remove_range(int start_pos, int end_pos)
+{
+	int offset_start_pos = al_ustr_offset(ustr, start_pos);
+	int offset_end_pos = al_ustr_offset(ustr, end_pos);
+	return al_ustr_remove_range(ustr, offset_start_pos, offset_end_pos);
+}
+
+bool Ustring::Insert(int pos, const Ustring& str)
+{
+	int offset_pos = al_ustr_offset(ustr, pos);
+	return al_ustr_insert(ustr, offset_pos, str.ustr);
+}
+
 std::ostream& operator<< (std::ostream& os, const Ustring& str)
 {
 	os<<str.Cstring();

@@ -9,7 +9,6 @@ Inputbox::Inputbox()
 :pressed(false)
 ,has_focus(false)
 ,mouse_over(false)
-,text(al_ustr_new(""))
 ,cursor(0)
 ,selection_start(0)
 ,selection_end(0)
@@ -17,17 +16,12 @@ Inputbox::Inputbox()
 	Enable_fixed_height();
 }
 
-Inputbox::~Inputbox()
-{
-	al_ustr_free(text);
-}
-
 Inputbox::Inputbox(const Inputbox& o)
 :Widget(o)
 ,pressed(false)
 ,has_focus(false)
 ,mouse_over(false)
-,text(al_ustr_dup(o.text))
+,text(o.text)
 ,cursor(0)
 ,selection_start(0)
 ,selection_end(0)
@@ -41,10 +35,10 @@ Widget* Inputbox::Clone() const
 
 void Inputbox::Set_text(const Ustring& t)
 {
-	al_ustr_assign(text, t.Astring());
+	text = t;
 }
 
-Ustring Inputbox::Get_text() const
+const Ustring& Inputbox::Get_text() const
 {
 	return text;
 }
@@ -55,12 +49,12 @@ bool Inputbox::Remove_range()
 	{
 		if(selection_start < selection_end)
 		{
-			al_ustr_remove_range(text, selection_start, selection_end);
+			text.Remove_range(selection_start, selection_end);
 			cursor = selection_start;
 		}
 		else
 		{
-			al_ustr_remove_range(text, selection_end, selection_start);
+			text.Remove_range(selection_end, selection_start);
 			cursor = selection_end;
 		}
 		selection_start = cursor;
@@ -131,9 +125,8 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			{
 				if(!Remove_range() && cursor>0)
 				{
-					int pos = al_ustr_offset(text, cursor-1);
-					al_ustr_remove_chr(text, pos);
 					--cursor;
+					text.Remove_chr(cursor);
 					selection_start = cursor;
 					selection_end = cursor;
 					Push_event(Event(this, "changed"));
@@ -142,10 +135,9 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			}
 			else if(ALLEGRO_KEY_DELETE == event.keyboard.keycode)
 			{
-				if(!Remove_range() && cursor<al_ustr_length(text))
+				if(!Remove_range() && cursor < text.Length())
 				{
-					int pos = al_ustr_offset(text, cursor);
-					al_ustr_remove_chr(text, pos);
+					text.Remove_chr(cursor);
 					Push_event(Event(this, "changed"));
 				}
 				return;
@@ -167,7 +159,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			}
 			else if(ALLEGRO_KEY_RIGHT == event.keyboard.keycode)
 			{
-				if(cursor<al_ustr_length(text))
+				if(cursor < text.Length())
 				{
 					++cursor;
 					if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
@@ -177,7 +169,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			}
 			else if(ALLEGRO_KEY_END == event.keyboard.keycode)
 			{
-				cursor = al_ustr_length(text);
+				cursor = text.Length();
 				if(!(event.keyboard.modifiers&ALLEGRO_KEYMOD_SHIFT))
 					selection_start = cursor;
 				selection_end = cursor;
@@ -192,19 +184,15 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 			else if(ALLEGRO_KEY_C == event.keyboard.keycode
 			&& (event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL))
 			{
-				int start_pos = al_ustr_offset(text, selection_start);
-				int end_pos = al_ustr_offset(text, selection_end);
-				ALLEGRO_USTR *sub = al_ustr_dup_substr(text, start_pos, end_pos);
-				const char *cstr = al_cstr(sub);
+				Ustring sub = text.Substring(selection_start, selection_end);
+				const char *cstr = sub.Cstring();
 				Set_clipboard_text(cstr, strlen(cstr) + 1);
-				al_ustr_free(sub);
 			}
 			else if(ALLEGRO_KEY_V == event.keyboard.keycode
 			&& (event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL))
 			{
 				std::string paste = Get_clipboard_text();
-				int pos = al_ustr_offset(text, cursor);
-				al_ustr_insert_cstr(text, pos, paste.c_str());
+				text.Insert(cursor, paste.c_str());
 				Push_event(Event(this, "changed"));
 			}
 			else
@@ -212,8 +200,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 //				std::cout<<event.keyboard.unichar<<std::endl;
 				if(event.keyboard.unichar != -1)
 					Remove_range();
-				int pos = al_ustr_offset(text, cursor);
-				if(al_ustr_insert_chr(text, pos, event.keyboard.unichar)>0)
+				if(text.Insert(cursor, event.keyboard.unichar)>0)
 				{
 					++cursor;
 					selection_start = cursor;
@@ -261,7 +248,7 @@ sinxml::Element* Inputbox::To_xml() const
 	e_self->Add_child(e_base);
 	e_base->Add_child(e_widget);
 
-	Element* e_text = new Element("text", al_cstr(text));
+	Element* e_text = new Element("text", text.Cstring());
 	e_self->Add_child(e_text);
 
 	return e_self;
@@ -273,6 +260,6 @@ void Inputbox::To_yaml(YAML::Emitter& out) const
 	out << YAML::Key << "Inputbox";
 	out << YAML::Value << YAML::BeginMap;
 		out << YAML::Key << "text";
-		out << YAML::Value << al_cstr(text);
+		out << YAML::Value << text;
 	out << YAML::EndMap;
 }
