@@ -81,6 +81,7 @@ bool Layout::Load_yaml()
 			continue;
 		}
 		//Todo: Call widgets loading function
+		w->From_yaml(doc["widgets"][i]);
 		name_to_widget[name] = w;
 		w->Set_name(name);
 		Container* container = dynamic_cast<Container*>(w);

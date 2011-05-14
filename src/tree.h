@@ -21,7 +21,7 @@ public:
 
 	void Add_child(Tree* c);
 	void Remove_child(Tree* c);
-	const Trees& Get_children() const;
+	const Trees& Get_childtrees() const;
 	Trees& Get_children();
 	void Clear_children();
 
@@ -35,6 +35,7 @@ public:
 	virtual void Handle_child_resize();
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
+	virtual Widgets Get_children() const;
 	virtual const Ustring& Get_tooltip(float x, float y) const;
 	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;

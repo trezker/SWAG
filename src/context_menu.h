@@ -15,6 +15,7 @@ public:
 	Widget* Get_context() const;
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
+	virtual Widgets Get_children() const;
 	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 private:

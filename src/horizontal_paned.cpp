@@ -152,6 +152,14 @@ void Horizontal_paned::Remove_child(Widget* c)
 		right = NULL;
 }
 
+Widgets Horizontal_paned::Get_children() const
+{
+	Widgets w;
+	w.push_back(left);
+	w.push_back(right);
+	return w;
+}
+
 const Ustring& Horizontal_paned::Get_tooltip(float x, float y) const
 {
 	if(left && left->Covers_point(x, y))

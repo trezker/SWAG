@@ -152,6 +152,14 @@ void Vertical_paned::Remove_child(Widget* c)
 		bottom = NULL;
 }
 
+Widgets Vertical_paned::Get_children() const
+{
+	Widgets w;
+	w.push_back(top);
+	w.push_back(bottom);
+	return w;
+}
+
 const Ustring& Vertical_paned::Get_tooltip(float x, float y) const
 {
 	if(top && top->Covers_point(x, y))

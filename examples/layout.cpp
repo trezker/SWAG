@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <list>
+#include <stack>
 
 int main(int argc, char **argv)
 {
@@ -263,13 +264,51 @@ int main(int argc, char **argv)
 					bool s = layout.Load_yaml();
 					std::cout<<(s?"Loaded":"Load failed")<<std::endl;
 					const Name_to_widget& layout_widgets = layout.Get_widgets();
+
 					root = layout.Get_root();
 					root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
 					treemap[widget_tree] = root;
+
+					typedef std::stack<Tree*> Trees_todo;
+					Trees_todo trees_todo;
+					trees_todo.push(widget_tree);
 					
+					while(!trees_todo.empty())
+					{
+						Tree* current_tree = trees_todo.top();
+						trees_todo.pop();
+
+						Container* parent = dynamic_cast<Container*>(treemap[current_tree]);
+
+						if(parent)
+						{
+							Widgets children = parent->Get_children();
+							for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
+							{
+								Tree* tree_child = skin.Clone<Tree>("tree");
+								tree_child->Set_text((*i)->Get_name());
+								treemap[tree_child] = *i;
+								current_tree->Add_child(tree_child);
+								trees_todo.push(tree_child);
+							}
+						}
+					}
+
+/*
+					for(Name_to_widget::const_iterator i = layout_widgets.begin(); i != layout_widgets.end(); ++i)
+					{
+						Container* parent = dynamic_cast<Container*>(i->second);
+
+						if(parent)
+						{
+						}
+					}
+*/
+/*					
 					typedef std::map<Widget*, Tree*> WTM;
 					WTM wtm;
 					wtm[root] = widget_tree;
+
 					for(Name_to_widget::const_iterator i = layout_widgets.begin(); i != layout_widgets.end(); ++i)
 					{
 						if(i->second == root)
@@ -286,7 +325,7 @@ int main(int argc, char **argv)
 							wtm[i->second->Get_parent()]->Add_child(i->first);
 						}
 					}
-				}
+*/				}
 				if(gui_event.source == fixed_width)
 				{
 					Widget* tw = treemap[selected_tree];

@@ -13,7 +13,7 @@ Vector2 Tree_view::Request_size(const Widget& widget) const
 	size.y = al_get_font_line_height(font) + 6;
 	float lh = size.y/4+6;
 
-	Trees children = tree.Get_children();
+	Trees children = tree.Get_childtrees();
 	size.x += size.y/2;
 	if(tree.Is_open())
 	{
@@ -55,7 +55,7 @@ void Tree_view::Render(const Widget& widget) const
 {
 	const Tree& tree = dynamic_cast<const Tree&>(widget);
 
-	Trees children = tree.Get_children();
+	Trees children = tree.Get_childtrees();
 	if(tree.Is_open())
 	{
 		for(Trees::iterator i = children.begin(); i != children.end(); ++i)

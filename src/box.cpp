@@ -54,6 +54,11 @@ void Box::Remove_child(Widget* c)
 	Organise();
 }
 
+Widgets Box::Get_children() const
+{
+	return widgets;
+}
+
 const Ustring& Box::Get_tooltip(float x, float y) const
 {
 	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
@@ -88,10 +93,10 @@ sinxml::Element* Box::To_xml() const
 
 void Box::To_yaml(YAML::Emitter& out) const
 {
-	out << YAML::Key << "Button";
-	out << YAML::Value << YAML::BeginMap;
+//	out << YAML::Key << "Box";
+//	out << YAML::Value << YAML::BeginMap;
 		Widget::To_yaml(out);
-	out << YAML::EndMap;
+//	out << YAML::EndMap;
 
 	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;

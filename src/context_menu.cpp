@@ -43,6 +43,13 @@ void Context_menu::Remove_child(Widget* c)
 	context = NULL;
 }
 
+Widgets Context_menu::Get_children() const
+{
+	Widgets w;
+	w.push_back(context);
+	return w;
+}
+
 using namespace sinxml;
 sinxml::Element* Context_menu::To_xml() const
 {

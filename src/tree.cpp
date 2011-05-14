@@ -70,7 +70,7 @@ void Tree::Remove_child(Tree* c)
 	Child_resized();
 }
 
-const Trees& Tree::Get_children() const
+const Trees& Tree::Get_childtrees() const
 {
 	return children;
 }
@@ -198,6 +198,16 @@ void Tree::Remove_child(Widget* c)
 		children.erase(i);
 	}
 	Organise();
+}
+
+Widgets Tree::Get_children() const
+{
+	Widgets w;
+	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
+	{
+		w.push_back(*i);
+	}
+	return w;
 }
 
 const Ustring& Tree::Get_tooltip(float x, float y) const

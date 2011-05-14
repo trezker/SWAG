@@ -121,6 +121,13 @@ void Expander::Remove_child(Widget* c)
 	Organise();
 }
 
+Widgets Expander::Get_children() const
+{
+	Widgets w;
+	w.push_back(child);
+	return w;
+}
+
 const Ustring& Expander::Get_tooltip(float x, float y) const
 {
 	if(child && child->Covers_point(x, y))

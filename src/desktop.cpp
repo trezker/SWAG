@@ -98,6 +98,13 @@ void Desktop::Remove_child(Widget* c)
 	child = NULL;
 }
 
+Widgets Desktop::Get_children() const
+{
+	Widgets w;
+	w.push_back(child);
+	return w;
+}
+
 Vector2 Desktop::Get_tooltip_position() const
 {
 	return tooltip_position;

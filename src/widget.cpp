@@ -239,5 +239,12 @@ void Widget::To_yaml(YAML::Emitter& out) const
 
 void Widget::From_yaml(const YAML::Node& in)
 {
-	
+	const YAML::Node& doc = in["Widget"];
+	doc["tooltip"] >> tooltip;
+	Ustring b;
+	doc["fixed_width"] >> b;
+	fixed_width = (b=="true");
+	doc["fixed_height"] >> b;
+	fixed_height = (b=="true");
+	std::cout<<"Loaded widget: "<<tooltip<<fixed_width<<fixed_height<<std::endl;
 }

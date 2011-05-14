@@ -101,6 +101,13 @@ void Slider_box::Remove_child(Widget* c)
 	child = NULL;
 }
 
+Widgets Slider_box::Get_children() const
+{
+	Widgets w;
+	w.push_back(child);
+	return w;
+}
+
 const Horizontal_slider& Slider_box::Get_hslider() const
 {
 	return hslider;
