@@ -47,8 +47,26 @@ void Slider_box::Handle_event(const ALLEGRO_EVENT& event)
 	Vector2 s = Get_size();
 	if(child)
 	{
-		child->Handle_event(event);
+
+		if(ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
+		{
+			int emx = event.mouse.x;
+			int emy = event.mouse.y;
+			Vector2 p = Get_position();
+			Vector2 downsize(Get_value(SLIDER_WIDTH), Get_value(SLIDER_HEIGHT));
+			int xslider = p.x+s.x-downsize.x;
+			int yslider = p.y+s.y-downsize.y;
+			if(Covers_point(emx, emy) && emx<xslider && emy<yslider)
+			{
+				child->Handle_event(event);
+			}
+		}
+		else
+		{
+			child->Handle_event(event);
+		}
 		Vector2 cs = child->Get_size();
+		//Sliders get events if the child is bigger than parent
 		if(cs.x>s.x)
 			hslider.Handle_event(event);
 		if(cs.y>s.y)
