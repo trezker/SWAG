@@ -37,15 +37,23 @@ void Slider_box_view::Render(const Widget& widget) const
 		Vector2 s = slider_box.Get_size();
 		Vector2 downsize(	Get_value(Slider_box::SLIDER_WIDTH, slider_box),
 							Get_value(Slider_box::SLIDER_HEIGHT, slider_box));
+		Vector2 ps = slider_box.Get_size();
+		Vector2 cs = child->Get_size();
+		//Trial code for only clipping when sliders are showing, has issue when one slider is but the other not...
+/*		if(cs.x>ps.x)
+			s.y -= downsize.y;
+		if(cs.y>ps.y)
+			s.x -= downsize.x;
+*/
 		s -= downsize;
+
 		al_set_clipping_rectangle(p.x, p.y, s.x, s.y);
 		child->Render();
 		al_set_clipping_rectangle(clip_x, clip_y, clip_w, clip_h);
-		Vector2 ps = slider_box.Get_size();
-		Vector2 cs = child->Get_size();
-		if(cs.x>ps.x)
+		//Currently always showing sliders, needs more development to get optional sliders, without bugs.
+//		if(cs.x>ps.x)
 			hslider_view->Render(slider_box.Get_hslider());
-		if(cs.y>ps.y)
+//		if(cs.y>ps.y)
 			vslider_view->Render(slider_box.Get_vslider());
 	}
 }
