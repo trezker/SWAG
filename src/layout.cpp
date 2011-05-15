@@ -50,72 +50,85 @@ bool Layout::Load_yaml()
 		std::cout<<"No skin"<<std::endl;
 		return false;
 	}
-	std::ifstream fin(filename.Cstring());
-	YAML::Parser parser(fin);
 
-	YAML::Node doc;
-	parser.GetNextDocument(doc);
-
-	typedef std::map<Container*, const YAML::Node*> Widget_children;
-	Widget_children widget_children;
-	for(unsigned i=0; i<doc["widgets"].size(); i++)
+	try
 	{
-		const YAML::Node &n = doc["widgets"][i];
+		std::ifstream fin(filename.Cstring());
+		YAML::Parser parser(fin);
 
-		Ustring name;
-		n["name"] >> name;
-		Ustring prototype_name;
-		n["prototype_name"] >> prototype_name;
+		YAML::Node doc;
+		parser.GetNextDocument(doc);
 
-		std::cout<<"DEBUG: "<<name<<"/"<<prototype_name<<std::endl;
-		//Skip if name is taken
-		if(name_to_widget.find(name) != name_to_widget.end())
+		typedef std::map<Container*, const YAML::Node*> Widget_children;
+		Widget_children widget_children;
+		for(unsigned i=0; i<doc["widgets"].size(); i++)
 		{
-			std::cout<<"ERROR: Name clash, skipping"<<std::endl;
-			continue;
-		}
-		Widget* w = skin->Clone<Widget>(prototype_name);
-		if(!w)
-		{
-			std::cout<<"ERROR: Prototype missing, skipping"<<std::endl;
-			continue;
-		}
-		//Todo: Call widgets loading function
-		w->From_yaml(doc["widgets"][i]);
-		name_to_widget[name] = w;
-		w->Set_name(name);
-		Container* container = dynamic_cast<Container*>(w);
-		if(container)
-			widget_children[container] = &(n["children"]);
-	}
-	//Set root widget
-	Ustring rootname;
-	doc["root"]>>rootname;
-	std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
-	//Check validity of root name
-	if(name_to_widget.find(rootname) != name_to_widget.end())
-		root = name_to_widget[rootname];
-	else
-		std::cout<<"ERROR: Root name invalid"<<std::endl;
+			const YAML::Node &n = doc["widgets"][i];
 
-	//Adding widget children
-	for(Widget_children::iterator i = widget_children.begin(); i != widget_children.end(); ++i)
-	{
-		Container* parent = i->first;
-		for(unsigned j=0; j<i->second->size(); j++)
-		{
-			const YAML::Node &n = *i->second;
 			Ustring name;
-			n[j]>>name;
-			std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
+			n["name"] >> name;
+			Ustring prototype_name;
+			n["prototype_name"] >> prototype_name;
+
+			std::cout<<"DEBUG: "<<name<<"/"<<prototype_name<<std::endl;
+			//Skip if name is taken
 			if(name_to_widget.find(name) != name_to_widget.end())
 			{
-				if(!parent->Add_child(name_to_widget[name]))
-					std::cout<<"ERROR: Failed to add"<<std::endl;
+				std::cout<<"ERROR: Name clash, skipping"<<std::endl;
+				continue;
 			}
-			else
-				std::cout<<"ERROR: Widget missing"<<std::endl;
+			Widget* w = skin->Clone<Widget>(prototype_name);
+			if(!w)
+			{
+				std::cout<<"ERROR: Prototype missing, skipping"<<std::endl;
+				continue;
+			}
+			//Todo: Call widgets loading function
+			w->From_yaml(doc["widgets"][i]);
+			name_to_widget[name] = w;
+			w->Set_name(name);
+			Container* container = dynamic_cast<Container*>(w);
+			if(container)
+				widget_children[container] = &(n["children"]);
 		}
+		//Set root widget
+		Ustring rootname;
+		doc["root"]>>rootname;
+		std::cout<<"DEBUG: rootname = "<<rootname<<std::endl;
+		//Check validity of root name
+		if(name_to_widget.find(rootname) != name_to_widget.end())
+			root = name_to_widget[rootname];
+		else
+			std::cout<<"ERROR: Root name invalid"<<std::endl;
+
+		//Adding widget children
+		for(Widget_children::iterator i = widget_children.begin(); i != widget_children.end(); ++i)
+		{
+			Container* parent = i->first;
+			for(unsigned j=0; j<i->second->size(); j++)
+			{
+				const YAML::Node &n = *i->second;
+				Ustring name;
+				n[j]>>name;
+				std::cout<<"DEBUG: Adding child "<<i->first<<" : "<<name<<std::endl;
+				if(name_to_widget.find(name) != name_to_widget.end())
+				{
+					if(!parent->Add_child(name_to_widget[name]))
+						std::cout<<"ERROR: Failed to add"<<std::endl;
+				}
+				else
+					std::cout<<"ERROR: Widget missing"<<std::endl;
+			}
+		}
+	}
+	catch(...)
+	{
+		root = NULL;
+	}
+	if(!root)
+	{
+		Clear();
+		return false;
 	}
 	return true;
 }

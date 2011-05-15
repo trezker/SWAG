@@ -261,71 +261,52 @@ int main(int argc, char **argv)
 //					layout.Set_filename("testlayout.xml");
 					layout.Set_skin(&skin);
 //					bool s = layout.Load();
-					bool s = layout.Load_yaml();
-					std::cout<<(s?"Loaded":"Load failed")<<std::endl;
-					const Name_to_widget& layout_widgets = layout.Get_widgets();
-
-					root = layout.Get_root();
-					root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-					treemap[widget_tree] = root;
-
-					typedef std::stack<Tree*> Trees_todo;
-					Trees_todo trees_todo;
-					trees_todo.push(widget_tree);
-					
-					while(!trees_todo.empty())
+					if(layout.Load_yaml())
 					{
-						Tree* current_tree = trees_todo.top();
-						trees_todo.pop();
+						std::cout<<"Loaded"<<std::endl;
+						const Name_to_widget& layout_widgets = layout.Get_widgets();
 
-						Container* parent = dynamic_cast<Container*>(treemap[current_tree]);
+						root = layout.Get_root();
+						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
+						treemap[widget_tree] = root;
 
-						if(parent)
+						typedef std::stack<Tree*> Trees_todo;
+						Trees_todo trees_todo;
+						trees_todo.push(widget_tree);
+						
+						while(!trees_todo.empty())
 						{
-							Widgets children = parent->Get_children();
-							for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
+							Tree* current_tree = trees_todo.top();
+							trees_todo.pop();
+
+							Container* parent = dynamic_cast<Container*>(treemap[current_tree]);
+
+							if(parent)
 							{
-								Tree* tree_child = skin.Clone<Tree>("tree");
-								tree_child->Set_text((*i)->Get_name());
-								treemap[tree_child] = *i;
-								current_tree->Add_child(tree_child);
-								trees_todo.push(tree_child);
+								Widgets children = parent->Get_children();
+								for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
+								{
+									Tree* tree_child = skin.Clone<Tree>("tree");
+									tree_child->Set_text((*i)->Get_name());
+									treemap[tree_child] = *i;
+									current_tree->Add_child(tree_child);
+									trees_todo.push(tree_child);
+								}
 							}
 						}
 					}
-
-/*
-					for(Name_to_widget::const_iterator i = layout_widgets.begin(); i != layout_widgets.end(); ++i)
+					else
 					{
-						Container* parent = dynamic_cast<Container*>(i->second);
-
-						if(parent)
-						{
-						}
+						root = skin.Clone<Desktop>("desktop");
+						root->Set_position(Vector2(0, 0));
+						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
+						
+						layout.Add_widget("root", root, NULL);
+						treemap[widget_tree] = root;
 					}
-*/
-/*					
-					typedef std::map<Widget*, Tree*> WTM;
-					WTM wtm;
-					wtm[root] = widget_tree;
-
-					for(Name_to_widget::const_iterator i = layout_widgets.begin(); i != layout_widgets.end(); ++i)
-					{
-						if(i->second == root)
-							continue;
-						Tree* tree_child = skin.Clone<Tree>("tree");
-						tree_child->Set_text(i->first);
-						treemap[tree_child] = i->second;
-						wtm[i->second] = tree_child;
-					}
-					for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
-					{
-						if(i->second->Get_parent())
-						{
-							wtm[i->second->Get_parent()]->Add_child(i->first);
-						}
-					}
-*/				}
+					widget_tree->Select();
+					selected_tree = widget_tree;
+				}
 				if(gui_event.source == fixed_width)
 				{
 					Widget* tw = treemap[selected_tree];
@@ -391,8 +372,11 @@ int main(int argc, char **argv)
 								layout.Remove_widget(treemap[current]);
 								delete treemap[current];
 								delete current;
+								treemap.erase(current);
 								++count;
 							}
+							selected_tree = parent;
+							widget_tree->Select();
 						}
 					}
 				}
