@@ -93,10 +93,7 @@ sinxml::Element* Box::To_xml() const
 
 void Box::To_yaml(YAML::Emitter& out) const
 {
-//	out << YAML::Key << "Box";
-//	out << YAML::Value << YAML::BeginMap;
-		Widget::To_yaml(out);
-//	out << YAML::EndMap;
+	Widget::To_yaml(out);
 
 	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;
