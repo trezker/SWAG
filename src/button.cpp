@@ -143,3 +143,14 @@ void Button::To_yaml(YAML::Emitter& out) const
 		out << YAML::Value << (toggle?"true":"false");
 	out << YAML::EndMap;
 }
+
+void Button::From_yaml(const YAML::Node& in)
+{
+	const YAML::Node& doc = in["Button"];
+	Widget::From_yaml(doc);
+	doc["text"] >> text;
+	Ustring b;
+	doc["toggle"] >> b;
+	toggle = (b=="true");
+	std::cout<<"Loaded button: "<<text<<toggle<<std::endl;
+}
