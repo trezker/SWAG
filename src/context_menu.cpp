@@ -72,10 +72,6 @@ sinxml::Element* Context_menu::To_xml() const
 void Context_menu::To_yaml(YAML::Emitter& out) const
 {
 	Container::To_yaml(out);
-/*	out << YAML::Key << "Context_menu";
-	out << YAML::Value << YAML::BeginMap;
-	out << YAML::EndMap;
-*/
 	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;
 	if(context && context->Get_name() != "")
