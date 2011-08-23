@@ -263,3 +263,12 @@ void Inputbox::To_yaml(YAML::Emitter& out) const
 		out << YAML::Value << text;
 	out << YAML::EndMap;
 }
+
+void Inputbox::From_yaml(const YAML::Node& in)
+{
+	Widget::From_yaml(in);
+	const YAML::Node& doc = in["Inputbox"];
+	doc["text"] >> text;
+
+	std::cout<<"Loaded Inputbox: "<<text<<std::endl;
+}
