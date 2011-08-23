@@ -134,9 +134,9 @@ sinxml::Element* Button::To_xml() const
 
 void Button::To_yaml(YAML::Emitter& out) const
 {
+	Widget::To_yaml(out);
 	out << YAML::Key << "Button";
 	out << YAML::Value << YAML::BeginMap;
-		Widget::To_yaml(out);
 		out << YAML::Key << "text";
 		out << YAML::Value << text.Cstring();
 		out << YAML::Key << "toggle";
@@ -146,8 +146,8 @@ void Button::To_yaml(YAML::Emitter& out) const
 
 void Button::From_yaml(const YAML::Node& in)
 {
+	Widget::From_yaml(in);
 	const YAML::Node& doc = in["Button"];
-	Widget::From_yaml(doc);
 	doc["text"] >> text;
 	Ustring b;
 	doc["toggle"] >> b;
