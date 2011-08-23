@@ -193,10 +193,8 @@ sinxml::Element* Horizontal_paned::To_xml() const
 
 void Horizontal_paned::To_yaml(YAML::Emitter& out) const
 {
-/*	out << YAML::Key << "Horizontal_paned";
-	out << YAML::Value << YAML::BeginMap;
-	out << YAML::EndMap;
-*/	out << YAML::Key << "children";
+	Container::To_yaml(out);
+	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;
 		if(left) out << left->Get_name();
 		if(right) out << right->Get_name();
