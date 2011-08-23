@@ -269,3 +269,11 @@ void Tree::To_yaml(YAML::Emitter& out) const
 
 	out << YAML::EndSeq;
 }
+
+void Tree::From_yaml(const YAML::Node& in)
+{
+	Widget::From_yaml(in);
+	const YAML::Node& doc = in["Tree"];
+	doc["text"] >> text;
+	std::cout<<"Loaded Tree: "<<text<<std::endl;
+}
