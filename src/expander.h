@@ -27,6 +27,7 @@ public:
 	virtual const Ustring& Get_tooltip(float x, float y) const;
 	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
+	virtual void From_yaml(const YAML::Node& in);
 
 	enum Value
 	{

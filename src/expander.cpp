@@ -176,3 +176,11 @@ void Expander::To_yaml(YAML::Emitter& out) const
 
 	out << YAML::EndSeq;
 }
+
+void Expander::From_yaml(const YAML::Node& in)
+{
+	Container::From_yaml(in);
+	const YAML::Node& doc = in["Expander"];
+	doc["text"] >> text;
+	std::cout<<"Loaded Expander: "<<text<<std::endl;
+}
