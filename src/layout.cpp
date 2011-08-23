@@ -121,8 +121,12 @@ bool Layout::Load_yaml()
 			}
 		}
 	}
+	catch(YAML::Exception& e){
+		std::cout<<"ERROR: "<<e.what()<<std::endl;
+	}
 	catch(...)
 	{
+		std::cout<<"Caught error"<<std::endl;
 		root = NULL;
 	}
 	if(!root)
