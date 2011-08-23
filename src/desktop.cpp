@@ -132,10 +132,7 @@ sinxml::Element* Desktop::To_xml() const
 void Desktop::To_yaml(YAML::Emitter& out) const
 {
 	Container::To_yaml(out);
-/*	out << YAML::Key << "Desktop";
-	out << YAML::Value << YAML::BeginMap;
-	out << YAML::EndMap;
-*/
+
 	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;
 	if(child && child->Get_name() != "")
