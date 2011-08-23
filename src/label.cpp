@@ -50,3 +50,12 @@ void Label::To_yaml(YAML::Emitter& out) const
 		out << YAML::Value << text.Cstring();
 	out << YAML::EndMap;
 }
+
+void Label::From_yaml(const YAML::Node& in)
+{
+	Widget::From_yaml(in);
+	const YAML::Node& doc = in["Label"];
+	doc["text"] >> text;
+
+	std::cout<<"Loaded Label: "<<text<<std::endl;
+}
