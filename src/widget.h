@@ -12,10 +12,6 @@ class Widget_view;
 class Event_queue;
 class Event;
 class Container;
-namespace sinxml
-{
-	class Element;
-}
 class Layout;
 
 namespace YAML
@@ -66,7 +62,6 @@ public:
 	
 	bool Covers_point(float x, float y);
 	
-	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 	virtual void From_yaml(const YAML::Node& in);
 protected:	

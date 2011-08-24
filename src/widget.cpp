@@ -3,7 +3,6 @@
 #include "event_queue.h"
 #include "container.h"
 #include <iostream>
-#include <sinxml/sinxml.h>
 #include "layout.h"
 #include <yaml-cpp/yaml.h>
 
@@ -203,25 +202,6 @@ void Widget::Child_resized()
 {
 	if(parent)
 		parent->Handle_child_resize();
-}
-
-using namespace sinxml;
-sinxml::Element* Widget::To_xml() const
-{
-/*	if(name == "")
-	{
-		return NULL;
-	}
-*/	Element* e_self = new Element("widget");
-//	Element* e_name = new Element("name", name);
-	Element* e_tooltip = new Element("tooltip", tooltip.Cstring());
-	Element* e_fixed_width = new Element("fixed_width", fixed_width?"true":"false");
-	Element* e_fixed_height = new Element("fixed_height", fixed_height?"true":"false");
-//	e_self->Add_child(e_name);
-	e_self->Add_child(e_tooltip);
-	e_self->Add_child(e_fixed_width);
-	e_self->Add_child(e_fixed_height);
-	return e_self;
 }
 
 void Widget::To_yaml(YAML::Emitter& out) const

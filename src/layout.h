@@ -17,9 +17,7 @@ public:
 	void Set_skin(Skin* skin);
 	void Set_filename(const Ustring& fn);
 	const Ustring& Get_filename() const;
-	bool Load();
 	bool Load_yaml();
-	bool Save() const;
 	bool Save_yaml() const;
 	
 	Widget* Get_root() const;

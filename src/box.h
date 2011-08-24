@@ -14,7 +14,6 @@ public:
 	virtual void Remove_child(Widget* c);
 	virtual Widgets Get_children() const;
 	virtual const Ustring& Get_tooltip(float x, float y) const;
-	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 protected:
 	Widgets widgets;

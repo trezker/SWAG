@@ -1,6 +1,5 @@
 #include "box.h"
 #include <algorithm>
-#include <sinxml/sinxml.h>
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
@@ -67,28 +66,6 @@ const Ustring& Box::Get_tooltip(float x, float y) const
 			return (*i)->Get_tooltip(x, y);
 	}
 	return Widget::Get_tooltip(x, y);
-}
-
-using namespace sinxml;
-sinxml::Element* Box::To_xml() const
-{
-	Element* e_widget = Widget::To_xml();
-	if(!e_widget)
-		return NULL;
-	Element* e_self = new Element("box");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_widget);
-	for(Widgets::const_iterator i = widgets.begin(); i != widgets.end(); ++i)
-	{
-		const Ustring &child_name = (*i)->Get_name();
-		if(child_name != "")
-		{
-			Element* e_child = new Element("child", child_name.Cstring());
-			e_self->Add_child(e_child);
-		}
-	}
-	return e_self;
 }
 
 void Box::To_yaml(YAML::Emitter& out) const

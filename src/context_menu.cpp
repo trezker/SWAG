@@ -1,5 +1,4 @@
 #include "context_menu.h"
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Context_menu::Context_menu()
@@ -48,25 +47,6 @@ Widgets Context_menu::Get_children() const
 	Widgets w;
 	w.push_back(context);
 	return w;
-}
-
-using namespace sinxml;
-sinxml::Element* Context_menu::To_xml() const
-{
-	Element* e_container = Container::To_xml();
-	if(!e_container)
-		return NULL;
-	Element* e_self = new Element("Context_menu");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_container);
-
-	if(context && context->Get_name() != "")
-	{
-		Element* e_child = new Element("child", context->Get_name().Cstring());
-		e_self->Add_child(e_child);
-	}
-	return e_self;
 }
 
 void Context_menu::To_yaml(YAML::Emitter& out) const

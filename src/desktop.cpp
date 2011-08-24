@@ -1,6 +1,5 @@
 #include "desktop.h"
 #include <iostream>
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Desktop::Desktop()
@@ -108,25 +107,6 @@ Widgets Desktop::Get_children() const
 Vector2 Desktop::Get_tooltip_position() const
 {
 	return tooltip_position;
-}
-
-using namespace sinxml;
-sinxml::Element* Desktop::To_xml() const
-{
-	Element* e_container = Container::To_xml();
-	if(!e_container)
-		return NULL;
-	Element* e_self = new Element("Desktop");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_container);
-
-	if(child && child->Get_name() != "")
-	{
-		Element* e_child = new Element("child", child->Get_name().Cstring());
-		e_self->Add_child(e_child);
-	}
-	return e_self;
 }
 
 void Desktop::To_yaml(YAML::Emitter& out) const

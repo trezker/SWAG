@@ -1,6 +1,5 @@
 #include "button.h"
 #include "event_queue.h"
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Button::Button()
@@ -111,25 +110,6 @@ void Button::Deactivate()
 bool Button::Is_active() const
 {
 	return active;
-}
-
-using namespace sinxml;
-sinxml::Element* Button::To_xml() const
-{
-	Element* e_widget = Widget::To_xml();
-	if(!e_widget)
-		return NULL;
-	Element* e_self = new Element("Button");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_widget);
-
-	Element* e_text = new Element("text", text.Cstring());
-	Element* e_toggle = new Element("toggle", (toggle?"true":"false"));
-	e_self->Add_child(e_text);
-	e_self->Add_child(e_toggle);
-
-	return e_self;
 }
 
 void Button::To_yaml(YAML::Emitter& out) const

@@ -2,7 +2,6 @@
 #include "widget_view.h"
 #include "event_queue.h"
 #include <algorithm>
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Tree::Tree()
@@ -218,33 +217,6 @@ const Ustring& Tree::Get_tooltip(float x, float y) const
 			return (*i)->Get_tooltip(x, y);
 	}
 	return Widget::Get_tooltip(x, y);
-}
-
-using namespace sinxml;
-sinxml::Element* Tree::To_xml() const
-{
-	Element* e_container = Container::To_xml();
-	if(!e_container)
-		return NULL;
-	Element* e_self = new Element("Tree");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_container);
-
-	Element* e_text = new Element("text", text.Cstring());
-	e_self->Add_child(e_text);
-
-	for(Trees::const_iterator i = children.begin(); i != children.end(); ++i)
-	{
-		const Ustring &child_name = (*i)->Get_name();
-		if(child_name != "")
-		{
-			Element* e_child = new Element("child", child_name.Cstring());
-			e_self->Add_child(e_child);
-		}
-	}
-	
-	return e_self;
 }
 
 void Tree::To_yaml(YAML::Emitter& out) const

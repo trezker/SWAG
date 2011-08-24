@@ -19,7 +19,6 @@ public:
 	int Cursor_position() const;
 	int Get_selection_start() const;
 	int Get_selection_end() const;
-	virtual sinxml::Element* To_xml() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 	virtual void From_yaml(const YAML::Node& in);
 

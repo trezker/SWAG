@@ -1,6 +1,5 @@
 #include "horizontal_paned.h"
 #include <iostream>
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Horizontal_paned::Horizontal_paned()
@@ -171,24 +170,6 @@ const Ustring& Horizontal_paned::Get_tooltip(float x, float y) const
 		return right->Get_tooltip(x, y);
 	}
 	return Widget::Get_tooltip(x, y);
-}
-
-using namespace sinxml;
-sinxml::Element* Horizontal_paned::To_xml() const
-{
-	Element* e_container = Container::To_xml();
-	if(!e_container)
-		return NULL;
-	Element* e_self = new Element("Horizontal_paned");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_container);
-
-	Element* e_left = new Element("child", left?left->Get_name().Cstring():"");
-	e_self->Add_child(e_left);
-	Element* e_right = new Element("child", right?right->Get_name().Cstring():"");
-	e_self->Add_child(e_right);
-	return e_self;
 }
 
 void Horizontal_paned::To_yaml(YAML::Emitter& out) const

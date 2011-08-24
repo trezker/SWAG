@@ -1,7 +1,6 @@
 #include "expander.h"
 #include "widget_view.h"
 #include "event_queue.h"
-#include <sinxml/sinxml.h>
 #include <yaml-cpp/yaml.h>
 
 Expander::Expander()
@@ -133,29 +132,6 @@ const Ustring& Expander::Get_tooltip(float x, float y) const
 	if(child && child->Covers_point(x, y))
 		return child->Get_tooltip(x, y);
 	return Widget::Get_tooltip(x, y);
-}
-
-using namespace sinxml;
-sinxml::Element* Expander::To_xml() const
-{
-	Element* e_container = Container::To_xml();
-	if(!e_container)
-		return NULL;
-	Element* e_self = new Element("expander");
-	Element* e_base = new Element("base");
-	e_self->Add_child(e_base);
-	e_base->Add_child(e_container);
-
-
-	if(child && child->Get_name() != "")
-	{
-		Element* e_child = new Element("child", child->Get_name().Cstring());
-		e_self->Add_child(e_child);
-	}
-	
-	Element* e_text = new Element("text", text.Cstring());
-	e_self->Add_child(e_text);
-	return e_self;
 }
 
 void Expander::To_yaml(YAML::Emitter& out) const
