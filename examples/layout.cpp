@@ -124,6 +124,33 @@ int main(int argc, char **argv)
 	widget_properties->Set_text("Widget properties");
 	widget_properties->Enable_fixed_height();
 
+	Vertical_box* attributes_vbox = skin.Clone<Vertical_box>("vertical box");
+	attributes_vbox->Add_child(widget_properties);
+
+
+	//Widget attribute editing interfaces
+	typedef std::map<std::string, Widget*> Attribute_interfaces;
+	Attribute_interfaces attribute_interfaces;
+
+	Label *button_text_label = skin.Clone<Label>("label");
+	button_text_label->Set_text("Text: ");
+	Inputbox *button_text = skin.Clone<Inputbox>("inputbox");
+
+	Horizontal_box* button_text_hbox = skin.Clone<Horizontal_box>("horizontal box");
+	button_text_hbox->Add_child(button_text_label);
+	button_text_hbox->Add_child(button_text);
+
+	Vertical_box* button_properties_vbox = skin.Clone<Vertical_box>("vertical box");
+	button_properties_vbox->Add_child(button_text_hbox);
+
+	Expander* button_properties = skin.Clone<Expander>("expander");
+	button_properties->Add_child(button_properties_vbox);
+	button_properties->Set_text("Button properties");
+	button_properties->Enable_fixed_height();
+	
+	attribute_interfaces["button"] = button_properties;
+
+
 	//FPS
 	Label* fps_label = skin.Clone<Label>("label");
 	fps_label->Set_text("FPS: ");
@@ -135,7 +162,7 @@ int main(int argc, char **argv)
 	toolvbox->Add(removebutton);
 	toolvbox->Add(inputbox);
 	toolvbox->Add(create_expander);
-	toolvbox->Add(widget_properties);
+	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
 
 	Slider_box* slider_box = skin.Clone<Slider_box>("slider box");
@@ -223,6 +250,15 @@ int main(int argc, char **argv)
 						else
 							fixed_height->Deactivate();
 						tooltip->Set_text(tw->Get_tooltip());
+						Widgets widgets = attributes_vbox->Get_children();
+						for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
+							attributes_vbox->Remove_child(*i);
+						}
+						attributes_vbox->Add_child(widget_properties);
+						Attribute_interfaces::iterator ai = attribute_interfaces.find(tw->Get_name().Cstring());
+						if(ai != attribute_interfaces.end()) {
+							attributes_vbox->Add_child(ai->second);
+						}
 					}
 				}
 			}
