@@ -274,9 +274,6 @@ int main(int argc, char **argv)
 			{
 				if(gui_event.source == save_button)
 				{
-/*					layout.Set_filename("testlayout.xml");
-					bool s = layout.Save();
-*/
 					layout.Set_filename("testlayout.yaml");
 					bool s = layout.Save_yaml();
 					std::cout<<(s?"Saved":"Save failed")<<std::endl;
