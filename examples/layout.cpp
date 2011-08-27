@@ -50,24 +50,43 @@ private:
 	Treemap treemap;
 };
 
-class Button_attribute_controller {
+class Controller {
 public:
+	//Load layout and return the 
+	virtual ~Controller();
+	virtual bool Load(Skin& skin) = 0;
 	void Handle_event(const Event& event) {
-		Ustring event_handle = Get_event_handle(event);
-		if(event_handle == "set_text") {
-			
-		}
-	}
-	Ustring Get_event_handle(const Event& event) {
 		Events::iterator i = events.find(event);
 		if(i != events.end()) {
-			return i->second;
+			Handle_event(i->second);
 		}
-		return "";
 	}
-private:
+	virtual void Handle_event(const Ustring& event_handle) = 0;
+protected:
 	typedef std::map<Event, Ustring> Events;
 	Events events;
+	Layout layout;
+};
+Controller::~Controller() {}
+
+class Button_attribute_controller: public Controller {
+public:
+	virtual bool Load(Skin& skin) {
+		layout.Set_filename("interfaces/button.yaml");
+		layout.Set_skin(&skin);
+		if(layout.Load_yaml())
+		{
+			//Todo: Set up event handles
+			return true;
+		}
+		return false;
+	}
+	virtual void Handle_event(const Ustring& event_handle) {
+		if(event_handle == "set_text") {
+			std::cout<<"Here we go!"<<std::endl;
+		}
+	}
+private:
 };
 
 int main(int argc, char **argv)
@@ -199,6 +218,9 @@ int main(int argc, char **argv)
 	typedef std::map<std::string, Widget*> Attribute_interfaces;
 	Attribute_interfaces attribute_interfaces;
 
+	Button_attribute_controller* button_attribute_controller = new Button_attribute_controller;
+	button_attribute_controller->Load(skin);
+	
 	Layout buttonlayout;
 	buttonlayout.Set_filename("interfaces/button.yaml");
 	buttonlayout.Set_skin(&skin);
