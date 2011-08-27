@@ -132,6 +132,16 @@ int main(int argc, char **argv)
 	typedef std::map<std::string, Widget*> Attribute_interfaces;
 	Attribute_interfaces attribute_interfaces;
 
+	Layout buttonlayout;
+	buttonlayout.Set_filename("interfaces/button.yaml");
+	buttonlayout.Set_skin(&skin);
+	if(buttonlayout.Load_yaml())
+	{
+		Widget* buttonbase = buttonlayout.Get_widget("expander");
+		if(buttonbase)
+			attribute_interfaces["button"] = buttonbase;
+	}
+/*
 	Label *button_text_label = skin.Clone<Label>("label");
 	button_text_label->Set_text("Text: ");
 	Inputbox *button_text = skin.Clone<Inputbox>("inputbox");
@@ -149,7 +159,7 @@ int main(int argc, char **argv)
 	button_properties->Enable_fixed_height();
 	
 	attribute_interfaces["button"] = button_properties;
-
+*/
 
 	//FPS
 	Label* fps_label = skin.Clone<Label>("label");

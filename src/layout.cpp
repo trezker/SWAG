@@ -246,3 +246,13 @@ const Name_to_widget& Layout::Get_widgets() const
 {
 	return name_to_widget;
 }
+
+Widget* Layout::Get_widget(const Ustring& name)
+{
+	Name_to_widget::iterator i = name_to_widget.find(name);
+	if(i != name_to_widget.end()) {
+		return i->second;
+	} else {
+		return NULL;
+	}
+}

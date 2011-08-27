@@ -27,6 +27,7 @@ public:
 	void Remove_widget(Widget* widget);
 	void Clear();
 	const Name_to_widget& Get_widgets() const;
+	Widget* Get_widget(const Ustring& name);
 private:
 	Layout(const Layout&){}
 	const Layout& operator=(Layout&){}

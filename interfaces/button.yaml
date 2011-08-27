@@ -1,0 +1,71 @@
+---
+root: root
+widgets:
+  -
+    name: expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    Expander:
+      text: Button
+    children:
+      - vertical box
+  -
+    name: horizontal box
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - text_label
+      - text
+  -
+    name: root
+    prototype_name: desktop
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - expander
+  -
+    name: text
+    prototype_name: inputbox
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    Inputbox:
+      text: ""
+  -
+    name: text_label
+    prototype_name: label
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Label:
+      text: Text
+  -
+    name: toggle
+    prototype_name: checkbox
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Toggle
+      toggle: true
+  -
+    name: vertical box
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - horizontal box
+      - toggle
