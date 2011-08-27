@@ -13,6 +13,7 @@ public:
 	Widget* source;
 	std::string type;
 	virtual Event* Clone() const;
+	bool operator< (const Event& o) const;
 };
 
 class Event_queue

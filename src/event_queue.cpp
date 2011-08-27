@@ -44,3 +44,15 @@ const Event& Event_queue::Front() const
 {
 	return *events.front();
 }
+
+bool Event::operator< (const Event& o) const {
+	if(source>o.source) {
+		return false;
+	} else if(source<o.source) {
+		return true;
+	}
+	if(type<o.type) {
+		return true;
+	}
+	return false;
+}

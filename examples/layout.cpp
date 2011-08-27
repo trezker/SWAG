@@ -49,7 +49,7 @@ private:
 	Tree* root_tree;
 	Treemap treemap;
 };
-/*
+
 class Button_attribute_controller {
 public:
 	void Handle_event(const Event& event) {
@@ -69,7 +69,7 @@ private:
 	typedef std::map<Event, Ustring> Events;
 	Events events;
 };
-*/
+
 int main(int argc, char **argv)
 {
 	al_init();
