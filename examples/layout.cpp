@@ -12,6 +12,64 @@
 #include <list>
 #include <stack>
 
+typedef std::map<Tree*, Widget*> Treemap;
+class Layout_controller {
+public:
+	void Set_root_tree(Tree* tree) {
+		root_tree = tree;
+	}
+	bool Set_tree(Tree* tree, Widget* widget) {
+		treemap[tree] = widget;
+	}
+	Widget* Get_widget(Tree* tree) {
+		Treemap::iterator i = treemap.find(tree);
+		if(i != treemap.end()) {
+			return i->second;
+		}
+		return NULL;
+	}
+	void Clear() {
+		for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
+		{
+			if(i->first == root_tree)
+			{
+				root_tree->Clear_children();
+				continue;
+			}
+			delete i->first;
+		}
+		treemap.clear();
+	}
+	void Destroy_widget(Tree* tree) {
+		delete treemap[tree];
+		treemap.erase(tree);
+		delete tree;
+	}
+private:
+	Tree* root_tree;
+	Treemap treemap;
+};
+/*
+class Button_attribute_controller {
+public:
+	void Handle_event(const Event& event) {
+		Ustring event_handle = Get_event_handle(event);
+		if(event_handle == "set_text") {
+			
+		}
+	}
+	Ustring Get_event_handle(const Event& event) {
+		Events::iterator i = events.find(event);
+		if(i != events.end()) {
+			return i->second;
+		}
+		return "";
+	}
+private:
+	typedef std::map<Event, Ustring> Events;
+	Events events;
+};
+*/
 int main(int argc, char **argv)
 {
 	al_init();
@@ -199,9 +257,9 @@ int main(int argc, char **argv)
 
 	Tree* selected_tree = widget_tree;
 
-	typedef std::map<Tree*, Widget*> Treemap;
-	Treemap treemap;
-	treemap[widget_tree] = root;
+	Layout_controller layout_controller;
+	layout_controller.Set_tree(widget_tree, root);
+	layout_controller.Set_root_tree(widget_tree);
 
 	typedef std::list<double> Frametimes;
 	Frametimes frametimes;
@@ -255,11 +313,10 @@ int main(int argc, char **argv)
 				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
 				if(newsel)
 				{
-					Treemap::iterator i = treemap.find(newsel);
-					if(i != treemap.end())
+					Widget* tw = layout_controller.Get_widget(newsel);
+					if(tw)
 					{
 						selected_tree = newsel;
-						Widget* tw = treemap[selected_tree];
 						if(tw->Has_fixed_width())
 							fixed_width->Activate();
 						else
@@ -286,13 +343,13 @@ int main(int argc, char **argv)
 			{
 				if(gui_event.source == tooltip)
 				{
-					Widget* tw = treemap[selected_tree];
+					Widget* tw = layout_controller.Get_widget(selected_tree);
 					tw->Set_tooltip(tooltip->Get_text().Cstring());
 				}
 				if(gui_event.source == name)
 				{
 					//Must not be empty string, must not collide in layout.
-					Widget* tw = treemap[selected_tree];
+					Widget* tw = layout_controller.Get_widget(selected_tree);
 					if(layout.Rename_widget(tw, name->Get_text())) {
 						selected_tree->Set_text(name->Get_text());
 					} else {
@@ -310,16 +367,7 @@ int main(int argc, char **argv)
 				}
 				if(gui_event.source == load_button)
 				{
-					for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
-					{
-						if(i->first == widget_tree)
-						{
-							widget_tree->Clear_children();
-							continue;
-						}
-						delete i->first;
-					}
-					treemap.clear();
+					layout_controller.Clear();
 					layout.Set_filename("testlayout.yaml");
 //					layout.Set_filename("testlayout.xml");
 					layout.Set_skin(&skin);
@@ -331,7 +379,7 @@ int main(int argc, char **argv)
 
 						root = layout.Get_root();
 						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-						treemap[widget_tree] = root;
+						layout_controller.Set_tree(widget_tree, root);
 
 						typedef std::stack<Tree*> Trees_todo;
 						Trees_todo trees_todo;
@@ -342,7 +390,7 @@ int main(int argc, char **argv)
 							Tree* current_tree = trees_todo.top();
 							trees_todo.pop();
 
-							Container* parent = dynamic_cast<Container*>(treemap[current_tree]);
+							Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(current_tree));
 
 							if(parent)
 							{
@@ -351,7 +399,7 @@ int main(int argc, char **argv)
 								{
 									Tree* tree_child = skin.Clone<Tree>("tree");
 									tree_child->Set_text((*i)->Get_name());
-									treemap[tree_child] = *i;
+									layout_controller.Set_tree(tree_child, *i);
 									current_tree->Add_child(tree_child);
 									trees_todo.push(tree_child);
 								}
@@ -365,14 +413,14 @@ int main(int argc, char **argv)
 						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
 						
 						layout.Add_widget("root", root, NULL);
-						treemap[widget_tree] = root;
+						layout_controller.Set_tree(widget_tree, root);
 					}
 					widget_tree->Select();
 					selected_tree = widget_tree;
 				}
 				if(gui_event.source == fixed_width)
 				{
-					Widget* tw = treemap[selected_tree];
+					Widget* tw = layout_controller.Get_widget(selected_tree);
 					if(fixed_width->Is_active())
 						tw->Enable_fixed_width();
 					else
@@ -380,7 +428,7 @@ int main(int argc, char **argv)
 				}
 				if(gui_event.source == fixed_height)
 				{
-					Widget* tw = treemap[selected_tree];
+					Widget* tw = layout_controller.Get_widget(selected_tree);
 					if(fixed_height->Is_active())
 						tw->Enable_fixed_height();
 					else
@@ -393,7 +441,7 @@ int main(int argc, char **argv)
 					{
 						std::cout<<i->second<<std::endl;
 						Widget* child = skin.Clone<Widget>(i->second);
-						Container* parent = dynamic_cast<Container*>(treemap[selected_tree]);
+						Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(selected_tree));
 
 						if(parent && parent->Add_child(child))
 						{
@@ -401,7 +449,7 @@ int main(int argc, char **argv)
 							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(name);
 							selected_tree->Add_child(tree_child);
-							treemap[tree_child] = child;
+							layout_controller.Set_tree(tree_child, child);
 							selected_tree->Open();
 							Text_interface* has_text = dynamic_cast<Text_interface*>(child);
 							if(has_text)
@@ -416,7 +464,7 @@ int main(int argc, char **argv)
 						Tree* parent = dynamic_cast<Tree*>(selected_tree->Get_parent());
 						if(parent)
 						{
-							dynamic_cast<Container*>(treemap[parent])->Remove_child(treemap[selected_tree]);
+							dynamic_cast<Container*>(layout_controller.Get_widget(parent))->Remove_child(layout_controller.Get_widget(selected_tree));
 
 							parent->Remove_child(selected_tree);
 							Trees deadlist;
@@ -432,10 +480,8 @@ int main(int argc, char **argv)
 								{
 									deadlist.push_back(*i);
 								}
-								layout.Remove_widget(treemap[current]);
-								delete treemap[current];
-								delete current;
-								treemap.erase(current);
+								layout.Remove_widget(layout_controller.Get_widget(current));
+								layout_controller.Destroy_widget(current);
 								++count;
 							}
 							selected_tree = parent;
