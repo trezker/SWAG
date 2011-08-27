@@ -28,6 +28,7 @@ public:
 	void Clear();
 	const Name_to_widget& Get_widgets() const;
 	Widget* Get_widget(const Ustring& name);
+	bool Rename_widget(Widget* widget, const Ustring& name);
 private:
 	Layout(const Layout&){}
 	const Layout& operator=(Layout&){}

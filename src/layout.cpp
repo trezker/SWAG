@@ -256,3 +256,21 @@ Widget* Layout::Get_widget(const Ustring& name)
 		return NULL;
 	}
 }
+
+bool Layout::Rename_widget(Widget* widget, const Ustring& name)
+{
+	//Check the new name is not taken.
+	Name_to_widget::iterator i = name_to_widget.find(name);
+	if(i != name_to_widget.end()) {
+		return false;
+	}
+	//Find and rename
+	i = name_to_widget.find(widget->Get_name().Cstring());
+	if(i != name_to_widget.end() && i->second == widget) { //Second condition makes sure the widget is from this layout
+		name_to_widget[name] = widget;
+		name_to_widget.erase(i);
+		widget->Set_name(name);
+		return true;
+	}
+	return false;
+}

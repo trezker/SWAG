@@ -100,6 +100,10 @@ int main(int argc, char **argv)
 
 	//Widget properties
 
+	Label *name_label = skin.Clone<Label>("label");
+	name_label->Set_text("Name: ");
+	Inputbox *name = skin.Clone<Inputbox>("inputbox");
+
 	Button *fixed_width = skin.Clone<Button>("checkbox");
 	fixed_width->Set_text("Fixed width");
 
@@ -110,11 +114,16 @@ int main(int argc, char **argv)
 	tooltip_label->Set_text("Tooltip: ");
 	Inputbox *tooltip = skin.Clone<Inputbox>("inputbox");
 	
+	Horizontal_box* name_hbox = skin.Clone<Horizontal_box>("horizontal box");
+	name_hbox->Add_child(name_label);
+	name_hbox->Add_child(name);
+
 	Horizontal_box* tooltip_hbox = skin.Clone<Horizontal_box>("horizontal box");
 	tooltip_hbox->Add_child(tooltip_label);
 	tooltip_hbox->Add_child(tooltip);
 
 	Vertical_box* widget_properties_vbox = skin.Clone<Vertical_box>("vertical box");
+	widget_properties_vbox->Add_child(name_hbox);
 	widget_properties_vbox->Add_child(fixed_width);
 	widget_properties_vbox->Add_child(fixed_height);
 	widget_properties_vbox->Add_child(tooltip_hbox);
@@ -259,6 +268,7 @@ int main(int argc, char **argv)
 							fixed_height->Activate();
 						else
 							fixed_height->Deactivate();
+						name->Set_text(tw->Get_name());
 						tooltip->Set_text(tw->Get_tooltip());
 						Widgets widgets = attributes_vbox->Get_children();
 						for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
@@ -278,6 +288,14 @@ int main(int argc, char **argv)
 				{
 					Widget* tw = treemap[selected_tree];
 					tw->Set_tooltip(tooltip->Get_text().Cstring());
+				}
+				if(gui_event.source == name)
+				{
+					//Must not be empty string, must not collide in layout.
+					Widget* tw = treemap[selected_tree];
+					if(layout.Rename_widget(tw, name->Get_text())) {
+						selected_tree->Set_text(name->Get_text());
+					}
 				}
 			}
 			else if(gui_event.type == "clicked")
