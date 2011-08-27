@@ -259,6 +259,8 @@ Widget* Layout::Get_widget(const Ustring& name)
 
 bool Layout::Rename_widget(Widget* widget, const Ustring& name)
 {
+	if(name == "")
+		return false;
 	//Check the new name is not taken.
 	Name_to_widget::iterator i = name_to_widget.find(name);
 	if(i != name_to_widget.end()) {

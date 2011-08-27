@@ -295,6 +295,8 @@ int main(int argc, char **argv)
 					Widget* tw = treemap[selected_tree];
 					if(layout.Rename_widget(tw, name->Get_text())) {
 						selected_tree->Set_text(name->Get_text());
+					} else {
+						name->Set_text(tw->Get_name());
 					}
 				}
 			}
