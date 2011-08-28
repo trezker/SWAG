@@ -13,88 +13,9 @@
 #include <stack>
 
 #include "controller.h"
+#include "layout_controller.h"
+#include "button_attribute_controller.h"
 
-typedef std::map<Tree*, Widget*> Treemap;
-class Layout_controller {
-public:
-	void Set_root_tree(Tree* tree) {
-		root_tree = tree;
-	}
-	bool Set_tree(Tree* tree, Widget* widget) {
-		treemap[tree] = widget;
-	}
-	void Select_tree(Tree* tree) {
-		selected_tree = tree;
-	}
-	Widget* Get_widget(Tree* tree) {
-		Treemap::iterator i = treemap.find(tree);
-		if(i != treemap.end()) {
-			return i->second;
-		}
-		return NULL;
-	}
-	Widget* Get_current_widget() {
-		return Get_widget(selected_tree);
-	}
-	Tree* Get_current_tree() {
-		return selected_tree;
-	}
-	void Clear() {
-		for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
-		{
-			if(i->first == root_tree)
-			{
-				root_tree->Clear_children();
-				continue;
-			}
-			delete i->first;
-		}
-		treemap.clear();
-	}
-	void Destroy_widget(Tree* tree) {
-		delete treemap[tree];
-		treemap.erase(tree);
-		delete tree;
-	}
-private:
-	Tree* root_tree;
-	Treemap treemap;
-	Tree* selected_tree;
-};
-
-
-class Button_attribute_controller: public Controller {
-public:
-	virtual bool Load(Skin& skin) {
-		layout.Set_filename("interfaces/button.yaml");
-		layout.Set_skin(&skin);
-		if(layout.Load_yaml())
-		{
-			events[Event(layout.Get_widget("text"), "changed")] = "set_text";
-			return true;
-		}
-		return false;
-	}
-	void Set_layout_controller(Layout_controller& lc) {
-		layout_controller = &lc;
-	}
-	virtual Widget* Get_root() {
-		return layout.Get_widget("expander");
-	}
-	virtual void Handle_event(const Ustring& event_handle) {
-		if(event_handle == "set_text") {
-			std::cout<<"Here we go!"<<std::endl;
-			Button* button = dynamic_cast<Button*>(layout_controller->Get_current_widget());
-			if(button) {
-				std::cout<<"It's a button!"<<std::endl;
-				Inputbox* text = dynamic_cast<Inputbox*>(layout.Get_widget("text"));
-				button->Set_text(text->Get_text());
-			}
-		}
-	}
-private:
-	Layout_controller* layout_controller;
-};
 
 int main(int argc, char **argv)
 {
