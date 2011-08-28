@@ -11,6 +11,7 @@ public:
 	void Set_layout_controller(Layout_controller& lc);
 	virtual Widget* Get_root();
 	virtual void Handle_event(const Ustring& event_handle);
+	virtual void Synchronize_values();
 private:
 	Layout_controller* layout_controller;
 };

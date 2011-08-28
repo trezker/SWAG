@@ -263,9 +263,10 @@ int main(int argc, char **argv)
 						if(ai != attribute_interfaces.end()) {
 							attributes_vbox->Add_child(ai->second);
 						}
-*/						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_name().Cstring());
+*/						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
 						if(ac != attribute_controllers.end()) {
 							attributes_vbox->Add_child(ac->second->Get_root());
+							ac->second->Synchronize_values();
 						}
 					}
 				}

@@ -34,3 +34,11 @@ void Button_attribute_controller::Handle_event(const Ustring& event_handle) {
 		}
 	}
 }
+
+void Button_attribute_controller::Synchronize_values() {
+	Button* button = dynamic_cast<Button*>(layout_controller->Get_current_widget());
+	Inputbox* text = dynamic_cast<Inputbox*>(layout.Get_widget("text"));
+	Button* toggle = dynamic_cast<Button*>(layout.Get_widget("toggle"));
+	text->Set_text(button->Get_text());
+	toggle->Set_active(button->Is_toggle());
+}

@@ -12,6 +12,7 @@ public:
 	virtual Widget* Get_root() = 0;
 	void Handle_event(const Event& event);
 	virtual void Handle_event(const Ustring& event_handle) = 0;
+	virtual void Synchronize_values() = 0;
 protected:
 	typedef std::map<Event, Ustring> Events;
 	Events events;

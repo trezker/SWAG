@@ -19,6 +19,7 @@ public:
 	bool Is_toggle() const;
 	void Activate();
 	void Deactivate();
+	void Set_active(bool iactive);
 	bool Is_active() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 	virtual void From_yaml(const YAML::Node& in);

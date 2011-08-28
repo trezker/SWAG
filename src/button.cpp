@@ -107,6 +107,10 @@ void Button::Deactivate()
 	Push_event(Event(this, "deactivated"));
 }
 
+void Button::Set_active(bool iactive) {
+	active = iactive;
+}
+
 bool Button::Is_active() const
 {
 	return active;
