@@ -52,9 +52,10 @@ private:
 
 class Controller {
 public:
-	//Load layout and return the 
 	virtual ~Controller();
+	//Load layout and setup the event handles
 	virtual bool Load(Skin& skin) = 0;
+	virtual Widget* Get_root() = 0;
 	void Handle_event(const Event& event) {
 		Events::iterator i = events.find(event);
 		if(i != events.end()) {
@@ -76,10 +77,13 @@ public:
 		layout.Set_skin(&skin);
 		if(layout.Load_yaml())
 		{
-			//Todo: Set up event handles
+			events[Event(layout.Get_widget("text"), "changed")] = "set_text";
 			return true;
 		}
 		return false;
+	}
+	virtual Widget* Get_root() {
+		return layout.Get_widget("expander");
 	}
 	virtual void Handle_event(const Ustring& event_handle) {
 		if(event_handle == "set_text") {
@@ -215,12 +219,16 @@ int main(int argc, char **argv)
 
 
 	//Widget attribute editing interfaces
+	typedef std::map<std::string, Controller*> Attribute_controllers;
+	Attribute_controllers attribute_controllers;
+
+	Controller* controller = new Button_attribute_controller;
+	controller->Load(skin);
+	attribute_controllers["button"] = controller;
+/*	
 	typedef std::map<std::string, Widget*> Attribute_interfaces;
 	Attribute_interfaces attribute_interfaces;
 
-	Button_attribute_controller* button_attribute_controller = new Button_attribute_controller;
-	button_attribute_controller->Load(skin);
-	
 	Layout buttonlayout;
 	buttonlayout.Set_filename("interfaces/button.yaml");
 	buttonlayout.Set_skin(&skin);
@@ -230,6 +238,7 @@ int main(int argc, char **argv)
 		if(buttonbase)
 			attribute_interfaces["button"] = buttonbase;
 	}
+*/
 /*
 	Label *button_text_label = skin.Clone<Label>("label");
 	button_text_label->Set_text("Text: ");
@@ -330,6 +339,9 @@ int main(int argc, char **argv)
 		{
 			const Event& gui_event = gui_events.Front();
 //			std::cout<<gui_event.type<<std::endl;
+			for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
+				i->second->Handle_event(gui_event);
+			}
 			if(gui_event.type == "selected")
 			{
 				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
@@ -354,9 +366,13 @@ int main(int argc, char **argv)
 							attributes_vbox->Remove_child(*i);
 						}
 						attributes_vbox->Add_child(widget_properties);
-						Attribute_interfaces::iterator ai = attribute_interfaces.find(tw->Get_name().Cstring());
+/*						Attribute_interfaces::iterator ai = attribute_interfaces.find(tw->Get_name().Cstring());
 						if(ai != attribute_interfaces.end()) {
 							attributes_vbox->Add_child(ai->second);
+						}
+*/						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_name().Cstring());
+						if(ac != attribute_controllers.end()) {
+							attributes_vbox->Add_child(ac->second->Get_root());
 						}
 					}
 				}
