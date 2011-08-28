@@ -21,12 +21,21 @@ public:
 	bool Set_tree(Tree* tree, Widget* widget) {
 		treemap[tree] = widget;
 	}
+	void Select_tree(Tree* tree) {
+		selected_tree = tree;
+	}
 	Widget* Get_widget(Tree* tree) {
 		Treemap::iterator i = treemap.find(tree);
 		if(i != treemap.end()) {
 			return i->second;
 		}
 		return NULL;
+	}
+	Widget* Get_current_widget() {
+		return Get_widget(selected_tree);
+	}
+	Tree* Get_current_tree() {
+		return selected_tree;
 	}
 	void Clear() {
 		for(Treemap::iterator i = treemap.begin(); i != treemap.end(); ++i)
@@ -48,6 +57,7 @@ public:
 private:
 	Tree* root_tree;
 	Treemap treemap;
+	Tree* selected_tree;
 };
 
 class Controller {
@@ -82,15 +92,25 @@ public:
 		}
 		return false;
 	}
+	void Set_layout_controller(Layout_controller& lc) {
+		layout_controller = &lc;
+	}
 	virtual Widget* Get_root() {
 		return layout.Get_widget("expander");
 	}
 	virtual void Handle_event(const Ustring& event_handle) {
 		if(event_handle == "set_text") {
 			std::cout<<"Here we go!"<<std::endl;
+			Button* button = dynamic_cast<Button*>(layout_controller->Get_current_widget());
+			if(button) {
+				std::cout<<"It's a button!"<<std::endl;
+				Inputbox* text = dynamic_cast<Inputbox*>(layout.Get_widget("text"));
+				button->Set_text(text->Get_text());
+			}
 		}
 	}
 private:
+	Layout_controller* layout_controller;
 };
 
 int main(int argc, char **argv)
@@ -218,46 +238,21 @@ int main(int argc, char **argv)
 	attributes_vbox->Add_child(widget_properties);
 
 
+
+	Layout_controller layout_controller;
+	layout_controller.Set_tree(widget_tree, root);
+	layout_controller.Set_root_tree(widget_tree);
+	layout_controller.Select_tree(widget_tree);
+
 	//Widget attribute editing interfaces
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
 
-	Controller* controller = new Button_attribute_controller;
+	Button_attribute_controller* controller = new Button_attribute_controller;
 	controller->Load(skin);
+	controller->Set_layout_controller(layout_controller);
 	attribute_controllers["button"] = controller;
-/*	
-	typedef std::map<std::string, Widget*> Attribute_interfaces;
-	Attribute_interfaces attribute_interfaces;
 
-	Layout buttonlayout;
-	buttonlayout.Set_filename("interfaces/button.yaml");
-	buttonlayout.Set_skin(&skin);
-	if(buttonlayout.Load_yaml())
-	{
-		Widget* buttonbase = buttonlayout.Get_widget("expander");
-		if(buttonbase)
-			attribute_interfaces["button"] = buttonbase;
-	}
-*/
-/*
-	Label *button_text_label = skin.Clone<Label>("label");
-	button_text_label->Set_text("Text: ");
-	Inputbox *button_text = skin.Clone<Inputbox>("inputbox");
-
-	Horizontal_box* button_text_hbox = skin.Clone<Horizontal_box>("horizontal box");
-	button_text_hbox->Add_child(button_text_label);
-	button_text_hbox->Add_child(button_text);
-
-	Vertical_box* button_properties_vbox = skin.Clone<Vertical_box>("vertical box");
-	button_properties_vbox->Add_child(button_text_hbox);
-
-	Expander* button_properties = skin.Clone<Expander>("expander");
-	button_properties->Add_child(button_properties_vbox);
-	button_properties->Set_text("Button properties");
-	button_properties->Enable_fixed_height();
-	
-	attribute_interfaces["button"] = button_properties;
-*/
 
 	//FPS
 	Label* fps_label = skin.Clone<Label>("label");
@@ -285,12 +280,6 @@ int main(int argc, char **argv)
 
 	Event_queue gui_events;
 	toolroot->Set_event_queue(&gui_events);
-
-	Tree* selected_tree = widget_tree;
-
-	Layout_controller layout_controller;
-	layout_controller.Set_tree(widget_tree, root);
-	layout_controller.Set_root_tree(widget_tree);
 
 	typedef std::list<double> Frametimes;
 	Frametimes frametimes;
@@ -350,7 +339,7 @@ int main(int argc, char **argv)
 					Widget* tw = layout_controller.Get_widget(newsel);
 					if(tw)
 					{
-						selected_tree = newsel;
+						layout_controller.Select_tree(newsel);
 						if(tw->Has_fixed_width())
 							fixed_width->Activate();
 						else
@@ -381,15 +370,15 @@ int main(int argc, char **argv)
 			{
 				if(gui_event.source == tooltip)
 				{
-					Widget* tw = layout_controller.Get_widget(selected_tree);
+					Widget* tw = layout_controller.Get_current_widget();
 					tw->Set_tooltip(tooltip->Get_text().Cstring());
 				}
 				if(gui_event.source == name)
 				{
 					//Must not be empty string, must not collide in layout.
-					Widget* tw = layout_controller.Get_widget(selected_tree);
+					Widget* tw = layout_controller.Get_current_widget();
 					if(layout.Rename_widget(tw, name->Get_text())) {
-						selected_tree->Set_text(name->Get_text());
+						layout_controller.Get_current_tree()->Set_text(name->Get_text());
 					} else {
 						name->Set_text(tw->Get_name());
 					}
@@ -454,11 +443,11 @@ int main(int argc, char **argv)
 						layout_controller.Set_tree(widget_tree, root);
 					}
 					widget_tree->Select();
-					selected_tree = widget_tree;
+					layout_controller.Select_tree(widget_tree);
 				}
 				if(gui_event.source == fixed_width)
 				{
-					Widget* tw = layout_controller.Get_widget(selected_tree);
+					Widget* tw = layout_controller.Get_current_widget();
 					if(fixed_width->Is_active())
 						tw->Enable_fixed_width();
 					else
@@ -466,29 +455,29 @@ int main(int argc, char **argv)
 				}
 				if(gui_event.source == fixed_height)
 				{
-					Widget* tw = layout_controller.Get_widget(selected_tree);
+					Widget* tw = layout_controller.Get_current_widget();
 					if(fixed_height->Is_active())
 						tw->Enable_fixed_height();
 					else
 						tw->Disable_fixed_height();
 				}
-				if(selected_tree)
+				if(layout_controller.Get_current_tree())
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
 					if(i != create_buttons.end())
 					{
 						std::cout<<i->second<<std::endl;
 						Widget* child = skin.Clone<Widget>(i->second);
-						Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(selected_tree));
+						Container* parent = dynamic_cast<Container*>(layout_controller.Get_current_widget());
 
 						if(parent && parent->Add_child(child))
 						{
 							Ustring name = layout.Add_widget(i->second, child, parent);
 							Tree* tree_child = skin.Clone<Tree>("tree");
 							tree_child->Set_text(name);
-							selected_tree->Add_child(tree_child);
+							layout_controller.Get_current_tree()->Add_child(tree_child);
 							layout_controller.Set_tree(tree_child, child);
-							selected_tree->Open();
+							layout_controller.Get_current_tree()->Open();
 							Text_interface* has_text = dynamic_cast<Text_interface*>(child);
 							if(has_text)
 								has_text->Set_text(name);
@@ -499,15 +488,15 @@ int main(int argc, char **argv)
 					}
 					if(gui_event.source == removebutton)
 					{
-						Tree* parent = dynamic_cast<Tree*>(selected_tree->Get_parent());
+						Tree* parent = dynamic_cast<Tree*>(layout_controller.Get_current_tree()->Get_parent());
 						if(parent)
 						{
-							dynamic_cast<Container*>(layout_controller.Get_widget(parent))->Remove_child(layout_controller.Get_widget(selected_tree));
+							dynamic_cast<Container*>(layout_controller.Get_widget(parent))->Remove_child(layout_controller.Get_current_widget());
 
-							parent->Remove_child(selected_tree);
+							parent->Remove_child(layout_controller.Get_current_tree());
 							Trees deadlist;
-							deadlist.push_back(selected_tree);
-							selected_tree = NULL;
+							deadlist.push_back(layout_controller.Get_current_tree());
+							layout_controller.Select_tree(NULL);
 							int count = 0;
 							while(!deadlist.empty())
 							{
@@ -522,7 +511,7 @@ int main(int argc, char **argv)
 								layout_controller.Destroy_widget(current);
 								++count;
 							}
-							selected_tree = parent;
+							layout_controller.Select_tree(parent);
 							widget_tree->Select();
 						}
 					}
@@ -530,11 +519,11 @@ int main(int argc, char **argv)
 			}
 			else if(gui_event.type == "activated")
 			{
-				if(selected_tree)
+				if(layout_controller.Get_current_tree())
 				{
 					if(gui_event.source == inputbox)
 					{
-						selected_tree->Set_text(inputbox->Get_text());
+						layout_controller.Get_current_tree()->Set_text(inputbox->Get_text());
 					}
 				}
 			}
