@@ -211,8 +211,6 @@ int main(int argc, char **argv)
 				al_acknowledge_resize(event.display.source);
 				if(event.display.source == display)
 					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
-//				if(event.display.source == tooldisplay)
-//					toolroot->Set_size(Vector2(event.display.width-20, event.display.height-20));
 			}
 			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
 			{
@@ -231,7 +229,6 @@ int main(int argc, char **argv)
 		while(!gui_events.Empty())
 		{
 			const Event& gui_event = gui_events.Front();
-//			std::cout<<gui_event.type<<std::endl;
 			for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
 				i->second->Handle_event(gui_event);
 			}
@@ -259,11 +256,7 @@ int main(int argc, char **argv)
 							attributes_vbox->Remove_child(*i);
 						}
 						attributes_vbox->Add_child(widget_properties);
-/*						Attribute_interfaces::iterator ai = attribute_interfaces.find(tw->Get_name().Cstring());
-						if(ai != attribute_interfaces.end()) {
-							attributes_vbox->Add_child(ai->second);
-						}
-*/						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
+						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
 						if(ac != attribute_controllers.end()) {
 							attributes_vbox->Add_child(ac->second->Get_root());
 							ac->second->Synchronize_values();
@@ -280,7 +273,6 @@ int main(int argc, char **argv)
 				}
 				if(gui_event.source == name)
 				{
-					//Must not be empty string, must not collide in layout.
 					Widget* tw = layout_controller.Get_current_widget();
 					if(layout.Rename_widget(tw, name->Get_text())) {
 						layout_controller.Get_current_tree()->Set_text(name->Get_text());
@@ -301,9 +293,7 @@ int main(int argc, char **argv)
 				{
 					layout_controller.Clear();
 					layout.Set_filename("testlayout.yaml");
-//					layout.Set_filename("testlayout.xml");
 					layout.Set_skin(&skin);
-//					bool s = layout.Load();
 					if(layout.Load_yaml())
 					{
 						std::cout<<"Loaded"<<std::endl;
