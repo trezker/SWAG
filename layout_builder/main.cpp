@@ -12,6 +12,8 @@
 #include <list>
 #include <stack>
 
+#include "controller.h"
+
 typedef std::map<Tree*, Widget*> Treemap;
 class Layout_controller {
 public:
@@ -60,25 +62,6 @@ private:
 	Tree* selected_tree;
 };
 
-class Controller {
-public:
-	virtual ~Controller();
-	//Load layout and setup the event handles
-	virtual bool Load(Skin& skin) = 0;
-	virtual Widget* Get_root() = 0;
-	void Handle_event(const Event& event) {
-		Events::iterator i = events.find(event);
-		if(i != events.end()) {
-			Handle_event(i->second);
-		}
-	}
-	virtual void Handle_event(const Ustring& event_handle) = 0;
-protected:
-	typedef std::map<Event, Ustring> Events;
-	Events events;
-	Layout layout;
-};
-Controller::~Controller() {}
 
 class Button_attribute_controller: public Controller {
 public:
