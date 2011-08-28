@@ -5,6 +5,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_native_dialog.h>
 
 #include <iostream>
 #include <string>
@@ -285,60 +286,84 @@ int main(int argc, char **argv)
 			{
 				if(gui_event.source == save_button)
 				{
-					layout.Set_filename("testlayout.yaml");
-					bool s = layout.Save_yaml();
-					std::cout<<(s?"Saved":"Save failed")<<std::endl;
+					ALLEGRO_FILECHOOSER* fc = al_create_native_file_dialog(
+						layout.Get_filename().Cstring(),
+						"Save",
+						"*",
+						ALLEGRO_FILECHOOSER_SAVE);
+					al_show_native_file_dialog(NULL, fc);
+					if(al_get_native_file_dialog_count(fc) > 0) {
+						const char *filename = al_get_native_file_dialog_path(fc, 0);
+						layout.Set_filename(filename);
+
+						//layout.Set_filename("testlayout.yaml");
+						bool s = layout.Save_yaml();
+						std::cout<<(s?"Saved":"Save failed")<<std::endl;
+					}
+					al_destroy_native_file_dialog(fc);
 				}
 				if(gui_event.source == load_button)
 				{
-					layout_controller.Clear();
-					layout.Set_filename("testlayout.yaml");
-					layout.Set_skin(&skin);
-					if(layout.Load_yaml())
-					{
-						std::cout<<"Loaded"<<std::endl;
-						const Name_to_widget& layout_widgets = layout.Get_widgets();
+					ALLEGRO_FILECHOOSER* fc = al_create_native_file_dialog(
+						layout.Get_filename().Cstring(),
+						"Load",
+						"*",
+						ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
+					al_show_native_file_dialog(NULL, fc);
+					if(al_get_native_file_dialog_count(fc) > 0) {
+						const char *filename = al_get_native_file_dialog_path(fc, 0);
+						layout.Set_filename(filename);
 
-						root = layout.Get_root();
-						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-						layout_controller.Set_tree(widget_tree, root);
-
-						typedef std::stack<Tree*> Trees_todo;
-						Trees_todo trees_todo;
-						trees_todo.push(widget_tree);
-						
-						while(!trees_todo.empty())
+						layout_controller.Clear();
+						//layout.Set_filename("testlayout.yaml");
+						layout.Set_skin(&skin);
+						if(layout.Load_yaml())
 						{
-							Tree* current_tree = trees_todo.top();
-							trees_todo.pop();
+							std::cout<<"Loaded"<<std::endl;
+							const Name_to_widget& layout_widgets = layout.Get_widgets();
 
-							Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(current_tree));
+							root = layout.Get_root();
+							root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
+							layout_controller.Set_tree(widget_tree, root);
 
-							if(parent)
+							typedef std::stack<Tree*> Trees_todo;
+							Trees_todo trees_todo;
+							trees_todo.push(widget_tree);
+							
+							while(!trees_todo.empty())
 							{
-								Widgets children = parent->Get_children();
-								for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
+								Tree* current_tree = trees_todo.top();
+								trees_todo.pop();
+
+								Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(current_tree));
+
+								if(parent)
 								{
-									Tree* tree_child = skin.Clone<Tree>("tree");
-									tree_child->Set_text((*i)->Get_name());
-									layout_controller.Set_tree(tree_child, *i);
-									current_tree->Add_child(tree_child);
-									trees_todo.push(tree_child);
+									Widgets children = parent->Get_children();
+									for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
+									{
+										Tree* tree_child = skin.Clone<Tree>("tree");
+										tree_child->Set_text((*i)->Get_name());
+										layout_controller.Set_tree(tree_child, *i);
+										current_tree->Add_child(tree_child);
+										trees_todo.push(tree_child);
+									}
 								}
 							}
 						}
+						else
+						{
+							root = skin.Clone<Desktop>("desktop");
+							root->Set_position(Vector2(0, 0));
+							root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
+							
+							layout.Add_widget("root", root, NULL);
+							layout_controller.Set_tree(widget_tree, root);
+						}
+						widget_tree->Select();
+						layout_controller.Select_tree(widget_tree);
 					}
-					else
-					{
-						root = skin.Clone<Desktop>("desktop");
-						root->Set_position(Vector2(0, 0));
-						root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-						
-						layout.Add_widget("root", root, NULL);
-						layout_controller.Set_tree(widget_tree, root);
-					}
-					widget_tree->Select();
-					layout_controller.Select_tree(widget_tree);
+					al_destroy_native_file_dialog(fc);
 				}
 				if(gui_event.source == fixed_width)
 				{
