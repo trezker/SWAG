@@ -45,6 +45,29 @@ solution (lib_name)
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 
+	project ("layout_builder")
+		kind "ConsoleApp"
+		language "C++"
+		location "build"
+		files { "layout_builder/*.cpp" }
+		includedirs { "src", "hardcoded_views" }
+		libdirs { "build/lib" }
+		links ("swag_hc")
+		links (lib_name)
+		links {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf", "allegro_primitives","allegro_dialog", "clipboard", "yaml-cpp" }
+		targetdir "build/layout_builder"
+		configuration { "linux", "gmake" }
+			buildoptions { "-pg" }
+			linkoptions { "-pg" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+ 
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
 	ex_dependencies = {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf",
 	"allegro_primitives","allegro_dialog", "clipboard", "yaml-cpp" }
 	examples = os.matchfiles("examples/*.cpp")
