@@ -120,6 +120,18 @@ const Ustring& Widget::Get_tooltip(float x, float y) const
 	return tooltip;
 }
 
+void Widget::Set_fixed_height(bool active)
+{
+	fixed_height = active;
+	Child_resized();
+}
+
+void Widget::Set_fixed_width(bool active)
+{
+	fixed_width = active;
+	Child_resized();
+}
+
 void Widget::Enable_fixed_height()
 {
 	fixed_height = true;

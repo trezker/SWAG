@@ -48,6 +48,8 @@ public:
 	const Ustring& Get_tooltip() const;
 	virtual const Ustring& Get_tooltip(float x, float y) const;
 
+	void Set_fixed_height(bool active);
+	void Set_fixed_width(bool active);
 	void Enable_fixed_height();
 	void Enable_fixed_width();
 	void Disable_fixed_height();

@@ -1,5 +1,9 @@
 #include "layout_controller.h"
 
+void Layout_controller::Set_layout(Layout* ilayout){
+	layout = ilayout;
+}
+
 void Layout_controller::Set_root_tree(Tree* tree) {
 	root_tree = tree;
 }
@@ -45,4 +49,9 @@ void Layout_controller::Destroy_widget(Tree* tree) {
 	delete treemap[tree];
 	treemap.erase(tree);
 	delete tree;
+}
+
+bool Layout_controller::Rename_widget(Widget* widget, const Ustring& name)
+{
+	layout->Rename_widget(widget, name);
 }

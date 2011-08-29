@@ -8,6 +8,7 @@ typedef std::map<Tree*, Widget*> Treemap;
 
 class Layout_controller {
 public:
+	void Set_layout(Layout* layout);
 	void Set_root_tree(Tree* tree);
 	bool Set_tree(Tree* tree, Widget* widget);
 	void Select_tree(Tree* tree);
@@ -16,10 +17,12 @@ public:
 	Tree* Get_current_tree();
 	void Clear();
 	void Destroy_widget(Tree* tree);
+	bool Rename_widget(Widget* widget, const Ustring& name);
 private:
 	Tree* root_tree;
 	Treemap treemap;
 	Tree* selected_tree;
+	Layout* layout;
 };
 
 #endif

@@ -16,6 +16,7 @@
 #include "controller.h"
 #include "layout_controller.h"
 #include "button_attribute_controller.h"
+#include "widget_attribute_controller.h"
 
 
 int main(int argc, char **argv)
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
 	create_expander->Open();
 
 	//Widget properties
-
+/*
 	Label *name_label = skin.Clone<Label>("label");
 	name_label->Set_text("Name: ");
 	Inputbox *name = skin.Clone<Inputbox>("inputbox");
@@ -138,13 +139,14 @@ int main(int argc, char **argv)
 	widget_properties->Add_child(widget_properties_vbox);
 	widget_properties->Set_text("Widget properties");
 	widget_properties->Enable_fixed_height();
-
+*/
 	Vertical_box* attributes_vbox = skin.Clone<Vertical_box>("vertical box");
-	attributes_vbox->Add_child(widget_properties);
+//	attributes_vbox->Add_child(widget_properties);
 
 
 
 	Layout_controller layout_controller;
+	layout_controller.Set_layout(&layout);
 	layout_controller.Set_tree(widget_tree, root);
 	layout_controller.Set_root_tree(widget_tree);
 	layout_controller.Select_tree(widget_tree);
@@ -153,10 +155,16 @@ int main(int argc, char **argv)
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
 
-	Button_attribute_controller* controller = new Button_attribute_controller;
-	controller->Load(skin);
-	controller->Set_layout_controller(layout_controller);
-	attribute_controllers["button"] = controller;
+	Widget_attribute_controller* widget_controller = new Widget_attribute_controller;
+	widget_controller->Load(skin);
+	widget_controller->Set_layout_controller(layout_controller);
+	attribute_controllers["widget"] = widget_controller;
+	attributes_vbox->Add_child(widget_controller->Get_root());
+
+	Button_attribute_controller* button_controller = new Button_attribute_controller;
+	button_controller->Load(skin);
+	button_controller->Set_layout_controller(layout_controller);
+	attribute_controllers["button"] = button_controller;
 
 
 	//FPS
@@ -242,7 +250,7 @@ int main(int argc, char **argv)
 					if(tw)
 					{
 						layout_controller.Select_tree(newsel);
-						if(tw->Has_fixed_width())
+/*						if(tw->Has_fixed_width())
 							fixed_width->Activate();
 						else
 							fixed_width->Deactivate();
@@ -252,11 +260,12 @@ int main(int argc, char **argv)
 							fixed_height->Deactivate();
 						name->Set_text(tw->Get_name());
 						tooltip->Set_text(tw->Get_tooltip());
-						Widgets widgets = attributes_vbox->Get_children();
+*/						Widgets widgets = attributes_vbox->Get_children();
 						for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
 							attributes_vbox->Remove_child(*i);
 						}
-						attributes_vbox->Add_child(widget_properties);
+						attributes_vbox->Add_child(attribute_controllers["widget"]->Get_root());
+						attribute_controllers["widget"]->Synchronize_values();
 						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
 						if(ac != attribute_controllers.end()) {
 							attributes_vbox->Add_child(ac->second->Get_root());
@@ -267,7 +276,7 @@ int main(int argc, char **argv)
 			}
 			else if(gui_event.type == "changed")
 			{
-				if(gui_event.source == tooltip)
+/*				if(gui_event.source == tooltip)
 				{
 					Widget* tw = layout_controller.Get_current_widget();
 					tw->Set_tooltip(tooltip->Get_text().Cstring());
@@ -281,7 +290,7 @@ int main(int argc, char **argv)
 						name->Set_text(tw->Get_name());
 					}
 				}
-			}
+*/			}
 			else if(gui_event.type == "clicked")
 			{
 				if(gui_event.source == save_button)
@@ -365,7 +374,7 @@ int main(int argc, char **argv)
 					}
 					al_destroy_native_file_dialog(fc);
 				}
-				if(gui_event.source == fixed_width)
+/*				if(gui_event.source == fixed_width)
 				{
 					Widget* tw = layout_controller.Get_current_widget();
 					if(fixed_width->Is_active())
@@ -381,7 +390,7 @@ int main(int argc, char **argv)
 					else
 						tw->Disable_fixed_height();
 				}
-				if(layout_controller.Get_current_tree())
+*/				if(layout_controller.Get_current_tree())
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
 					if(i != create_buttons.end())
