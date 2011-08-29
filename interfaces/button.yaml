@@ -48,7 +48,7 @@ widgets:
       fixed_width: true
       fixed_height: true
     Label:
-      text: Text
+      text: "Text: "
   -
     name: toggle
     prototype_name: checkbox

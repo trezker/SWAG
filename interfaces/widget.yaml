@@ -9,7 +9,7 @@ widgets:
       fixed_width: false
       fixed_height: false
     Expander:
-      text: expander
+      text: Widget
     children:
       - vertical box
   -
@@ -20,7 +20,7 @@ widgets:
       fixed_width: true
       fixed_height: true
     Button:
-      text: checkbox2
+      text: Fixed height
       toggle: true
   -
     name: fixed width
@@ -30,7 +30,7 @@ widgets:
       fixed_width: true
       fixed_height: true
     Button:
-      text: checkbox
+      text: Fixed width
       toggle: true
   -
     name: name
@@ -40,7 +40,7 @@ widgets:
       fixed_width: false
       fixed_height: true
     Inputbox:
-      text: inputbox
+      text: ""
   -
     name: name hbox
     prototype_name: horizontal box
@@ -59,7 +59,7 @@ widgets:
       fixed_width: true
       fixed_height: true
     Label:
-      text: label
+      text: "Name: "
   -
     name: root
     prototype_name: desktop
@@ -77,7 +77,7 @@ widgets:
       fixed_width: false
       fixed_height: true
     Inputbox:
-      text: inputbox
+      text: ""
   -
     name: tooltip hbox
     prototype_name: horizontal box
@@ -96,7 +96,7 @@ widgets:
       fixed_width: true
       fixed_height: true
     Label:
-      text: label
+      text: "Tooltip: "
   -
     name: vertical box
     prototype_name: vertical box
