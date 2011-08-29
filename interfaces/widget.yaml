@@ -1,0 +1,111 @@
+---
+root: root
+widgets:
+  -
+    name: expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    Expander:
+      text: expander
+    children:
+      - vertical box
+  -
+    name: fixed height
+    prototype_name: checkbox
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: checkbox2
+      toggle: true
+  -
+    name: fixed width
+    prototype_name: checkbox
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: checkbox
+      toggle: true
+  -
+    name: name
+    prototype_name: inputbox
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    Inputbox:
+      text: inputbox
+  -
+    name: name hbox
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - name label
+      - name
+  -
+    name: name label
+    prototype_name: label
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Label:
+      text: label
+  -
+    name: root
+    prototype_name: desktop
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - expander
+  -
+    name: tooltip
+    prototype_name: inputbox
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    Inputbox:
+      text: inputbox
+  -
+    name: tooltip hbox
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - tooltip label
+      - tooltip
+  -
+    name: tooltip label
+    prototype_name: label
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Label:
+      text: label
+  -
+    name: vertical box
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - name hbox
+      - fixed width
+      - fixed height
+      - tooltip hbox
