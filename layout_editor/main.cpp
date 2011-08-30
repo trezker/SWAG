@@ -106,44 +106,7 @@ int main(int argc, char **argv)
 	create_expander->Open();
 
 	//Widget properties
-/*
-	Label *name_label = skin.Clone<Label>("label");
-	name_label->Set_text("Name: ");
-	Inputbox *name = skin.Clone<Inputbox>("inputbox");
-
-	Button *fixed_width = skin.Clone<Button>("checkbox");
-	fixed_width->Set_text("Fixed width");
-
-	Button *fixed_height = skin.Clone<Button>("checkbox");
-	fixed_height->Set_text("Fixed height");
-
-	Label *tooltip_label = skin.Clone<Label>("label");
-	tooltip_label->Set_text("Tooltip: ");
-	Inputbox *tooltip = skin.Clone<Inputbox>("inputbox");
-	
-	Horizontal_box* name_hbox = skin.Clone<Horizontal_box>("horizontal box");
-	name_hbox->Add_child(name_label);
-	name_hbox->Add_child(name);
-
-	Horizontal_box* tooltip_hbox = skin.Clone<Horizontal_box>("horizontal box");
-	tooltip_hbox->Add_child(tooltip_label);
-	tooltip_hbox->Add_child(tooltip);
-
-	Vertical_box* widget_properties_vbox = skin.Clone<Vertical_box>("vertical box");
-	widget_properties_vbox->Add_child(name_hbox);
-	widget_properties_vbox->Add_child(fixed_width);
-	widget_properties_vbox->Add_child(fixed_height);
-	widget_properties_vbox->Add_child(tooltip_hbox);
-
-	Expander* widget_properties = skin.Clone<Expander>("expander");
-	widget_properties->Add_child(widget_properties_vbox);
-	widget_properties->Set_text("Widget properties");
-	widget_properties->Enable_fixed_height();
-*/
 	Vertical_box* attributes_vbox = skin.Clone<Vertical_box>("vertical box");
-//	attributes_vbox->Add_child(widget_properties);
-
-
 
 	Layout_controller layout_controller;
 	layout_controller.Set_layout(&layout);
@@ -250,17 +213,7 @@ int main(int argc, char **argv)
 					if(tw)
 					{
 						layout_controller.Select_tree(newsel);
-/*						if(tw->Has_fixed_width())
-							fixed_width->Activate();
-						else
-							fixed_width->Deactivate();
-						if(tw->Has_fixed_height())
-							fixed_height->Activate();
-						else
-							fixed_height->Deactivate();
-						name->Set_text(tw->Get_name());
-						tooltip->Set_text(tw->Get_tooltip());
-*/						Widgets widgets = attributes_vbox->Get_children();
+						Widgets widgets = attributes_vbox->Get_children();
 						for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
 							attributes_vbox->Remove_child(*i);
 						}
@@ -274,23 +227,6 @@ int main(int argc, char **argv)
 					}
 				}
 			}
-			else if(gui_event.type == "changed")
-			{
-/*				if(gui_event.source == tooltip)
-				{
-					Widget* tw = layout_controller.Get_current_widget();
-					tw->Set_tooltip(tooltip->Get_text().Cstring());
-				}
-				if(gui_event.source == name)
-				{
-					Widget* tw = layout_controller.Get_current_widget();
-					if(layout.Rename_widget(tw, name->Get_text())) {
-						layout_controller.Get_current_tree()->Set_text(name->Get_text());
-					} else {
-						name->Set_text(tw->Get_name());
-					}
-				}
-*/			}
 			else if(gui_event.type == "clicked")
 			{
 				if(gui_event.source == save_button)
@@ -374,23 +310,7 @@ int main(int argc, char **argv)
 					}
 					al_destroy_native_file_dialog(fc);
 				}
-/*				if(gui_event.source == fixed_width)
-				{
-					Widget* tw = layout_controller.Get_current_widget();
-					if(fixed_width->Is_active())
-						tw->Enable_fixed_width();
-					else
-						tw->Disable_fixed_width();
-				}
-				if(gui_event.source == fixed_height)
-				{
-					Widget* tw = layout_controller.Get_current_widget();
-					if(fixed_height->Is_active())
-						tw->Enable_fixed_height();
-					else
-						tw->Disable_fixed_height();
-				}
-*/				if(layout_controller.Get_current_tree())
+				if(layout_controller.Get_current_tree())
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
 					if(i != create_buttons.end())
@@ -493,8 +413,6 @@ int main(int argc, char **argv)
 		ss>>fps_string;
 		fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
 	}
-
-//	delete root;
 
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);
