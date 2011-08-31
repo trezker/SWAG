@@ -80,11 +80,6 @@ int main(int argc, char **argv)
 	removebutton->Set_text("Remove");
 	removebutton->Set_tooltip("Remove widget and its children");
 
-	Inputbox* inputbox = skin.Clone<Inputbox>("inputbox");
-	inputbox->Set_text("Change me");
-	inputbox->Set_tooltip("Change this text");
-
-
 	Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
 
 	typedef std::map<Widget*, Ustring> Create_buttons;
@@ -139,7 +134,6 @@ int main(int argc, char **argv)
 	toolvbox->Add(file_box);
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
-	toolvbox->Add(inputbox);
 	toolvbox->Add(create_expander);
 	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
@@ -363,16 +357,6 @@ int main(int argc, char **argv)
 							layout_controller.Select_tree(parent);
 							widget_tree->Select();
 						}
-					}
-				}
-			}
-			else if(gui_event.type == "activated")
-			{
-				if(layout_controller.Get_current_tree())
-				{
-					if(gui_event.source == inputbox)
-					{
-						layout_controller.Get_current_tree()->Set_text(inputbox->Get_text());
 					}
 				}
 			}
