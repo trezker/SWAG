@@ -123,7 +123,9 @@ void Expander::Remove_child(Widget* c)
 Widgets Expander::Get_children() const
 {
 	Widgets w;
-	w.push_back(child);
+	if(child) {
+		w.push_back(child);
+	}
 	return w;
 }
 
