@@ -1,0 +1,98 @@
+---
+root: root
+widgets:
+  -
+    name: attribute expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    Expander:
+      text: Attributes
+    children:
+      []
+  -
+    name: create expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    Expander:
+      text: Create
+    children:
+      []
+  -
+    name: file commands
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - save
+      - load
+  -
+    name: layout expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    Expander:
+      text: Layout
+    children:
+      []
+  -
+    name: load
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Load
+      toggle: false
+  -
+    name: remove
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Remove
+      toggle: false
+  -
+    name: root
+    prototype_name: desktop
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - vertical box
+  -
+    name: save
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Save
+      toggle: false
+  -
+    name: vertical box
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - file commands
+      - layout expander
+      - remove
+      - create expander
+      - attribute expander

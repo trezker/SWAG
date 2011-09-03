@@ -15,6 +15,7 @@
 
 #include "controller.h"
 #include "layout_controller.h"
+#include "editor_controller.h"
 #include "button_attribute_controller.h"
 #include "widget_attribute_controller.h"
 
@@ -52,96 +53,95 @@ int main(int argc, char **argv)
 	if(!font)
 		font = al_load_font("examples/data/DejaVuSans.ttf", 12, 0);
 
-	Hardcoded_skin skin;
-
 	Layout layout;
 
-	Widget* root = skin.Clone<Desktop>("desktop");
-	root->Set_position(Vector2(0, 0));
-	root->Set_size(Vector2(640, 480));
-	
-	layout.Add_widget("root", root, NULL);
+	Layout_controller layout_controller;
+	layout_controller.Set_layout(&layout);
 
-	Button* save_button = skin.Clone<Button>("button");
-	save_button->Set_text("Save");
-
-	Button* load_button = skin.Clone<Button>("button");
-	load_button->Set_text("Load");
-	
-	Horizontal_box* file_box = skin.Clone<Horizontal_box>("horizontal box");
-	file_box->Add_child(save_button);
-	file_box->Add_child(load_button);
-
-	Tree* widget_tree = skin.Clone<Tree>("tree");
+	Tree* widget_tree = layout_controller.Get_skin().Clone<Tree>("tree");
 	widget_tree->Set_text("Desktop");
 	widget_tree->Select();
 
-	Button* removebutton = skin.Clone<Button>("button");
+	Widget* root_widget = layout_controller.Get_skin().Clone<Desktop>("desktop");
+	root_widget->Set_position(Vector2(0, 0));
+	root_widget->Set_size(Vector2(640, 480));
+
+	layout_controller.Set_tree(widget_tree, root_widget);
+	layout_controller.Set_root(root_widget);
+	layout_controller.Set_root_tree(widget_tree);
+	layout_controller.Select_tree(widget_tree);
+
+	layout.Set_skin(&layout_controller.Get_skin());
+	layout.Add_widget("root", root_widget, NULL);
+
+
+	Editor_controller editor_controller;
+	editor_controller.Load(layout_controller.Get_skin());
+	editor_controller.Set_layout_controller(layout_controller);
+	editor_controller.Set_layout_display(display);
+
+	Button* removebutton = layout_controller.Get_skin().Clone<Button>("button");
 	removebutton->Set_text("Remove");
 	removebutton->Set_tooltip("Remove widget and its children");
 
-	Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
+	Vertical_box* create_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 
 	typedef std::map<Widget*, Ustring> Create_buttons;
 	Create_buttons create_buttons;
-	Namelist protlist = skin.Get_prototype_list();
+	Namelist protlist = layout_controller.Get_skin().Get_prototype_list();
 	for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
 	{
-		Button* createbutton = skin.Clone<Button>("button");
+		Button* createbutton = layout_controller.Get_skin().Clone<Button>("button");
 		createbutton->Set_text(*i);
 		create_buttons[createbutton] = *i;
 		create_vbox->Add(createbutton);
 		createbutton->Set_tooltip("Create a widget");
 	}
 
-	Expander* create_expander = skin.Clone<Expander>("expander");
+	Expander* create_expander = layout_controller.Get_skin().Clone<Expander>("expander");
 	create_expander->Add_child(create_vbox);
 	create_expander->Set_text("Create widgets");
 	create_expander->Enable_fixed_height();
 	create_expander->Open();
 
 	//Widget properties
-	Vertical_box* attributes_vbox = skin.Clone<Vertical_box>("vertical box");
+	Vertical_box* attributes_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 
-	Layout_controller layout_controller;
-	layout_controller.Set_layout(&layout);
-	layout_controller.Set_tree(widget_tree, root);
-	layout_controller.Set_root_tree(widget_tree);
-	layout_controller.Select_tree(widget_tree);
+
 
 	//Widget attribute editing interfaces
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
 
 	Widget_attribute_controller* widget_controller = new Widget_attribute_controller;
-	widget_controller->Load(skin);
+	widget_controller->Load(layout_controller.Get_skin());
 	widget_controller->Set_layout_controller(layout_controller);
 	attribute_controllers["widget"] = widget_controller;
 	attributes_vbox->Add_child(widget_controller->Get_root());
 
 	Button_attribute_controller* button_controller = new Button_attribute_controller;
-	button_controller->Load(skin);
+	button_controller->Load(layout_controller.Get_skin());
 	button_controller->Set_layout_controller(layout_controller);
 	attribute_controllers["button"] = button_controller;
 
 
 	//FPS
-	Label* fps_label = skin.Clone<Label>("label");
+	Label* fps_label = layout_controller.Get_skin().Clone<Label>("label");
 	fps_label->Set_text("FPS: ");
 
 	//Main vbox
-	Vertical_box* toolvbox = skin.Clone<Vertical_box>("vertical box");
-	toolvbox->Add(file_box);
+	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
+	toolvbox->Add(editor_controller.Get_root());
 	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
 	toolvbox->Add(create_expander);
 	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
 
-	Slider_box* slider_box = skin.Clone<Slider_box>("slider box");
+	Slider_box* slider_box = layout_controller.Get_skin().Clone<Slider_box>("slider box");
 	slider_box->Set_child(toolvbox);
 
-	Desktop* desktop = skin.Clone<Desktop>("desktop");
+	Desktop* desktop = layout_controller.Get_skin().Clone<Desktop>("desktop");
 	desktop->Set_child(slider_box);
 	desktop->Set_position(Vector2(0, 0));
 	desktop->Set_size(Vector2(200, 480));
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 			{
 				al_acknowledge_resize(event.display.source);
 				if(event.display.source == display)
-					root->Set_size(Vector2(event.display.width-20, event.display.height-20));
+					layout_controller.Get_root()->Set_size(Vector2(event.display.width-20, event.display.height-20));
 			}
 			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
 			{
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 			}
 			if(current_display == display)
 			{
-				root->Handle_event(event);
+				layout_controller.Get_root()->Handle_event(event);
 			}
 		}
 
@@ -196,8 +196,10 @@ int main(int argc, char **argv)
 		{
 			const Event& gui_event = gui_events.Front();
 			for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
-				i->second->Handle_event(gui_event);
+				i->second->Process_event(gui_event);
 			}
+			editor_controller.Process_event(gui_event);
+			std::cout<<"EVENT_PROCESSING: "<<gui_event.type<<std::endl;
 			if(gui_event.type == "selected")
 			{
 				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
@@ -223,100 +225,19 @@ int main(int argc, char **argv)
 			}
 			else if(gui_event.type == "clicked")
 			{
-				if(gui_event.source == save_button)
-				{
-					ALLEGRO_FILECHOOSER* fc = al_create_native_file_dialog(
-						layout.Get_filename().Cstring(),
-						"Save",
-						"*",
-						ALLEGRO_FILECHOOSER_SAVE);
-					al_show_native_file_dialog(NULL, fc);
-					if(al_get_native_file_dialog_count(fc) > 0) {
-						const char *filename = al_get_native_file_dialog_path(fc, 0);
-						layout.Set_filename(filename);
-
-						//layout.Set_filename("testlayout.yaml");
-						bool s = layout.Save_yaml();
-						std::cout<<(s?"Saved":"Save failed")<<std::endl;
-					}
-					al_destroy_native_file_dialog(fc);
-				}
-				if(gui_event.source == load_button)
-				{
-					ALLEGRO_FILECHOOSER* fc = al_create_native_file_dialog(
-						layout.Get_filename().Cstring(),
-						"Load",
-						"*",
-						ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
-					al_show_native_file_dialog(NULL, fc);
-					if(al_get_native_file_dialog_count(fc) > 0) {
-						const char *filename = al_get_native_file_dialog_path(fc, 0);
-						layout.Set_filename(filename);
-
-						layout_controller.Clear();
-						//layout.Set_filename("testlayout.yaml");
-						layout.Set_skin(&skin);
-						if(layout.Load_yaml())
-						{
-							std::cout<<"Loaded"<<std::endl;
-							const Name_to_widget& layout_widgets = layout.Get_widgets();
-
-							root = layout.Get_root();
-							root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-							layout_controller.Set_tree(widget_tree, root);
-
-							typedef std::stack<Tree*> Trees_todo;
-							Trees_todo trees_todo;
-							trees_todo.push(widget_tree);
-							
-							while(!trees_todo.empty())
-							{
-								Tree* current_tree = trees_todo.top();
-								trees_todo.pop();
-
-								Container* parent = dynamic_cast<Container*>(layout_controller.Get_widget(current_tree));
-
-								if(parent)
-								{
-									Widgets children = parent->Get_children();
-									for(Widgets::iterator i = children.begin(); i != children.end(); ++i)
-									{
-										Tree* tree_child = skin.Clone<Tree>("tree");
-										tree_child->Set_text((*i)->Get_name());
-										layout_controller.Set_tree(tree_child, *i);
-										current_tree->Add_child(tree_child);
-										trees_todo.push(tree_child);
-									}
-								}
-							}
-						}
-						else
-						{
-							root = skin.Clone<Desktop>("desktop");
-							root->Set_position(Vector2(0, 0));
-							root->Set_size(Vector2(al_get_display_width(display), al_get_display_height(display)));
-							
-							layout.Add_widget("root", root, NULL);
-							layout_controller.Set_tree(widget_tree, root);
-						}
-						widget_tree->Select();
-						layout_controller.Select_tree(widget_tree);
-					}
-					al_destroy_native_file_dialog(fc);
-				}
 				if(layout_controller.Get_current_tree())
 				{
 					Create_buttons::iterator i = create_buttons.find(gui_event.source);
 					if(i != create_buttons.end())
 					{
 						std::cout<<i->second<<std::endl;
-						Widget* child = skin.Clone<Widget>(i->second);
+						Widget* child = layout_controller.Get_skin().Clone<Widget>(i->second);
 						Container* parent = dynamic_cast<Container*>(layout_controller.Get_current_widget());
 
 						if(parent && parent->Add_child(child))
 						{
 							Ustring name = layout.Add_widget(i->second, child, parent);
-							Tree* tree_child = skin.Clone<Tree>("tree");
+							Tree* tree_child = layout_controller.Get_skin().Clone<Tree>("tree");
 							tree_child->Set_text(name);
 							layout_controller.Get_current_tree()->Add_child(tree_child);
 							layout_controller.Set_tree(tree_child, child);
@@ -367,10 +288,10 @@ int main(int argc, char **argv)
 		double dt = current_time - last_time;
 		last_time = current_time;
 		
-		skin.Update(dt);
+		layout_controller.Get_skin().Update(dt);
 
 		al_set_target_backbuffer(display);
-		root->Render();
+		layout_controller.Get_root()->Render();
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 

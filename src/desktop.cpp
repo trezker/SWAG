@@ -100,7 +100,9 @@ void Desktop::Remove_child(Widget* c)
 Widgets Desktop::Get_children() const
 {
 	Widgets w;
-	w.push_back(child);
+	if(child) {
+		w.push_back(child);
+	}
 	return w;
 }
 

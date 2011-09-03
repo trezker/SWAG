@@ -10,13 +10,13 @@ public:
 	//Load layout and setup the event handles
 	virtual bool Load(Skin& skin) = 0;
 	virtual Widget* Get_root() = 0;
-	void Handle_event(const Event& event);
+	void Process_event(const Event& event);
 	virtual void Handle_event(const Ustring& event_handle) = 0;
 	virtual void Synchronize_values() = 0;
 protected:
 	typedef std::map<Event, Ustring> Events;
 	Events events;
-	Layout layout;
+	Layout controller_layout;
 };
 
 #endif

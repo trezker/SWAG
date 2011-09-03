@@ -4,6 +4,11 @@ void Layout_controller::Set_layout(Layout* ilayout){
 	layout = ilayout;
 }
 
+void Layout_controller::Set_root(Widget* widget)
+{
+	root = widget;
+}
+
 void Layout_controller::Set_root_tree(Tree* tree) {
 	root_tree = tree;
 }
@@ -13,6 +18,7 @@ bool Layout_controller::Set_tree(Tree* tree, Widget* widget) {
 }
 
 void Layout_controller::Select_tree(Tree* tree) {
+//	tree->Select();
 	selected_tree = tree;
 }
 
@@ -30,6 +36,18 @@ Widget* Layout_controller::Get_current_widget() {
 
 Tree* Layout_controller::Get_current_tree() {
 	return selected_tree;
+}
+
+Widget* Layout_controller::Get_root() {
+	return root;
+}
+
+Tree* Layout_controller::Get_root_tree() {
+	return root_tree;
+}
+
+Skin& Layout_controller::Get_skin() {
+	return skin;
 }
 
 void Layout_controller::Clear() {
@@ -54,4 +72,8 @@ void Layout_controller::Destroy_widget(Tree* tree) {
 bool Layout_controller::Rename_widget(Widget* widget, const Ustring& name)
 {
 	layout->Rename_widget(widget, name);
+}
+
+Layout& Layout_controller::Get_layout() {
+	return *layout;
 }
