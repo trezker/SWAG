@@ -11,6 +11,7 @@ bool Editor_controller::Load(Skin& skin) {
 		dynamic_cast<Container*>(controller_layout.Get_widget("layout expander"))->Add_child(layout_controller->Get_root_tree());
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
 		events[Event(controller_layout.Get_widget("load"), "clicked")] = "load";
+		events[Event(controller_layout.Get_widget("remove"), "clicked")] = "remove";
 		return true;
 	}
 	return false;
@@ -104,7 +105,34 @@ void Editor_controller::Handle_event(const Ustring& event_handle) {
 		}
 		al_destroy_native_file_dialog(fc);
 	}
-	std::cout<<"EVENT HANDLED"<<std::endl;
+	if(event_handle == "remove") {
+		Tree* parent = dynamic_cast<Tree*>(layout_controller->Get_current_tree()->Get_parent());
+		if(parent)
+		{
+			dynamic_cast<Container*>(layout_controller->Get_widget(parent))->Remove_child(layout_controller->Get_current_widget());
+
+			parent->Remove_child(layout_controller->Get_current_tree());
+			Trees deadlist;
+			deadlist.push_back(layout_controller->Get_current_tree());
+			layout_controller->Select_tree(NULL);
+			int count = 0;
+			while(!deadlist.empty())
+			{
+				Tree* current = deadlist.back();
+				deadlist.erase(--deadlist.end());
+				Trees& children = current->Get_children();
+				for(Trees::iterator i = children.begin(); i != children.end(); ++i)
+				{
+					deadlist.push_back(*i);
+				}
+				layout.Remove_widget(layout_controller->Get_widget(current));
+				layout_controller->Destroy_widget(current);
+				++count;
+			}
+			layout_controller->Select_tree(parent);
+			parent->Select();
+		}
+	}
 }
 
 void Editor_controller::Synchronize_values() {

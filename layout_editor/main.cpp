@@ -80,10 +80,6 @@ int main(int argc, char **argv)
 	editor_controller.Set_layout_controller(layout_controller);
 	editor_controller.Load(layout_controller.Get_skin());
 
-	Button* removebutton = layout_controller.Get_skin().Clone<Button>("button");
-	removebutton->Set_text("Remove");
-	removebutton->Set_tooltip("Remove widget and its children");
-
 	Vertical_box* create_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 
 	typedef std::map<Widget*, Ustring> Create_buttons;
@@ -132,8 +128,6 @@ int main(int argc, char **argv)
 	//Main vbox
 	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 	toolvbox->Add(editor_controller.Get_root());
-//	toolvbox->Add(widget_tree);
-	toolvbox->Add(removebutton);
 	toolvbox->Add(create_expander);
 	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
@@ -249,35 +243,6 @@ int main(int argc, char **argv)
 						}
 						else
 							delete child;
-					}
-					if(gui_event.source == removebutton)
-					{
-						Tree* parent = dynamic_cast<Tree*>(layout_controller.Get_current_tree()->Get_parent());
-						if(parent)
-						{
-							dynamic_cast<Container*>(layout_controller.Get_widget(parent))->Remove_child(layout_controller.Get_current_widget());
-
-							parent->Remove_child(layout_controller.Get_current_tree());
-							Trees deadlist;
-							deadlist.push_back(layout_controller.Get_current_tree());
-							layout_controller.Select_tree(NULL);
-							int count = 0;
-							while(!deadlist.empty())
-							{
-								Tree* current = deadlist.back();
-								deadlist.erase(--deadlist.end());
-								Trees& children = current->Get_children();
-								for(Trees::iterator i = children.begin(); i != children.end(); ++i)
-								{
-									deadlist.push_back(*i);
-								}
-								layout.Remove_widget(layout_controller.Get_widget(current));
-								layout_controller.Destroy_widget(current);
-								++count;
-							}
-							layout_controller.Select_tree(parent);
-							widget_tree->Select();
-						}
 					}
 				}
 			}
