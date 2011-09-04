@@ -76,9 +76,9 @@ int main(int argc, char **argv)
 
 
 	Editor_controller editor_controller;
-	editor_controller.Load(layout_controller.Get_skin());
-	editor_controller.Set_layout_controller(layout_controller);
 	editor_controller.Set_layout_display(display);
+	editor_controller.Set_layout_controller(layout_controller);
+	editor_controller.Load(layout_controller.Get_skin());
 
 	Button* removebutton = layout_controller.Get_skin().Clone<Button>("button");
 	removebutton->Set_text("Remove");
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 	//Main vbox
 	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 	toolvbox->Add(editor_controller.Get_root());
-	toolvbox->Add(widget_tree);
+//	toolvbox->Add(widget_tree);
 	toolvbox->Add(removebutton);
 	toolvbox->Add(create_expander);
 	toolvbox->Add(attributes_vbox);

@@ -8,6 +8,7 @@ bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_skin(&skin);
 	if(controller_layout.Load_yaml())
 	{
+		dynamic_cast<Container*>(controller_layout.Get_widget("layout expander"))->Add_child(layout_controller->Get_root_tree());
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
 		events[Event(controller_layout.Get_widget("load"), "clicked")] = "load";
 		return true;
