@@ -8,6 +8,21 @@ bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_skin(&skin);
 	if(controller_layout.Load_yaml())
 	{
+		Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
+		typedef std::map<Widget*, Ustring> Create_buttons;
+		Namelist protlist = skin.Get_prototype_list();
+		for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
+		{
+			Button* createbutton = skin.Clone<Button>("button");
+			createbutton->Set_text(*i);
+			create_buttons[createbutton] = *i;
+			create_vbox->Add(createbutton);
+			createbutton->Set_tooltip("Create a widget");
+			events[Event(createbutton, "clicked")] = "create";
+		}
+		dynamic_cast<Container*>(controller_layout.Get_widget("create expander"))->Add_child(create_vbox);
+
+
 		dynamic_cast<Container*>(controller_layout.Get_widget("layout expander"))->Add_child(layout_controller->Get_root_tree());
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
 		events[Event(controller_layout.Get_widget("load"), "clicked")] = "load";
@@ -25,7 +40,7 @@ Widget* Editor_controller::Get_root() {
 	return controller_layout.Get_widget("vertical box");
 }
 
-void Editor_controller::Handle_event(const Ustring& event_handle) {
+void Editor_controller::Handle_event(const Ustring& event_handle, const Event& event) {
 	Layout& layout = layout_controller->Get_layout();
 	if(event_handle == "save") {
 		ALLEGRO_FILECHOOSER* fc = al_create_native_file_dialog(
@@ -131,6 +146,33 @@ void Editor_controller::Handle_event(const Ustring& event_handle) {
 			}
 			layout_controller->Select_tree(parent);
 			parent->Select();
+		}
+	}
+	if(event_handle == "create") {
+		if(layout_controller->Get_current_tree())
+		{
+			Create_buttons::iterator i = create_buttons.find(event.source);
+			if(i != create_buttons.end())
+			{
+				std::cout<<i->second<<std::endl;
+				Widget* child = layout_controller->Get_skin().Clone<Widget>(i->second);
+				Container* parent = dynamic_cast<Container*>(layout_controller->Get_current_widget());
+
+				if(parent && parent->Add_child(child))
+				{
+					Ustring name = layout.Add_widget(i->second, child, parent);
+					Tree* tree_child = layout_controller->Get_skin().Clone<Tree>("tree");
+					tree_child->Set_text(name);
+					layout_controller->Get_current_tree()->Add_child(tree_child);
+					layout_controller->Set_tree(tree_child, child);
+					layout_controller->Get_current_tree()->Open();
+					Text_interface* has_text = dynamic_cast<Text_interface*>(child);
+					if(has_text)
+						has_text->Set_text(name);
+				}
+				else
+					delete child;
+			}
 		}
 	}
 }

@@ -11,7 +11,7 @@ public:
 	virtual bool Load(Skin& skin) = 0;
 	virtual Widget* Get_root() = 0;
 	void Process_event(const Event& event);
-	virtual void Handle_event(const Ustring& event_handle) = 0;
+	virtual void Handle_event(const Ustring& event_handle, const Event& event) = 0;
 	virtual void Synchronize_values() = 0;
 protected:
 	typedef std::map<Event, Ustring> Events;

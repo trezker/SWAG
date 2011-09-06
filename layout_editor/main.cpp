@@ -80,26 +80,6 @@ int main(int argc, char **argv)
 	editor_controller.Set_layout_controller(layout_controller);
 	editor_controller.Load(layout_controller.Get_skin());
 
-	Vertical_box* create_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
-
-	typedef std::map<Widget*, Ustring> Create_buttons;
-	Create_buttons create_buttons;
-	Namelist protlist = layout_controller.Get_skin().Get_prototype_list();
-	for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
-	{
-		Button* createbutton = layout_controller.Get_skin().Clone<Button>("button");
-		createbutton->Set_text(*i);
-		create_buttons[createbutton] = *i;
-		create_vbox->Add(createbutton);
-		createbutton->Set_tooltip("Create a widget");
-	}
-
-	Expander* create_expander = layout_controller.Get_skin().Clone<Expander>("expander");
-	create_expander->Add_child(create_vbox);
-	create_expander->Set_text("Create widgets");
-	create_expander->Enable_fixed_height();
-	create_expander->Open();
-
 	//Widget properties
 	Vertical_box* attributes_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 
@@ -128,7 +108,6 @@ int main(int argc, char **argv)
 	//Main vbox
 	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 	toolvbox->Add(editor_controller.Get_root());
-	toolvbox->Add(create_expander);
 	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
 
@@ -214,35 +193,6 @@ int main(int argc, char **argv)
 							attributes_vbox->Add_child(ac->second->Get_root());
 							ac->second->Synchronize_values();
 						}
-					}
-				}
-			}
-			else if(gui_event.type == "clicked")
-			{
-				if(layout_controller.Get_current_tree())
-				{
-					Create_buttons::iterator i = create_buttons.find(gui_event.source);
-					if(i != create_buttons.end())
-					{
-						std::cout<<i->second<<std::endl;
-						Widget* child = layout_controller.Get_skin().Clone<Widget>(i->second);
-						Container* parent = dynamic_cast<Container*>(layout_controller.Get_current_widget());
-
-						if(parent && parent->Add_child(child))
-						{
-							Ustring name = layout.Add_widget(i->second, child, parent);
-							Tree* tree_child = layout_controller.Get_skin().Clone<Tree>("tree");
-							tree_child->Set_text(name);
-							layout_controller.Get_current_tree()->Add_child(tree_child);
-							layout_controller.Set_tree(tree_child, child);
-							layout_controller.Get_current_tree()->Open();
-							Text_interface* has_text = dynamic_cast<Text_interface*>(child);
-							if(has_text)
-								has_text->Set_text(name);
-
-						}
-						else
-							delete child;
 					}
 				}
 			}

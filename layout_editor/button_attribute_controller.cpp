@@ -21,7 +21,7 @@ Widget* Button_attribute_controller::Get_root() {
 	return controller_layout.Get_widget("expander");
 }
 
-void Button_attribute_controller::Handle_event(const Ustring& event_handle) {
+void Button_attribute_controller::Handle_event(const Ustring& event_handle, const Event& event) {
 	Button* button = dynamic_cast<Button*>(layout_controller->Get_current_widget());
 	if(button) {
 		if(event_handle == "set_text") {

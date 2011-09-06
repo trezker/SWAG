@@ -23,7 +23,7 @@ Widget* Widget_attribute_controller::Get_root() {
 	return controller_layout.Get_widget("expander");
 }
 
-void Widget_attribute_controller::Handle_event(const Ustring& event_handle) {
+void Widget_attribute_controller::Handle_event(const Ustring& event_handle, const Event& event) {
 	Widget* widget = layout_controller->Get_current_widget();
 	if(widget) {
 		if(event_handle == "set_name") {
