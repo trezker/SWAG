@@ -2,6 +2,15 @@
 root: root
 widgets:
   -
+    name: attribute vbox
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      []
+  -
     name: attribute expander
     prototype_name: expander
     Widget:
@@ -11,14 +20,14 @@ widgets:
     Expander:
       text: Attributes
     children:
-      []
+      - attribute vbox
   -
     name: create expander
     prototype_name: expander
     Widget:
       tooltip: ""
       fixed_width: false
-      fixed_height: false
+      fixed_height: true
     Expander:
       text: Create
     children:

@@ -2,6 +2,8 @@
 #include "layout_controller.h"
 #include <allegro5/allegro_native_dialog.h>
 #include <stack>
+#include "button_attribute_controller.h"
+#include "widget_attribute_controller.h"
 
 bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_filename("interfaces/editor.yaml");
@@ -22,6 +24,17 @@ bool Editor_controller::Load(Skin& skin) {
 		}
 		dynamic_cast<Container*>(controller_layout.Get_widget("create expander"))->Add_child(create_vbox);
 
+		//Widget attribute editing interfaces
+		Widget_attribute_controller* widget_controller = new Widget_attribute_controller;
+		widget_controller->Load(layout_controller->Get_skin());
+		widget_controller->Set_layout_controller(*layout_controller);
+		attribute_controllers["widget"] = widget_controller;
+//		attributes_vbox->Add_child(widget_controller->Get_root());
+
+		Button_attribute_controller* button_controller = new Button_attribute_controller;
+		button_controller->Load(layout_controller->Get_skin());
+		button_controller->Set_layout_controller(*layout_controller);
+		attribute_controllers["button"] = button_controller;
 
 		dynamic_cast<Container*>(controller_layout.Get_widget("layout expander"))->Add_child(layout_controller->Get_root_tree());
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
@@ -169,9 +182,35 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 					Text_interface* has_text = dynamic_cast<Text_interface*>(child);
 					if(has_text)
 						has_text->Set_text(name);
+events[Event(tree_child, "selected")] = "select";
 				}
 				else
 					delete child;
+			}
+		}
+	}
+
+	if(event_handle == "select")
+	{
+		Tree* newsel = dynamic_cast<Tree*>(event.source);
+		if(newsel)
+		{
+			Widget* tw = layout_controller->Get_widget(newsel);
+			if(tw)
+			{
+				Container* attributes_vbox = dynamic_cast<Container*>(controller_layout.Get_widget("attribute vbox"));
+				layout_controller->Select_tree(newsel);
+				Widgets widgets = attributes_vbox->Get_children();
+				for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
+					attributes_vbox->Remove_child(*i);
+				}
+				attributes_vbox->Add_child(attribute_controllers["widget"]->Get_root());
+				attribute_controllers["widget"]->Synchronize_values();
+				Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
+				if(ac != attribute_controllers.end()) {
+					attributes_vbox->Add_child(ac->second->Get_root());
+					ac->second->Synchronize_values();
+				}
 			}
 		}
 	}
