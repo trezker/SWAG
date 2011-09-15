@@ -80,27 +80,6 @@ int main(int argc, char **argv)
 	editor_controller.Set_layout_controller(layout_controller);
 	editor_controller.Load(layout_controller.Get_skin());
 
-	//Widget properties
-	Vertical_box* attributes_vbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
-
-
-
-	//Widget attribute editing interfaces
-	typedef std::map<std::string, Controller*> Attribute_controllers;
-	Attribute_controllers attribute_controllers;
-
-	Widget_attribute_controller* widget_controller = new Widget_attribute_controller;
-	widget_controller->Load(layout_controller.Get_skin());
-	widget_controller->Set_layout_controller(layout_controller);
-	attribute_controllers["widget"] = widget_controller;
-	attributes_vbox->Add_child(widget_controller->Get_root());
-
-	Button_attribute_controller* button_controller = new Button_attribute_controller;
-	button_controller->Load(layout_controller.Get_skin());
-	button_controller->Set_layout_controller(layout_controller);
-	attribute_controllers["button"] = button_controller;
-
-
 	//FPS
 	Label* fps_label = layout_controller.Get_skin().Clone<Label>("label");
 	fps_label->Set_text("FPS: ");
@@ -108,7 +87,6 @@ int main(int argc, char **argv)
 	//Main vbox
 	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
 	toolvbox->Add(editor_controller.Get_root());
-	toolvbox->Add(attributes_vbox);
 	toolvbox->Add(fps_label);
 
 	Slider_box* slider_box = layout_controller.Get_skin().Clone<Slider_box>("slider box");
@@ -168,9 +146,6 @@ int main(int argc, char **argv)
 		while(!gui_events.Empty())
 		{
 			const Event& gui_event = gui_events.Front();
-			for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
-				i->second->Process_event(gui_event);
-			}
 			editor_controller.Process_event(gui_event);
 			std::cout<<"EVENT_PROCESSING: "<<gui_event.type<<std::endl;
 			if(gui_event.type == "selected")
@@ -182,17 +157,6 @@ int main(int argc, char **argv)
 					if(tw)
 					{
 						layout_controller.Select_tree(newsel);
-						Widgets widgets = attributes_vbox->Get_children();
-						for(Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i) {
-							attributes_vbox->Remove_child(*i);
-						}
-						attributes_vbox->Add_child(attribute_controllers["widget"]->Get_root());
-						attribute_controllers["widget"]->Synchronize_values();
-						Attribute_controllers::iterator ac = attribute_controllers.find(tw->Get_prototype_name().Cstring());
-						if(ac != attribute_controllers.end()) {
-							attributes_vbox->Add_child(ac->second->Get_root());
-							ac->second->Synchronize_values();
-						}
 					}
 				}
 			}
