@@ -9,3 +9,6 @@ void Controller::Process_event(const Event& event) {
 		Handle_event(i->second, event);
 	}
 }
+
+void Controller::Update() {
+}

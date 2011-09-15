@@ -12,8 +12,10 @@ public:
 	virtual Widget* Get_root();
 	virtual void Handle_event(const Ustring& event_handle, const Event& event);
 	virtual void Synchronize_values();
+	virtual void Update();
 private:
 	Layout_controller* layout_controller;
+	Event_queue gui_events;
 };
 
 #endif

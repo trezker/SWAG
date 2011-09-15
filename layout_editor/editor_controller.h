@@ -13,6 +13,7 @@ public:
 	virtual void Handle_event(const Ustring& event_handle, const Event& event);
 	virtual void Synchronize_values();
 	void Set_layout_display(ALLEGRO_DISPLAY *display);
+	virtual void Update();
 private:
 	Layout_controller* layout_controller;
 	ALLEGRO_DISPLAY *layout_display;

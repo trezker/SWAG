@@ -223,3 +223,10 @@ void Editor_controller::Set_layout_display(ALLEGRO_DISPLAY *display)
 {
 	layout_display = display;
 }
+
+void Editor_controller::Update()
+{
+	for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
+		i->second->Update();
+	}
+}

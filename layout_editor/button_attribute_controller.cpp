@@ -8,6 +8,7 @@ bool Button_attribute_controller::Load(Skin& skin) {
 	{
 		events[Event(controller_layout.Get_widget("text"), "changed")] = "set_text";
 		events[Event(controller_layout.Get_widget("toggle"), "clicked")] = "set_toggle";
+		controller_layout.Get_widget("expander")->Set_event_queue(&gui_events);
 		return true;
 	}
 	return false;
@@ -41,4 +42,13 @@ void Button_attribute_controller::Synchronize_values() {
 	Button* toggle = dynamic_cast<Button*>(controller_layout.Get_widget("toggle"));
 	text->Set_text(button->Get_text());
 	toggle->Set_active(button->Is_toggle());
+}
+
+void Button_attribute_controller::Update(){
+	while(!gui_events.Empty())
+	{
+		const Event& gui_event = gui_events.Front();
+		Process_event(gui_event);
+		gui_events.Pop();
+	}
 }

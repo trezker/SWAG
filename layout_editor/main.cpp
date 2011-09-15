@@ -203,6 +203,7 @@ int main(int argc, char **argv)
 		double dt = current_time - last_time;
 		last_time = current_time;
 		
+		editor_controller.Update();
 		layout_controller.Get_skin().Update(dt);
 
 		al_set_target_backbuffer(display);

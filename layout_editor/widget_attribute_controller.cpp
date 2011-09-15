@@ -10,6 +10,7 @@ bool Widget_attribute_controller::Load(Skin& skin) {
 		events[Event(controller_layout.Get_widget("fixed width"), "clicked")] = "set_fixed_width";
 		events[Event(controller_layout.Get_widget("fixed height"), "clicked")] = "set_fixed_height";
 		events[Event(controller_layout.Get_widget("tooltip"), "changed")] = "set_tooltip";
+		controller_layout.Get_widget("expander")->Set_event_queue(&gui_events);
 		return true;
 	}
 	return false;
@@ -60,4 +61,13 @@ void Widget_attribute_controller::Synchronize_values() {
 	fixed_width->Set_active(widget->Has_fixed_width());
 	fixed_height->Set_active(widget->Has_fixed_height());
 	tooltip->Set_text(widget->Get_tooltip());
+}
+
+void Widget_attribute_controller::Update(){
+	while(!gui_events.Empty())
+	{
+		const Event& gui_event = gui_events.Front();
+		Process_event(gui_event);
+		gui_events.Pop();
+	}
 }

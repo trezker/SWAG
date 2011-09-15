@@ -13,6 +13,7 @@ public:
 	void Process_event(const Event& event);
 	virtual void Handle_event(const Ustring& event_handle, const Event& event) = 0;
 	virtual void Synchronize_values() = 0;
+	virtual void Update();
 protected:
 	typedef std::map<Event, Ustring> Events;
 	Events events;
