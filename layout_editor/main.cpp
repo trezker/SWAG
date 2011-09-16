@@ -139,13 +139,6 @@ int main(int argc, char **argv)
 			}
 		}
 
-		while(!gui_events.Empty())
-		{
-			const Event& gui_event = gui_events.Front();
-			editor_controller.Process_event(gui_event);
-			gui_events.Pop();
-		}
-
 		double current_time = al_current_time();
 		double dt = current_time - last_time;
 		last_time = current_time;

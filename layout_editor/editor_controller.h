@@ -21,6 +21,7 @@ private:
 	Create_buttons create_buttons;
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
+	Event_queue gui_events;
 };
 
 #endif

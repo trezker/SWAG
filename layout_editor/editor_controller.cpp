@@ -40,6 +40,8 @@ bool Editor_controller::Load(Skin& skin) {
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
 		events[Event(controller_layout.Get_widget("load"), "clicked")] = "load";
 		events[Event(controller_layout.Get_widget("remove"), "clicked")] = "remove";
+
+		controller_layout.Get_widget("vertical box")->Set_event_queue(&gui_events);
 		return true;
 	}
 	return false;
@@ -226,6 +228,12 @@ void Editor_controller::Set_layout_display(ALLEGRO_DISPLAY *display)
 
 void Editor_controller::Update()
 {
+	while(!gui_events.Empty())
+	{
+		const Event& gui_event = gui_events.Front();
+		Process_event(gui_event);
+		gui_events.Pop();
+	}
 	for(Attribute_controllers::iterator i = attribute_controllers.begin(); i != attribute_controllers.end(); ++i){
 		i->second->Update();
 	}
