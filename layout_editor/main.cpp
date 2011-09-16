@@ -95,9 +95,6 @@ int main(int argc, char **argv)
 
 	Widget* toolroot = desktop;
 
-	Event_queue gui_events;
-	toolroot->Set_event_queue(&gui_events);
-
 	typedef std::list<double> Frametimes;
 	Frametimes frametimes;
 	double total_time = 0;
