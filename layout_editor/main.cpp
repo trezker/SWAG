@@ -13,11 +13,8 @@
 #include <list>
 #include <stack>
 
-#include "controller.h"
 #include "layout_controller.h"
 #include "editor_controller.h"
-#include "button_attribute_controller.h"
-#include "widget_attribute_controller.h"
 
 
 int main(int argc, char **argv)
@@ -37,7 +34,6 @@ int main(int argc, char **argv)
     al_set_window_position(display, 220, 0);
     
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
-
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
@@ -147,19 +143,6 @@ int main(int argc, char **argv)
 		{
 			const Event& gui_event = gui_events.Front();
 			editor_controller.Process_event(gui_event);
-			std::cout<<"EVENT_PROCESSING: "<<gui_event.type<<std::endl;
-			if(gui_event.type == "selected")
-			{
-				Tree* newsel = dynamic_cast<Tree*>(gui_event.source);
-				if(newsel)
-				{
-					Widget* tw = layout_controller.Get_widget(newsel);
-					if(tw)
-					{
-						layout_controller.Select_tree(newsel);
-					}
-				}
-			}
 			gui_events.Pop();
 		}
 
