@@ -1,7 +1,9 @@
 #include "menu.h"
+#include "event_queue.h"
 #include <yaml-cpp/yaml.h>
 
 Menu::Menu()
+:mouse_over(false)
 {
 	Enable_fixed_width();
 	Enable_fixed_height();
@@ -38,6 +40,36 @@ Ustring Menu::Get_option(int i) const
 int Menu::Get_selected_option() const
 {
 	return selection;
+}
+
+void Menu::Handle_event(const ALLEGRO_EVENT& event)
+{
+	if(ALLEGRO_EVENT_MOUSE_AXES == event.type)
+	{
+		//Todo: implement hover over options.
+		Vector2 p = Get_position();
+		Vector2 s = Get_size();
+		int emx = event.mouse.x;
+		int emy = event.mouse.y;
+		if(!mouse_over && Covers_point(emx, emy))
+		{
+			mouse_over = true;
+			Push_event(Event(this, "enter"));
+		}
+		else if(mouse_over && !Covers_point(emx, emy))//(emx<p.x || emx>p.x+s.x || emy<p.y || emy>p.y+s.y))
+		{
+			mouse_over = false;
+			Push_event(Event(this, "leave"));
+		}
+	}
+	if(ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
+	{
+		if(mouse_over)
+		{
+			selection = (event.mouse.y - Get_position().y - Get_value(PADDING_TOP)) / Get_value(OPTION_HEIGHT);
+			Push_event(Event(this, "clicked"));
+		}
+	}
 }
 
 void Menu::To_yaml(YAML::Emitter& out) const
