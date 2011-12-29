@@ -1,0 +1,72 @@
+---
+root: root
+widgets:
+  -
+    name: expander
+    prototype_name: expander
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    Expander:
+      text: Menu
+    children:
+      - vertical box
+  -
+    name: add option
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Add option
+      toggle: false
+  -
+    name: horizontal box
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - option text
+      - add option
+  -
+    name: option text
+    prototype_name: inputbox
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    Inputbox:
+      text: inputbox
+  -
+    name: remove option
+    prototype_name: button
+    Widget:
+      tooltip: Remove selected option from menu
+      fixed_width: false
+      fixed_height: true
+    Button:
+      text: Remove option
+      toggle: false
+  -
+    name: root
+    prototype_name: desktop
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - expander
+  -
+    name: vertical box
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - horizontal box
+      - remove option

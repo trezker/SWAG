@@ -6,6 +6,8 @@
 #include "layout.h"
 #include <yaml-cpp/yaml.h>
 
+#include "desktop.h"
+
 Widget::Widget()
 :view(NULL)
 ,fixed_width(false)
@@ -200,6 +202,16 @@ void Widget::Set_parent(Container* p)
 Container* Widget::Get_parent() const
 {
 	return parent;
+}
+
+Desktop* Widget::Get_desktop()
+{
+	Desktop* d = dynamic_cast<Desktop*>(this);
+	if(d) {
+		return d;
+	} else {
+		return parent->Get_desktop();
+	}
 }
 
 bool Widget::Covers_point(float x, float y)

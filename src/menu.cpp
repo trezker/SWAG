@@ -12,9 +12,15 @@ Widget* Menu::Clone() const
 	return new Menu(*this);
 }
 
-void Menu::Add_option(const std::string& t)
+void Menu::Add_option(const Ustring& t)
 {
 	options.push_back(t);
+}
+
+void Menu::Remove_option(int i){
+	if(i>=0 && i<options.size()) {
+		options.erase(options.begin()+i);
+	}
 }
 
 int Menu::Get_option_count() const
@@ -22,7 +28,7 @@ int Menu::Get_option_count() const
 	return options.size();
 }
 
-std::string Menu::Get_option(int i) const
+Ustring Menu::Get_option(int i) const
 {
 	if(i < options.size())
 		return options[i];

@@ -12,8 +12,8 @@ Vector2 Menu_view::Request_size(const Widget& widget) const
 	size.y = al_get_font_line_height(font) * oc + 6;
 	for(int i = 0; i<oc; ++i)
 	{
-		std::string o = menu.Get_option(i);
-		int w = al_get_text_width(font, o.c_str());
+		Ustring o = menu.Get_option(i);
+		int w = al_get_text_width(font, o.Cstring());
 		if(w > size.x)
 			size.x = w;
 	}
@@ -41,8 +41,8 @@ void Menu_view::Render(const Widget& widget) const
 	int oc = menu.Get_option_count();
 	for(int i = 0; i<oc; ++i)
 	{
-		std::string o = menu.Get_option(i);
-		al_draw_text(font, text_color, x, y, 0, o.c_str());
+		Ustring o = menu.Get_option(i);
+		al_draw_text(font, text_color, x, y, 0, o.Cstring());
 		y += font_h;
 	}
 }

@@ -9,13 +9,14 @@ class Menu: public Widget
 public:
 	Menu();
 	virtual Widget* Clone() const;
-	void Add_option(const std::string& t);
+	void Add_option(const Ustring& t);
+	void Remove_option(int i);
 	int Get_option_count() const;
-	std::string Get_option(int i) const;
+	Ustring Get_option(int i) const;
 	int Get_selected_option() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 private:
-	typedef std::vector<std::string> Options;
+	typedef std::vector<Ustring> Options;
 	Options options;
 	int selection;
 };

@@ -11,6 +11,11 @@ public:
 	void Set_child(Widget* widget);
 	Widget* Get_child() const;
 	Vector2 Get_tooltip_position() const;
+	
+	void Push_top(Widget* widget);
+	void Pop_top();
+	const Widgets& Get_top() const;
+	
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	virtual bool Add_child(Widget* c);
 	virtual void Remove_child(Widget* c);
@@ -20,6 +25,7 @@ private:
 	void Reset_tooltip();
 	virtual void Resized();
 	Widget* child;
+	Widgets top;
 	Vector2 tooltip_position;
 	float tooltip_countdown;
 };

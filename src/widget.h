@@ -12,6 +12,7 @@ class Widget_view;
 class Event_queue;
 class Event;
 class Container;
+class Desktop;
 class Layout;
 
 namespace YAML
@@ -61,6 +62,7 @@ public:
 	Event_queue* Get_event_queue() const;
 	void Set_parent(Container* parent);
 	Container* Get_parent() const;
+	Desktop* Get_desktop();
 	
 	bool Covers_point(float x, float y);
 	

@@ -19,6 +19,12 @@ void Desktop_view::Render(const Widget& widget) const
 	if(child)
 		child->Render();
 
+	const Widgets& top = desktop.Get_top();
+	
+	for(Widgets::const_iterator i = top.begin(); i != top.end(); ++i) {
+		(*i)->Render();
+	}
+
 	Ustring tooltip = desktop.Get_tooltip(0,0);
 	if(tooltip != "")
 	{

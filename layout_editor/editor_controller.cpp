@@ -4,6 +4,7 @@
 #include <stack>
 #include "button_attribute_controller.h"
 #include "widget_attribute_controller.h"
+#include "menu_attribute_controller.h"
 
 bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_filename("interfaces/editor.yaml");
@@ -35,6 +36,11 @@ bool Editor_controller::Load(Skin& skin) {
 		button_controller->Load(layout_controller->Get_skin());
 		button_controller->Set_layout_controller(*layout_controller);
 		attribute_controllers["button"] = button_controller;
+
+		Menu_attribute_controller* menu_controller = new Menu_attribute_controller;
+		menu_controller->Load(layout_controller->Get_skin());
+		menu_controller->Set_layout_controller(*layout_controller);
+		attribute_controllers["menu"] = menu_controller;
 
 		dynamic_cast<Container*>(controller_layout.Get_widget("layout expander"))->Add_child(layout_controller->Get_root_tree());
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";

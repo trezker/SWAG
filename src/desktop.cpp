@@ -67,10 +67,15 @@ void Desktop::Handle_event(const ALLEGRO_EVENT& event)
 		else
 			tooltip_countdown -= al_get_timer_speed(event.timer.source);
 	}
-	
-	if(child)
+
+	if(!top.empty())
 	{
-		child->Handle_event(event);
+		top.back()->Handle_event(event);
+	} else { //TODO: Figure out if letting through certain events is neccesary. (mouse_up, mouse_axis)
+		if(child)
+		{
+			child->Handle_event(event);
+		}
 	}
 }
 
@@ -109,6 +114,21 @@ Widgets Desktop::Get_children() const
 Vector2 Desktop::Get_tooltip_position() const
 {
 	return tooltip_position;
+}
+
+void Desktop::Push_top(Widget* widget)
+{
+	top.push_back(widget);
+}
+
+void Desktop::Pop_top()
+{
+	top.pop_back();
+}
+
+const Widgets& Desktop::Get_top() const
+{
+	return top;
 }
 
 void Desktop::To_yaml(YAML::Emitter& out) const
