@@ -10,6 +10,7 @@ public:
 	virtual bool Add_child(Widget* c) = 0;
 	virtual void Remove_child(Widget* c) = 0;
 	virtual Widgets Get_children() const = 0;
+	virtual void Close_child(Widget* c);
 };
 
 #endif

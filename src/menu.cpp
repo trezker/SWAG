@@ -1,9 +1,11 @@
 #include "menu.h"
 #include "event_queue.h"
+#include "container.h"
 #include <yaml-cpp/yaml.h>
 
 Menu::Menu()
 :mouse_over(false)
+,selection(-1)
 {
 	Enable_fixed_width();
 	Enable_fixed_height();
@@ -69,6 +71,7 @@ void Menu::Handle_event(const ALLEGRO_EVENT& event)
 			selection = (event.mouse.y - Get_position().y - Get_value(PADDING_TOP)) / Get_value(OPTION_HEIGHT);
 			Push_event(Event(this, "clicked"));
 		}
+		Get_parent()->Close_child(this);
 	}
 }
 

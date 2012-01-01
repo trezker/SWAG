@@ -23,6 +23,7 @@
 #include "inputbox_view.h"
 #include "label_view.h"
 #include "menu_view.h"
+#include "dropdown_menu_view.h"
 
 Hardcoded_skin::Hardcoded_skin()
 {
@@ -148,6 +149,13 @@ Hardcoded_skin::Hardcoded_skin()
 	widget->Set_view(menu_view);
 	Set_prototype("menu", widget);
 	Add_view(menu_view);
+
+	Dropdown_menu_view* dropdown_menu_view = new Dropdown_menu_view;
+	dropdown_menu_view->font = font;
+	widget = new Dropdown_menu;
+	widget->Set_view(dropdown_menu_view);
+	Set_prototype("dropdown_menu", widget);
+	Add_view(dropdown_menu_view);
 }
 
 Hardcoded_skin::~Hardcoded_skin()

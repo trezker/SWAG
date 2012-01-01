@@ -13,6 +13,7 @@
 #include "inputbox.h"
 #include "label.h"
 #include "menu.h"
+#include "dropdown_menu.h"
 #include "tree.h"
 #include "vertical_box.h"
 #include "vertical_paned.h"
