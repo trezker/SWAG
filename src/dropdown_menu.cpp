@@ -76,9 +76,13 @@ void Dropdown_menu::Organise()
 
 	if(child)
 	{
-		child->Set_size(s);
 		child->Set_position(p);
 	}
+}
+
+void Dropdown_menu::Resized()
+{
+	Organise();
 }
 
 void Dropdown_menu::Handle_event(const ALLEGRO_EVENT& event)

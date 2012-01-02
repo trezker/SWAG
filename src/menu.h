@@ -14,6 +14,7 @@ public:
 	int Get_option_count() const;
 	Ustring Get_option(int i) const;
 	int Get_selected_option() const;
+	int Get_hover_option() const;
 	virtual void To_yaml(YAML::Emitter& out) const;
 	virtual void Handle_event(const ALLEGRO_EVENT& event);
 	enum Value
@@ -25,6 +26,7 @@ private:
 	typedef std::vector<Ustring> Options;
 	Options options;
 	int selection;
+	int hover;
 	bool mouse_over;
 };
 

@@ -30,6 +30,7 @@ public:
 		SELF_HEIGHT
 	};
 private:
+	virtual void Resized();
 	bool open;
 	Widget* child;
 };

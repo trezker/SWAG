@@ -39,6 +39,7 @@ void Menu_view::Render(const Widget& widget) const
 	const Menu& menu = dynamic_cast<const Menu&>(widget);
 	Vector2 p = widget.Get_position();
 	Vector2 s = widget.Get_size();
+//	std::cout<<s.y<<std::endl;
 
 	ALLEGRO_COLOR bg_color = al_map_rgb_f(0.5, 0.5, 0.5);
 	ALLEGRO_COLOR edge_color = al_map_rgb_f(0.9, 0.0, 0.0);
@@ -53,10 +54,14 @@ void Menu_view::Render(const Widget& widget) const
 	int x = p.x + 3;
 
 	int selected = menu.Get_selected_option();
+	int hover = menu.Get_hover_option();
 	int oc = menu.Get_option_count();
 	for(int i = 0; i<oc; ++i)
 	{
-		if(i == selected) {
+		if(i == selected && !hover==-1) {
+			al_draw_filled_rectangle(p.x, y, p.x+s.x-1, y+font_h, selected_color);
+		}
+		if(i == hover) {
 			al_draw_filled_rectangle(p.x, y, p.x+s.x-1, y+font_h, selected_color);
 		}
 		Ustring o = menu.Get_option(i);

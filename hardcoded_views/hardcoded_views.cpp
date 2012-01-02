@@ -154,7 +154,7 @@ Hardcoded_skin::Hardcoded_skin()
 	dropdown_menu_view->font = font;
 	widget = new Dropdown_menu;
 	widget->Set_view(dropdown_menu_view);
-	Set_prototype("dropdown_menu", widget);
+	Set_prototype("dropdown menu", widget);
 	Add_view(dropdown_menu_view);
 }
 

@@ -11,9 +11,18 @@ bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_skin(&skin);
 	if(controller_layout.Load_yaml())
 	{
+		Namelist protlist = skin.Get_prototype_list();
+		Dropdown_menu* create_dropdown_menu = skin.Clone<Dropdown_menu>("dropdown menu");
+		Menu* create_menu = skin.Clone<Menu>("menu");
+		for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
+		{
+			create_menu->Add_option(*i);
+		}
+		create_dropdown_menu->Add_child(create_menu);
+//		dynamic_cast<Container*>(controller_layout.Get_widget("create expander"))->Add_child(create_dropdown_menu);
+
 		Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
 		typedef std::map<Widget*, Ustring> Create_buttons;
-		Namelist protlist = skin.Get_prototype_list();
 		for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
 		{
 			Button* createbutton = skin.Clone<Button>("button");
@@ -123,6 +132,7 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 							tree_child->Set_text((*i)->Get_name());
 							layout_controller->Set_tree(tree_child, *i);
 							current_tree->Add_child(tree_child);
+							events[Event(tree_child, "selected")] = "select";
 							trees_todo.push(tree_child);
 						}
 					}
@@ -170,14 +180,17 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 		}
 	}
 	if(event_handle == "create") {
+		std::cout<<"Create"<<std::endl;
 		if(layout_controller->Get_current_tree())
 		{
+			std::cout<<"Current tree"<<std::endl;
 			Create_buttons::iterator i = create_buttons.find(event.source);
 			if(i != create_buttons.end())
 			{
 				std::cout<<i->second<<std::endl;
 				Widget* child = layout_controller->Get_skin().Clone<Widget>(i->second);
 				Container* parent = dynamic_cast<Container*>(layout_controller->Get_current_widget());
+				std::cout<<"parent: "<<parent<<std::endl;
 
 				if(parent && parent->Add_child(child))
 				{
@@ -190,7 +203,7 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 					Text_interface* has_text = dynamic_cast<Text_interface*>(child);
 					if(has_text)
 						has_text->Set_text(name);
-events[Event(tree_child, "selected")] = "select";
+					events[Event(tree_child, "selected")] = "select";
 				}
 				else
 					delete child;
