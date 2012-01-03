@@ -106,7 +106,7 @@ void Dropdown_menu::Handle_event(const ALLEGRO_EVENT& event)
 void Dropdown_menu::To_yaml(YAML::Emitter& out) const
 {
 	Container::To_yaml(out);
-	out << YAML::Key << "Dropdown_menu";
+//	out << YAML::Key << "Dropdown_menu";
 
 	out << YAML::Key << "children";
 	out << YAML::Value << YAML::BeginSeq;
@@ -121,5 +121,5 @@ void Dropdown_menu::To_yaml(YAML::Emitter& out) const
 void Dropdown_menu::From_yaml(const YAML::Node& in)
 {
 	Container::From_yaml(in);
-	const YAML::Node& doc = in["Dropdown_menu"];
+//	const YAML::Node& doc = in["Dropdown_menu"];
 }

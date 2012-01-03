@@ -12,27 +12,14 @@ bool Editor_controller::Load(Skin& skin) {
 	if(controller_layout.Load_yaml())
 	{
 		Namelist protlist = skin.Get_prototype_list();
-		Dropdown_menu* create_dropdown_menu = skin.Clone<Dropdown_menu>("dropdown menu");
-		Menu* create_menu = skin.Clone<Menu>("menu");
+
+		Menu* create_menu = dynamic_cast<Menu*>(controller_layout.Get_widget("create menu"));
+		std::cout<<"THE CREATE MENU: "<<create_menu<<std::endl;
 		for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
 		{
 			create_menu->Add_option(*i);
 		}
-		create_dropdown_menu->Add_child(create_menu);
-//		dynamic_cast<Container*>(controller_layout.Get_widget("create expander"))->Add_child(create_dropdown_menu);
-
-		Vertical_box* create_vbox = skin.Clone<Vertical_box>("vertical box");
-		typedef std::map<Widget*, Ustring> Create_buttons;
-		for(Namelist::iterator i = protlist.begin(); i != protlist.end(); ++i)
-		{
-			Button* createbutton = skin.Clone<Button>("button");
-			createbutton->Set_text(*i);
-			create_buttons[createbutton] = *i;
-			create_vbox->Add(createbutton);
-			createbutton->Set_tooltip("Create a widget");
-			events[Event(createbutton, "clicked")] = "create";
-		}
-		dynamic_cast<Container*>(controller_layout.Get_widget("create expander"))->Add_child(create_vbox);
+		events[Event(controller_layout.Get_widget("create button"), "clicked")] = "create";
 
 		//Widget attribute editing interfaces
 		Widget_attribute_controller* widget_controller = new Widget_attribute_controller;
@@ -184,17 +171,16 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 		if(layout_controller->Get_current_tree())
 		{
 			std::cout<<"Current tree"<<std::endl;
-			Create_buttons::iterator i = create_buttons.find(event.source);
-			if(i != create_buttons.end())
-			{
-				std::cout<<i->second<<std::endl;
-				Widget* child = layout_controller->Get_skin().Clone<Widget>(i->second);
+			Menu* create_menu = dynamic_cast<Menu*>(controller_layout.Get_widget("create menu"));
+			int option = create_menu->Get_selected_option();
+			if(option != -1){
+				Widget* child = layout_controller->Get_skin().Clone<Widget>(create_menu->Get_option(option));
 				Container* parent = dynamic_cast<Container*>(layout_controller->Get_current_widget());
 				std::cout<<"parent: "<<parent<<std::endl;
 
 				if(parent && parent->Add_child(child))
 				{
-					Ustring name = layout.Add_widget(i->second, child, parent);
+					Ustring name = layout.Add_widget(create_menu->Get_option(option), child, parent);
 					Tree* tree_child = layout_controller->Get_skin().Clone<Tree>("tree");
 					tree_child->Set_text(name);
 					layout_controller->Get_current_tree()->Add_child(tree_child);

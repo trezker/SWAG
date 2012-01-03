@@ -2,15 +2,6 @@
 root: root
 widgets:
   -
-    name: attribute vbox
-    prototype_name: vertical box
-    Widget:
-      tooltip: ""
-      fixed_width: false
-      fixed_height: false
-    children:
-      []
-  -
     name: attribute expander
     prototype_name: expander
     Widget:
@@ -22,6 +13,25 @@ widgets:
     children:
       - attribute vbox
   -
+    name: attribute vbox
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      []
+  -
+    name: create button
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Create
+      toggle: false
+  -
     name: create expander
     prototype_name: expander
     Widget:
@@ -31,7 +41,25 @@ widgets:
     Expander:
       text: Create
     children:
+      - horizontal box
+  -
+    name: create menu
+    prototype_name: menu
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    options:
       []
+  -
+    name: dropdown menu
+    prototype_name: dropdown menu
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: true
+    children:
+      - create menu
   -
     name: file commands
     prototype_name: horizontal box
@@ -42,6 +70,16 @@ widgets:
     children:
       - save
       - load
+  -
+    name: horizontal box
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - create button
+      - dropdown menu
   -
     name: layout expander
     prototype_name: expander
