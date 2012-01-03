@@ -26,7 +26,6 @@ bool Editor_controller::Load(Skin& skin) {
 		widget_controller->Load(layout_controller->Get_skin());
 		widget_controller->Set_layout_controller(*layout_controller);
 		attribute_controllers["widget"] = widget_controller;
-//		attributes_vbox->Add_child(widget_controller->Get_root());
 
 		Button_attribute_controller* button_controller = new Button_attribute_controller;
 		button_controller->Load(layout_controller->Get_skin());
@@ -70,7 +69,6 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 			const char *filename = al_get_native_file_dialog_path(fc, 0);
 			layout.Set_filename(filename);
 
-			//layout.Set_filename("testlayout.yaml");
 			bool s = layout.Save_yaml();
 			std::cout<<(s?"Saved":"Save failed")<<std::endl;
 		}
@@ -88,8 +86,6 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 			layout.Set_filename(filename);
 
 			layout_controller->Clear();
-			//layout.Set_filename("testlayout.yaml");
-			//layout.Set_skin(&skin);
 			if(layout.Load_yaml())
 			{
 				std::cout<<"Loaded"<<std::endl;
@@ -134,7 +130,7 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 				layout.Add_widget("root", layout_controller->Get_root(), NULL);
 				layout_controller->Set_tree(layout_controller->Get_root_tree(), layout_controller->Get_root());
 			}
-			layout_controller->Select_tree(NULL);//layout_controller->Get_root_tree());
+			layout_controller->Select_tree(NULL);
 		}
 		al_destroy_native_file_dialog(fc);
 	}

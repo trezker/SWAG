@@ -17,8 +17,6 @@ public:
 private:
 	Layout_controller* layout_controller;
 	ALLEGRO_DISPLAY *layout_display;
-	typedef std::map<Widget*, Ustring> Create_buttons;
-	Create_buttons create_buttons;
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
 	Event_queue gui_events;
