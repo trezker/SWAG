@@ -59,3 +59,22 @@ Namelist Skin::Get_prototype_list() const
 	}
 	return l;
 }
+
+void Skin::Set_filename(const Ustring& f)
+{
+	filename = f;
+}
+
+const Ustring& Skin::Get_filename() const
+{
+	return filename;
+}
+
+bool Skin::Load()
+{
+	return false;
+}
+
+void Skin::Save()
+{
+}

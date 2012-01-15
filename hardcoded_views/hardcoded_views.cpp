@@ -5,6 +5,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <yaml-cpp/yaml.h>
+#include <fstream>
 
 #include <iostream>
 
@@ -161,4 +163,32 @@ Hardcoded_skin::Hardcoded_skin()
 Hardcoded_skin::~Hardcoded_skin()
 {
 	al_destroy_font(font);
+}
+
+bool Hardcoded_skin::Load()
+{
+	if(Get_filename()=="")
+	{
+		std::cout<<"No filename"<<std::endl;
+		return false;
+	}
+	try
+	{
+		std::ifstream fin(Get_filename().Cstring());
+		YAML::Parser parser(fin);
+
+		YAML::Node doc;
+		parser.GetNextDocument(doc);
+	}
+	catch(YAML::Exception& e){
+		std::cout<<"ERROR: "<<e.what()<<std::endl;
+	}
+	catch(...)
+	{
+		std::cout<<"Caught error"<<std::endl;
+	}
+}
+
+void Hardcoded_skin::Save()
+{
 }

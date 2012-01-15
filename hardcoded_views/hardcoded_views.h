@@ -11,6 +11,8 @@ class Hardcoded_skin: public Skin
 public:
 	Hardcoded_skin();
 	virtual ~Hardcoded_skin();
+	virtual bool Load();
+	virtual void Save();
 private:
 	ALLEGRO_FONT* font;
 };

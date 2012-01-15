@@ -16,6 +16,10 @@ public:
 	/* Destructor: ~Skin
 	 * */
 	virtual ~Skin();
+	void Set_filename(const Ustring& filename);
+	const Ustring& Get_filename() const;
+	virtual bool Load();
+	virtual void Save();
 
 	/* Function: Clone
 	 * Clones the prototype that is mapped to name.
@@ -60,6 +64,7 @@ private:
 	typedef std::list<Widget_view*> Views;
 	Views views;
 	Views animated_views;
+	Ustring filename;
 };
 
 #endif
