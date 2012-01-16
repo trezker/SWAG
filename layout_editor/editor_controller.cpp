@@ -264,6 +264,30 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 		{
 			Widget* widget = layout_controller->Get_current_widget();
 			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+			Widgets children = parent->Get_children();
+			Widgets::iterator i = std::find(children.begin(), children.end(), widget);
+			Trees treechildren = parenttree->Get_children();
+			Trees::iterator itree = std::find(treechildren.begin(), treechildren.end(), currenttree);
+			if(i+1 != children.end()) {
+				i = children.erase(i);
+				itree = treechildren.erase(itree);
+				++i;
+				++itree;
+				children.insert(i, widget);
+				treechildren.insert(itree, currenttree);
+				for(Widgets::iterator i = children.begin(); i != children.end(); ++i) {
+					parent->Remove_child(*i);
+				}
+				for(Trees::iterator i = treechildren.begin(); i != treechildren.end(); ++i) {
+					parenttree->Remove_child(*i);
+				}
+				for(Widgets::iterator i = children.begin(); i != children.end(); ++i) {
+					parent->Add_child(*i);
+				}
+				for(Trees::iterator i = treechildren.begin(); i != treechildren.end(); ++i) {
+					parenttree->Add_child(*i);
+				}
+			}
 		}
 	}
 	if(event_handle == "cut") {
