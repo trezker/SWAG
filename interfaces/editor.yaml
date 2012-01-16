@@ -52,6 +52,26 @@ widgets:
     options:
       []
   -
+    name: cut
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Cut
+      toggle: false
+  -
+    name: cutpaste
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - cut
+      - paste
+  -
     name: dropdown menu
     prototype_name: dropdown menu
     Widget:
@@ -81,7 +101,7 @@ widgets:
       - create button
       - dropdown menu
   -
-    name: layout expander
+    name: layout
     prototype_name: expander
     Widget:
       tooltip: ""
@@ -90,7 +110,16 @@ widgets:
     Expander:
       text: Layout
     children:
-      []
+      - layout expander
+  -
+    name: layout expander
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - vertical box3
   -
     name: load
     prototype_name: button
@@ -100,6 +129,46 @@ widgets:
       fixed_height: true
     Button:
       text: Load
+      toggle: false
+  -
+    name: move
+    prototype_name: horizontal box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - move up
+      - move down
+  -
+    name: move down
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Move Down
+      toggle: false
+  -
+    name: move up
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Move up
+      toggle: false
+  -
+    name: paste
+    prototype_name: button
+    Widget:
+      tooltip: ""
+      fixed_width: true
+      fixed_height: true
+    Button:
+      text: Paste
       toggle: false
   -
     name: remove
@@ -139,7 +208,17 @@ widgets:
       fixed_height: false
     children:
       - file commands
-      - layout expander
-      - remove
       - create expander
+      - layout
+      - remove
       - attribute expander
+  -
+    name: vertical box3
+    prototype_name: vertical box
+    Widget:
+      tooltip: ""
+      fixed_width: false
+      fixed_height: false
+    children:
+      - move
+      - cutpaste

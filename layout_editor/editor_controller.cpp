@@ -2,6 +2,7 @@
 #include "layout_controller.h"
 #include <allegro5/allegro_native_dialog.h>
 #include <stack>
+#include <algorithm>
 #include "button_attribute_controller.h"
 #include "widget_attribute_controller.h"
 #include "menu_attribute_controller.h"
@@ -41,6 +42,10 @@ bool Editor_controller::Load(Skin& skin) {
 		events[Event(controller_layout.Get_widget("save"), "clicked")] = "save";
 		events[Event(controller_layout.Get_widget("load"), "clicked")] = "load";
 		events[Event(controller_layout.Get_widget("remove"), "clicked")] = "remove";
+		events[Event(controller_layout.Get_widget("cut"), "clicked")] = "cut";
+		events[Event(controller_layout.Get_widget("paste"), "clicked")] = "paste";
+		events[Event(controller_layout.Get_widget("move up"), "clicked")] = "move up";
+		events[Event(controller_layout.Get_widget("move down"), "clicked")] = "move down";
 
 		controller_layout.Get_widget("vertical box")->Set_event_queue(&gui_events);
 		return true;
@@ -215,6 +220,68 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 					ac->second->Synchronize_values();
 				}
 			}
+		}
+	}
+	if(event_handle == "move up") {
+		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
+		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
+		if(currenttree && parenttree)
+		{
+			Widget* widget = layout_controller->Get_current_widget();
+			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+			Widgets children = parent->Get_children();
+			Widgets::iterator i = std::find(children.begin(), children.end(), widget);
+			Trees treechildren = parenttree->Get_children();
+			Trees::iterator itree = std::find(treechildren.begin(), treechildren.end(), currenttree);
+			if(i != children.begin()) {
+				i = children.erase(i);
+				itree = treechildren.erase(itree);
+				if(i != children.begin()){
+					--i;
+					--itree;
+				}
+				children.insert(i, widget);
+				treechildren.insert(itree, currenttree);
+				for(Widgets::iterator i = children.begin(); i != children.end(); ++i) {
+					parent->Remove_child(*i);
+				}
+				for(Trees::iterator i = treechildren.begin(); i != treechildren.end(); ++i) {
+					parenttree->Remove_child(*i);
+				}
+				for(Widgets::iterator i = children.begin(); i != children.end(); ++i) {
+					parent->Add_child(*i);
+				}
+				for(Trees::iterator i = treechildren.begin(); i != treechildren.end(); ++i) {
+					parenttree->Add_child(*i);
+				}
+			}
+		}
+	}
+	if(event_handle == "move down") {
+		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
+		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
+		if(currenttree && parenttree)
+		{
+			Widget* widget = layout_controller->Get_current_widget();
+			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+		}
+	}
+	if(event_handle == "cut") {
+		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
+		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
+		if(currenttree && parenttree)
+		{
+			Widget* widget = layout_controller->Get_current_widget();
+			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+		}
+	}
+	if(event_handle == "paste") {
+		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
+		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
+		if(currenttree && parenttree)
+		{
+			Widget* widget = layout_controller->Get_current_widget();
+			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
 		}
 	}
 }
