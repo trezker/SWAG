@@ -338,12 +338,16 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 		}
 	}
 	if(event_handle == "paste") {
-		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
-		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
-		if(currenttree && parenttree)
+		Container* parent = dynamic_cast<Container*>(layout_controller->Get_current_widget());
+		if(cut_widget && parent)
 		{
-			Widget* widget = layout_controller->Get_current_widget();
-			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+			Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
+			parent->Add_child(cut_widget);
+			currenttree->Add_child(cut_tree);
+			layout_controller->Select_tree(cut_tree);
+			cut_tree->Select();
+			cut_widget = NULL;
+			cut_tree = NULL;
 		}
 	}
 }
