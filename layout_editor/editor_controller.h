@@ -7,6 +7,7 @@ class Layout_controller;
 
 class Editor_controller: public Controller {
 public:
+	Editor_controller();
 	virtual bool Load(Skin& skin);
 	void Set_layout_controller(Layout_controller& lc);
 	virtual Widget* Get_root();
@@ -20,6 +21,8 @@ private:
 	typedef std::map<std::string, Controller*> Attribute_controllers;
 	Attribute_controllers attribute_controllers;
 	Event_queue gui_events;
+	Widget* cut_widget;
+	Tree* cut_tree;
 };
 
 #endif

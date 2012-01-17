@@ -7,6 +7,13 @@
 #include "widget_attribute_controller.h"
 #include "menu_attribute_controller.h"
 
+Editor_controller::Editor_controller()
+:cut_widget(NULL)
+,cut_tree(NULL)
+{
+
+}
+
 bool Editor_controller::Load(Skin& skin) {
 	controller_layout.Set_filename("interfaces/editor.yaml");
 	controller_layout.Set_skin(&skin);
@@ -291,12 +298,43 @@ void Editor_controller::Handle_event(const Ustring& event_handle, const Event& e
 		}
 	}
 	if(event_handle == "cut") {
+		std::cout<<"Cut"<<std::endl;
 		Tree* currenttree = dynamic_cast<Tree*>(layout_controller->Get_current_tree());
 		Tree* parenttree = dynamic_cast<Tree*>(currenttree->Get_parent());
 		if(currenttree && parenttree)
 		{
 			Widget* widget = layout_controller->Get_current_widget();
 			Container* parent = dynamic_cast<Container*>(widget->Get_parent());
+			
+			parent->Remove_child(widget);
+			parenttree->Remove_child(currenttree);
+
+			layout_controller->Select_tree(NULL);
+			layout_controller->Select_tree(parenttree);
+			parenttree->Select();
+
+			if(cut_widget) {
+				Trees deadlist;
+				deadlist.push_back(cut_tree);
+				int count = 0;
+				while(!deadlist.empty())
+				{
+					Tree* current = deadlist.back();
+					deadlist.erase(--deadlist.end());
+					Trees& children = current->Get_children();
+					for(Trees::iterator i = children.begin(); i != children.end(); ++i)
+					{
+						deadlist.push_back(*i);
+					}
+					layout.Remove_widget(layout_controller->Get_widget(current));
+					layout_controller->Destroy_widget(current);
+					++count;
+				}
+				std::cout<<"Deleted "<<count<<" widgets in cut buffer"<<std::endl;
+			}
+			
+			cut_widget = widget;
+			cut_tree = currenttree;
 		}
 	}
 	if(event_handle == "paste") {
