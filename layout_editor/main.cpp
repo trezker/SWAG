@@ -93,17 +93,17 @@ int main(int argc, char **argv)
     al_set_window_position(display, 220, 0);
     
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
+	ALLEGRO_TIMER* timer = al_create_timer(0.1);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)tooldisplay);
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
-
-/*	ALLEGRO_TIMER *timer = al_create_timer(0.01);
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
+
 	al_start_timer(timer);
-*/
+
 	ALLEGRO_FONT* font = al_load_font("data/DejaVuSans.ttf", 12, 0);
 	if(!font)
 		font = al_load_font("examples/data/DejaVuSans.ttf", 12, 0);
@@ -165,9 +165,9 @@ int main(int argc, char **argv)
 	{
 		ALLEGRO_EVENT event;
 
-//		al_wait_for_event(event_queue, &event);
-		while (al_get_next_event(event_queue, &event))
+		while (!quit)
 		{
+			al_wait_for_event(event_queue, &event);
 			if(log_event_debug) {
 				std::cout<<event.type<<" "<<get_event_name(event.type)<<std::endl;
 			}
@@ -224,51 +224,55 @@ int main(int argc, char **argv)
 			{
 				layout_controller.Get_root()->Handle_event(event);
 			}
-		}
-/*		if(events_this_loop>0)
-			std::cout<<events_this_loop<<std::endl<<std::endl;
-*/
-		if (log_event_debug)
-			std::cout<<"Events done"<<std::endl;
+			
+			if(ALLEGRO_EVENT_TIMER == event.type)
+			{
+		/*		if(events_this_loop>0)
+					std::cout<<events_this_loop<<std::endl<<std::endl;
+		*/
+				if (log_event_debug)
+					std::cout<<"Events done"<<std::endl;
 
-		double current_time = al_current_time();
-		double dt = current_time - last_time;
-		last_time = current_time;
-		
-		editor_controller.Update();
-		layout_controller.Get_skin().Update(dt);
+				double current_time = al_current_time();
+				double dt = current_time - last_time;
+				last_time = current_time;
+				
+				editor_controller.Update();
+				layout_controller.Get_skin().Update(dt);
 
-		al_set_target_backbuffer(display);
-		layout_controller.Get_root()->Render();
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_set_target_backbuffer(display);
+				layout_controller.Get_root()->Render();
+				al_flip_display();
+				al_clear_to_color(al_map_rgb(0, 0, 0));
 
-		al_set_target_backbuffer(tooldisplay);
-		toolroot->Render();
+				al_set_target_backbuffer(tooldisplay);
+				toolroot->Render();
 
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_flip_display();
+				al_clear_to_color(al_map_rgb(0, 0, 0));
 
-		al_rest(0.001);
-		
-		
-		frametimes.push_back(dt);
-		total_time+=dt;
-		if(frametimes.size()>100)
-		{
-			total_time -= frametimes.front();
-			frametimes.erase(frametimes.begin());
-		}
-		int fps = frametimes.size()/total_time;
-		std::stringstream ss;
-		ss<<fps;
-		std::string fps_string;
-		ss>>fps_string;
-		fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
+				al_rest(0.001);
+				
+				
+				frametimes.push_back(dt);
+				total_time+=dt;
+				if(frametimes.size()>100)
+				{
+					total_time -= frametimes.front();
+					frametimes.erase(frametimes.begin());
+				}
+				int fps = frametimes.size()/total_time;
+				std::stringstream ss;
+				ss<<fps;
+				std::string fps_string;
+				ss>>fps_string;
+				fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
 
-		if (log_event_debug) {
-			std::cout<<"Flipped displays"<<std::endl;
-			log_event_debug = false;
+				if (log_event_debug) {
+					std::cout<<"Flipped displays"<<std::endl;
+					log_event_debug = false;
+				}
+			}
 		}
 	}
 
