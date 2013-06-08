@@ -29,9 +29,14 @@
 
 Hardcoded_skin::Hardcoded_skin()
 {
-	font = al_load_font("data/times.ttf", 12, 0);
+	
+	//font = al_load_font("data/times.ttf", 12, ALLEGRO_TTF_NO_KERNING);
+	//font = al_load_font("data/times.ttf", 12, 0);
+	font = al_load_font("data/small_font.tga", 12, 0);
 	if(!font)
-		font = al_load_font("examples/data/times.ttf", 12, 0);
+		//font = al_load_font("examples/data/times.ttf", 12, ALLEGRO_TTF_NO_KERNING);
+		//font = al_load_font("examples/data/times.ttf", 12, 0);
+		font = al_load_font("examples/data/small_font.tga", 12, 0);
 	
 	Widget* widget;
 

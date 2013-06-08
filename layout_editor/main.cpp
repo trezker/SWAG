@@ -16,6 +16,65 @@
 #include "layout_controller.h"
 #include "editor_controller.h"
 
+const char* get_event_name(int type)
+{
+	switch(type){
+		case ALLEGRO_EVENT_KEY_DOWN:
+			return "ALLEGRO_EVENT_KEY_DOWN";
+			break;
+		case ALLEGRO_EVENT_KEY_UP:
+			return "ALLEGRO_EVENT_KEY_UP";
+			break;
+		case ALLEGRO_EVENT_KEY_CHAR:
+			return "ALLEGRO_EVENT_KEY_CHAR";
+			break;
+		case ALLEGRO_EVENT_MOUSE_AXES:
+			return "ALLEGRO_EVENT_MOUSE_AXES";
+			break;
+		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+			return "ALLEGRO_EVENT_MOUSE_BUTTON_DOWN";
+			break;
+		case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+			return "ALLEGRO_EVENT_MOUSE_BUTTON_UP";
+			break;
+		case ALLEGRO_EVENT_MOUSE_WARPED:
+			return "ALLEGRO_EVENT_MOUSE_WARPED";
+			break;
+		case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY:
+			return "ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY";
+			break;
+		case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY:
+			return "ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY";
+			break;
+		case ALLEGRO_EVENT_TIMER:
+			return "ALLEGRO_EVENT_TIMER";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_EXPOSE:
+			return "ALLEGRO_EVENT_DISPLAY_EXPOSE";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_RESIZE:
+			return "ALLEGRO_EVENT_DISPLAY_RESIZE";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_CLOSE:
+			return "ALLEGRO_EVENT_DISPLAY_CLOSE";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_LOST:
+			return "ALLEGRO_EVENT_DISPLAY_LOST";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_FOUND:
+			return "ALLEGRO_EVENT_DISPLAY_FOUND";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_SWITCH_OUT:
+			return "ALLEGRO_EVENT_DISPLAY_SWITCH_OUT";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
+			return "ALLEGRO_EVENT_DISPLAY_SWITCH_IN";
+			break;
+		case ALLEGRO_EVENT_DISPLAY_ORIENTATION:
+			return "ALLEGRO_EVENT_DISPLAY_ORIENTATION";
+			break;
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -41,10 +100,10 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
-	ALLEGRO_TIMER *timer = al_create_timer(0.01);
+/*	ALLEGRO_TIMER *timer = al_create_timer(0.01);
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_start_timer(timer);
-
+*/
 	ALLEGRO_FONT* font = al_load_font("data/DejaVuSans.ttf", 12, 0);
 	if(!font)
 		font = al_load_font("examples/data/DejaVuSans.ttf", 12, 0);
@@ -100,11 +159,18 @@ int main(int argc, char **argv)
 	double total_time = 0;
 	double last_time = al_current_time();
 	bool quit = false;
+	bool log_event_debug = false;
+	int events_this_loop;
 	while(!quit)
 	{
 		ALLEGRO_EVENT event;
+
+//		al_wait_for_event(event_queue, &event);
 		while (al_get_next_event(event_queue, &event))
 		{
+			if(log_event_debug) {
+				std::cout<<event.type<<" "<<get_event_name(event.type)<<std::endl;
+			}
 			if (ALLEGRO_EVENT_KEY_DOWN == event.type)
 			{
 				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
@@ -126,15 +192,44 @@ int main(int argc, char **argv)
 			{
 				current_display = event.display.source;
 			}
+			if (ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
+			{
+				std::cout<<"--------"<<std::endl;
+				std::cout<<"DOWN"<<std::endl;
+				std::cout<<"--------"<<std::endl;
+				log_event_debug = true;
+			}
+			if (ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
+			{
+				std::cout<<"--------"<<std::endl;
+				std::cout<<"Mouse up"<<std::endl;
+				std::cout<<"--------"<<std::endl;
+			}
+			else if(log_event_debug) {
+				std::cout<<event.type<<" "<<get_event_name(event.type)<<std::endl;
+			}
+			
 			if(current_display == tooldisplay)
 			{
-				toolroot->Handle_event(event);
+				if (log_event_debug)					std::cout<<al_current_time()<<" Send to toolroot"<<std::endl;
+				if (ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type) {
+					//Make a global textbuffer use within the widgets, if the time before and after differs more than 0.5s then print it.
+					toolroot->Handle_event(event);
+				} else {
+					toolroot->Handle_event(event);
+				}
+				if (log_event_debug)					std::cout<<al_current_time()<<" Toolroot done"<<std::endl<<std::endl;
 			}
 			if(current_display == display)
 			{
 				layout_controller.Get_root()->Handle_event(event);
 			}
 		}
+/*		if(events_this_loop>0)
+			std::cout<<events_this_loop<<std::endl<<std::endl;
+*/
+		if (log_event_debug)
+			std::cout<<"Events done"<<std::endl;
 
 		double current_time = al_current_time();
 		double dt = current_time - last_time;
@@ -170,6 +265,11 @@ int main(int argc, char **argv)
 		std::string fps_string;
 		ss>>fps_string;
 		fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
+
+		if (log_event_debug) {
+			std::cout<<"Flipped displays"<<std::endl;
+			log_event_debug = false;
+		}
 	}
 
 	al_destroy_event_queue(event_queue);

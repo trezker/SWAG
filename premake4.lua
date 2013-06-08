@@ -11,7 +11,7 @@ solution (lib_name)
 		files { "src/*.cpp" }
 		targetdir "build/lib"
 		includedirs { "include" }
-		links ("clipboard")
+		buildoptions { "-fPIC", "-m64", "-std=c++11" }
 
 		configuration { "linux", "gmake" }
 			buildoptions { "-pg" }
@@ -32,6 +32,7 @@ solution (lib_name)
 		files { "hardcoded_views/*.cpp" }
 		targetdir "build/lib"
 		includedirs { "src" }
+		buildoptions { "-fPIC", "-m64", "-std=c++11" }
 
 		configuration { "linux", "gmake" }
 			buildoptions { "-pg" }
@@ -54,7 +55,7 @@ solution (lib_name)
 		libdirs { "build/lib" }
 		links ("swag_hc")
 		links (lib_name)
-		links {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf", "allegro_primitives","allegro_dialog", "clipboard", "yaml-cpp" }
+		links {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf", "allegro_primitives","allegro_dialog", "yaml-cpp" }
 		targetdir "build/layout_editor"
 		configuration { "linux", "gmake" }
 			buildoptions { "-pg" }
@@ -69,7 +70,7 @@ solution (lib_name)
 			flags { "Optimize" }
 
 	ex_dependencies = {"allegro","allegro_main","allegro_image","allegro_font","allegro_ttf",
-	"allegro_primitives","allegro_dialog", "clipboard", "yaml-cpp" }
+	"allegro_primitives","allegro_dialog", "yaml-cpp" }
 	examples = os.matchfiles("examples/*.cpp")
 	for index, name in pairs(examples) do
 		sname = name:sub(10, name:len()-4);

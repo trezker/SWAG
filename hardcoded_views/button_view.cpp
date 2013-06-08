@@ -9,6 +9,8 @@ Vector2 Button_view::Request_size(const Widget& widget) const
 	const Button& button = dynamic_cast<const Button&>(widget);
 	const Ustring& text = button.Get_text();
 	Vector2 size;
+	//int minwidth = 50;
+	//size.x = 50;
 	int minwidth = al_get_text_width(font, "Button") + 6;
 	size.x = al_get_ustr_width(font, text.Astring()) + 6;
 	if(size.x<minwidth)

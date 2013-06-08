@@ -1,7 +1,7 @@
 #include "inputbox.h"
 #include "event_queue.h"
 #include <iostream>
-#include <clipboard/clipboard.h>
+//#include <clipboard/clipboard.h>
 #include <yaml-cpp/yaml.h>
 
 Inputbox::Inputbox()
@@ -180,6 +180,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 					selection_start = cursor;
 				selection_end = cursor;
 			}
+			/*
 			else if(ALLEGRO_KEY_C == event.keyboard.keycode
 			&& (event.keyboard.modifiers&ALLEGRO_KEYMOD_CTRL))
 			{
@@ -194,6 +195,7 @@ void Inputbox::Handle_event(const ALLEGRO_EVENT& event)
 				text.Insert(cursor, paste.c_str());
 				Push_event(Event(this, "changed"));
 			}
+			*/
 			else
 			{
 //				std::cout<<event.keyboard.unichar<<std::endl;
