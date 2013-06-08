@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     al_set_window_position(display, 220, 0);
     
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
-	ALLEGRO_TIMER* timer = al_create_timer(0.1);
+	ALLEGRO_TIMER* timer = al_create_timer(0.01);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
@@ -101,8 +101,6 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-
-	al_start_timer(timer);
 
 	ALLEGRO_FONT* font = al_load_font("data/DejaVuSans.ttf", 12, 0);
 	if(!font)
@@ -137,7 +135,7 @@ int main(int argc, char **argv)
 
 	//FPS
 	Label* fps_label = layout_controller.Get_skin().Clone<Label>("label");
-	fps_label->Set_text("FPS: ");
+	fps_label->Set_text("FPS: 100");
 
 	//Main vbox
 	Vertical_box* toolvbox = layout_controller.Get_skin().Clone<Vertical_box>("vertical box");
@@ -154,125 +152,80 @@ int main(int argc, char **argv)
 
 	Widget* toolroot = desktop;
 
-	typedef std::list<double> Frametimes;
-	Frametimes frametimes;
-	double total_time = 0;
-	double last_time = al_current_time();
+	al_start_timer(timer);
 	bool quit = false;
-	bool log_event_debug = false;
-	int events_this_loop;
-	while(!quit)
+	while (!quit)
 	{
 		ALLEGRO_EVENT event;
-
-		while (!quit)
+		al_wait_for_event(event_queue, &event);
+		if (ALLEGRO_EVENT_KEY_DOWN == event.type)
 		{
-			al_wait_for_event(event_queue, &event);
-			if(log_event_debug) {
-				std::cout<<event.type<<" "<<get_event_name(event.type)<<std::endl;
-			}
-			if (ALLEGRO_EVENT_KEY_DOWN == event.type)
-			{
-				if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
-				{
-					quit=true;
-				}
-			}
-			if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)
+			if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode)
 			{
 				quit=true;
 			}
-			if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
-			{
-				al_acknowledge_resize(event.display.source);
-				if(event.display.source == display)
-					layout_controller.Get_root()->Set_size(Vector2(event.display.width-20, event.display.height-20));
-			}
-			if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
-			{
-				current_display = event.display.source;
-			}
-			if (ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type)
-			{
-				std::cout<<"--------"<<std::endl;
-				std::cout<<"DOWN"<<std::endl;
-				std::cout<<"--------"<<std::endl;
-				log_event_debug = true;
-			}
-			if (ALLEGRO_EVENT_MOUSE_BUTTON_UP == event.type)
-			{
-				std::cout<<"--------"<<std::endl;
-				std::cout<<"Mouse up"<<std::endl;
-				std::cout<<"--------"<<std::endl;
-			}
-			else if(log_event_debug) {
-				std::cout<<event.type<<" "<<get_event_name(event.type)<<std::endl;
-			}
-			
-			if(current_display == tooldisplay)
-			{
-				if (log_event_debug)					std::cout<<al_current_time()<<" Send to toolroot"<<std::endl;
-				if (ALLEGRO_EVENT_MOUSE_BUTTON_DOWN == event.type) {
-					//Make a global textbuffer use within the widgets, if the time before and after differs more than 0.5s then print it.
-					toolroot->Handle_event(event);
-				} else {
-					toolroot->Handle_event(event);
-				}
-				if (log_event_debug)					std::cout<<al_current_time()<<" Toolroot done"<<std::endl<<std::endl;
-			}
-			if(current_display == display)
-			{
-				layout_controller.Get_root()->Handle_event(event);
-			}
-			
-			if(ALLEGRO_EVENT_TIMER == event.type)
-			{
-		/*		if(events_this_loop>0)
-					std::cout<<events_this_loop<<std::endl<<std::endl;
-		*/
-				if (log_event_debug)
-					std::cout<<"Events done"<<std::endl;
+		}
+		if (ALLEGRO_EVENT_DISPLAY_CLOSE == event.type)
+		{
+			quit=true;
+		}
+		if (ALLEGRO_EVENT_DISPLAY_RESIZE == event.type)
+		{
+			al_acknowledge_resize(event.display.source);
+			if(event.display.source == display)
+				layout_controller.Get_root()->Set_size(Vector2(event.display.width-20, event.display.height-20));
+		}
+		if (ALLEGRO_EVENT_DISPLAY_SWITCH_IN == event.type)
+		{
+			current_display = event.display.source;
+		}
+		
+		if(current_display == tooldisplay)
+		{
+			toolroot->Handle_event(event);
+		}
+		if(current_display == display)
+		{
+			layout_controller.Get_root()->Handle_event(event);
+		}
+		
+		if(ALLEGRO_EVENT_TIMER == event.type) {
+			double dt = al_get_timer_speed(timer);
+			editor_controller.Update();
+			layout_controller.Get_skin().Update(dt);
 
-				double current_time = al_current_time();
-				double dt = current_time - last_time;
-				last_time = current_time;
-				
-				editor_controller.Update();
-				layout_controller.Get_skin().Update(dt);
+			al_set_target_backbuffer(display);
+			layout_controller.Get_root()->Render();
+			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 
-				al_set_target_backbuffer(display);
-				layout_controller.Get_root()->Render();
-				al_flip_display();
-				al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_set_target_backbuffer(tooldisplay);
+			toolroot->Render();
 
-				al_set_target_backbuffer(tooldisplay);
-				toolroot->Render();
+			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 
-				al_flip_display();
-				al_clear_to_color(al_map_rgb(0, 0, 0));
+			double fps = 1 / dt;
+			std::stringstream ss;
+			ss<<fps;
+			std::string fps_string;
+			ss>>fps_string;
+			fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
 
-				al_rest(0.001);
-				
-				
-				frametimes.push_back(dt);
-				total_time+=dt;
-				if(frametimes.size()>100)
-				{
-					total_time -= frametimes.front();
-					frametimes.erase(frametimes.begin());
-				}
-				int fps = frametimes.size()/total_time;
-				std::stringstream ss;
-				ss<<fps;
-				std::string fps_string;
-				ss>>fps_string;
-				fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
-
-				if (log_event_debug) {
-					std::cout<<"Flipped displays"<<std::endl;
-					log_event_debug = false;
-				}
+			if(dt < 0.1 && event.timer.count < al_get_timer_count(timer) - 4)
+			{
+				dt = dt * 1.1;
+				al_set_timer_speed(timer, dt);
+				//print("Tick too fast, setting speed to " .. timer_speed);
 			}
+			if(event.timer.count == al_get_timer_count(timer))
+			{
+				dt = dt * 0.9;
+				al_set_timer_speed(timer, dt);
+				//print("Tick too fast, setting speed to " .. timer_speed);
+			}
+
+			al_rest(0.001);
 		}
 	}
 
