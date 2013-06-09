@@ -3,6 +3,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <inputbox.h>
+#include <font.h>
 
 Inputbox_view::Inputbox_view()
 :cursor_flash(0)
@@ -13,8 +14,8 @@ Vector2 Inputbox_view::Request_size(const Widget& widget) const
 	const Inputbox& inputbox = dynamic_cast<const Inputbox&>(widget);
 	const Ustring& text = inputbox.Get_text();
 	Vector2 size;
-	size.x = al_get_ustr_width(font, text.Astring()) + 6;
-	size.y = al_get_font_line_height(font) + 6;
+	size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	size.y = al_get_font_line_height(font->Afont()) + 6;
 	return size;
 }
 
@@ -24,15 +25,15 @@ float Inputbox_view::Get_value(int id, const Widget& widget) const
 	const Ustring& text = inputbox.Get_text();
 	ALLEGRO_MOUSE_STATE mouse;
 	al_get_mouse_state(&mouse);
-	int char_w = al_get_text_width(font, " ");
+	int char_w = al_get_text_width(font->Afont(), " ");
 	int x = mouse.x - widget.Get_position().x-6;
 	int guess = x/char_w;
-	int diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
+	int diff = x-al_get_ustr_width(font->Afont(), text.Substring(0, guess).Astring());
 	//First back up if needed
 	while(diff<0 && guess > 0)
 	{
 		--guess;
-		diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
+		diff = x-al_get_ustr_width(font->Afont(), text.Substring(0, guess).Astring());
 	}
 	//Then check forth
 	int diff2;
@@ -40,7 +41,7 @@ float Inputbox_view::Get_value(int id, const Widget& widget) const
 	{
 		diff2 = diff;
 		++guess;
-		diff = x-al_get_ustr_width(font, text.Substring(0, guess).Astring());
+		diff = x-al_get_ustr_width(font->Afont(), text.Substring(0, guess).Astring());
 	}
 	if(diff>diff2)
 		--guess;
@@ -78,16 +79,16 @@ void Inputbox_view::Render(const Widget& widget) const
 		int sel_s = inputbox.Get_selection_start();
 		int sel_e = inputbox.Get_selection_end();
 
-		int cp_s = al_get_ustr_width(font, text.Substring(0, sel_s).Astring());
-		int cp_e = al_get_ustr_width(font, text.Substring(0, sel_e).Astring());
-		int h = al_get_font_line_height(font);
+		int cp_s = al_get_ustr_width(font->Afont(), text.Substring(0, sel_s).Astring());
+		int cp_e = al_get_ustr_width(font->Afont(), text.Substring(0, sel_e).Astring());
+		int h = al_get_font_line_height(font->Afont());
 		if(sel_s != sel_e)
 			al_draw_filled_rectangle(x+cp_s-1, y, x+cp_e, y+h, al_map_rgb_f(0.5, 0.5, 1));
 		else if(cursor_flash>0)
 			al_draw_line(x+cp_e-1, y, x+cp_e, y+h, al_map_rgb_f(0, 0, 0), 0);
 	}
 
-	al_draw_ustr(font, text_color, x, y, 0, text.Astring());
+	al_draw_ustr(font->Afont(), text_color, x, y, 0, text.Astring());
 }
 
 void Inputbox_view::Update(float t)

@@ -3,6 +3,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <desktop.h>
+#include "font.h"
 
 Vector2 Desktop_view::Request_size(const Widget& widget) const
 {
@@ -33,8 +34,8 @@ void Desktop_view::Render(const Widget& widget) const
 		Vector2 tp = desktop.Get_tooltip_position() + Vector2(20, 10);
 		ALLEGRO_COLOR text_color = al_map_rgb_f(0, 0, 0);
 		ALLEGRO_COLOR bg_color = al_map_rgb_f(0.9, 0.9, 0.5);
-		int w = al_get_text_width(font, tooltip.Cstring());
-		int h = al_get_font_line_height(font);
+		int w = al_get_text_width(font->Afont(), tooltip.Cstring());
+		int h = al_get_font_line_height(font->Afont());
 		if(tp.x+w > p.x+s.x)
 		{
 			tp.x = p.x+s.x - w;
@@ -50,6 +51,6 @@ void Desktop_view::Render(const Widget& widget) const
 		}
 
 		al_draw_filled_rectangle(tp.x, tp.y, tp.x+w, tp.y+h, bg_color);
-		al_draw_ustr(font, text_color, tp.x, tp.y, 0, tooltip.Astring());
+		al_draw_ustr(font->Afont(), text_color, tp.x, tp.y, 0, tooltip.Astring());
 	}
 }

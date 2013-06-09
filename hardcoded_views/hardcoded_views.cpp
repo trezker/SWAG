@@ -27,21 +27,26 @@
 #include "menu_view.h"
 #include "dropdown_menu_view.h"
 
+#include "font.h"
+
 Hardcoded_skin::Hardcoded_skin()
 {
 	
-	//font = al_load_font("data/times.ttf", 12, ALLEGRO_TTF_NO_KERNING);
-	font = al_load_font("examples/data/times.ttf", 12, 0);
-	//font = al_load_font("data/small_font.tga", 12, 0);
-	if(!font)
+	//font = al_load_font("examples/data/times.ttf", 12, ALLEGRO_TTF_NO_KERNING);
+	//font = al_load_font("examples/data/times.ttf", 12, 0);
+	//font = al_load_font("examples/data/small_font.tga", 12, 0);
+	font2 = new Font();
+	//if(!font)
 		//font = al_load_font("examples/data/times.ttf", 12, ALLEGRO_TTF_NO_KERNING);
 		//font = al_load_font("examples/data/times.ttf", 12, 0);
-		font = al_load_font("examples/data/small_font.tga", 12, 0);
+		//font = al_load_font("examples/data/small_font.tga", 12, 0);
+	if(!font2->Load("examples/data/small_font.tga", 12, 0))
+		font2->Load("examples/data/small_font.tga", 12, 0);
 	
 	Widget* widget;
 
 	Size_mode_view* size_mode_view = new Size_mode_view;
-	size_mode_view->font = font;
+	size_mode_view->font = font2;
 	widget = new Widget;
 	widget->Set_view(size_mode_view);
 	Set_prototype("size mode", widget);
@@ -80,7 +85,7 @@ Hardcoded_skin::Hardcoded_skin()
 	Add_view(slider_box_view);
 
 	Desktop_view* desktop_view = new Desktop_view;
-	desktop_view->font = font;
+	desktop_view->font = font2;
 	widget = new Desktop;
 	widget->Set_view(desktop_view);
 	Set_prototype("desktop", widget);
@@ -99,28 +104,28 @@ Hardcoded_skin::Hardcoded_skin()
 	Add_view(hbox_view);
 
 	Tree_view* tree_view = new Tree_view;
-	tree_view->font = font;
+	tree_view->font = font2;
 	widget = new Tree;
 	widget->Set_view(tree_view);
 	Set_prototype("tree", widget);
 	Add_view(tree_view);
 
 	Expander_view* expander_view = new Expander_view;
-	expander_view->font = font;
+	expander_view->font = font2;
 	widget = new Expander;
 	widget->Set_view(expander_view);
 	Set_prototype("expander", widget);
 	Add_view(expander_view);
 
 	Button_view* button_view = new Button_view;
-	button_view->font = font;
+	button_view->font = font2;
 	widget = new Button;
 	widget->Set_view(button_view);
 	Set_prototype("button", widget);
 	Add_view(button_view);
 
 	Button_view* toggle_view = new Button_view;
-	toggle_view->font = font;
+	toggle_view->font = font2;
 	widget = new Button;
 	widget->Set_view(toggle_view);
 	static_cast<Button*>(widget)->Set_toggle(true);
@@ -128,7 +133,7 @@ Hardcoded_skin::Hardcoded_skin()
 	Add_view(toggle_view);
 
 	Checkbox_view* checkbox_view = new Checkbox_view;
-	checkbox_view->font = font;
+	checkbox_view->font = font2;
 	widget = new Button;
 	widget->Set_view(checkbox_view);
 	static_cast<Button*>(widget)->Set_toggle(true);
@@ -136,14 +141,14 @@ Hardcoded_skin::Hardcoded_skin()
 	Add_view(checkbox_view);
 
 	Label_view* label_view = new Label_view;
-	label_view->font = font;
+	label_view->font = font2;
 	widget = new Label;
 	widget->Set_view(label_view);
 	Set_prototype("label", widget);
 	Add_view(label_view);
 
 	Inputbox_view* inputbox_view = new Inputbox_view;
-	inputbox_view->font = font;
+	inputbox_view->font = font2;
 	widget = new Inputbox;
 	widget->Set_view(inputbox_view);
 	Set_prototype("inputbox", widget);
@@ -151,14 +156,14 @@ Hardcoded_skin::Hardcoded_skin()
 	Add_animated_view(inputbox_view);
 
 	Menu_view* menu_view = new Menu_view;
-	menu_view->font = font;
+	menu_view->font = font2;
 	widget = new Menu;
 	widget->Set_view(menu_view);
 	Set_prototype("menu", widget);
 	Add_view(menu_view);
 
 	Dropdown_menu_view* dropdown_menu_view = new Dropdown_menu_view;
-	dropdown_menu_view->font = font;
+	dropdown_menu_view->font = font2;
 	widget = new Dropdown_menu;
 	widget->Set_view(dropdown_menu_view);
 	Set_prototype("dropdown menu", widget);
@@ -167,7 +172,8 @@ Hardcoded_skin::Hardcoded_skin()
 
 Hardcoded_skin::~Hardcoded_skin()
 {
-	al_destroy_font(font);
+	//al_destroy_font(font);
+	delete font2;
 }
 
 bool Hardcoded_skin::Load()

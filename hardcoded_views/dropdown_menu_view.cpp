@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <dropdown_menu.h>
 #include <menu.h>
+#include <font.h>
 
 Vector2 Dropdown_menu_view::Request_size(const Widget& widget) const
 {
@@ -13,9 +14,9 @@ Vector2 Dropdown_menu_view::Request_size(const Widget& widget) const
 	Menu *child = dynamic_cast<Menu*>(dropdown_menu.Get_child());
 	if(child){
 		const Ustring& text = child->Get_option(child->Get_selected_option());
-		size.x = al_get_ustr_width(font, text.Astring()) + 6;
+		size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
 	}
-	size.y = al_get_font_line_height(font) + 6;
+	size.y = al_get_font_line_height(font->Afont()) + 6;
 	float lh = size.y/4+6;
 
 	size.x += size.y/2;
@@ -26,7 +27,7 @@ float Dropdown_menu_view::Get_value(int id, const Widget& widget) const
 {
 	if(id == Dropdown_menu::SELF_HEIGHT)
 	{
-		return al_get_font_line_height(font) + 6;
+		return al_get_font_line_height(font->Afont()) + 6;
 	}
 	return 0;
 }
@@ -43,13 +44,13 @@ void Dropdown_menu_view::Render(const Widget& widget) const
 	ALLEGRO_COLOR select_color = al_map_rgb_f(0.0, 0, 0.8);
 
 	//const Ustring& text = dropdown_menu.Get_text();
-	float h = al_get_font_line_height(font);
+	float h = al_get_font_line_height(font->Afont());
 
 	Menu *child = dynamic_cast<Menu*>(dropdown_menu.Get_child());
 	if(child){
 		const Ustring& text = child->Get_option(child->Get_selected_option());
-		float text_width = al_get_ustr_width(font, text.Astring());
-		al_draw_ustr(font, text_color, p.x+6+h/2, p.y+3, 0, text.Astring());
+		float text_width = al_get_ustr_width(font->Afont(), text.Astring());
+		al_draw_ustr(font->Afont(), text_color, p.x+6+h/2, p.y+3, 0, text.Astring());
 	}
 
 

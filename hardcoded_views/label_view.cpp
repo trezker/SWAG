@@ -3,14 +3,15 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <label.h>
+#include <font.h>
 
 Vector2 Label_view::Request_size(const Widget& widget) const
 {
 	const Label& label = dynamic_cast<const Label&>(widget);
 	const Ustring& text = label.Get_text();
 	Vector2 size;
-	size.x = al_get_ustr_width(font, text.Astring()) + 6;
-	size.y = al_get_font_line_height(font) + 6;
+	size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	size.y = al_get_font_line_height(font->Afont()) + 6;
 	return size;
 }
 
@@ -28,5 +29,5 @@ void Label_view::Render(const Widget& widget) const
 	int y = p.y + 3;
 	int x = p.x + 3;
 	const Ustring& text = label.Get_text();
-	al_draw_ustr(font, text_color, x, y, 0, text.Astring());
+	al_draw_ustr(font->Afont(), text_color, x, y, 0, text.Astring());
 }

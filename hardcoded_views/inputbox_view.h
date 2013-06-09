@@ -1,5 +1,5 @@
 #include <widget_view.h>
-struct ALLEGRO_FONT;
+class Font;
 
 class Inputbox_view: public Widget_view
 {
@@ -11,6 +11,6 @@ public:
 	virtual void Render(const Widget& widget) const;
 	virtual void Update(float t);
 public:
-	ALLEGRO_FONT* font;
+	Font* font;
 	float cursor_flash;
 };

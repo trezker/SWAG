@@ -6,6 +6,8 @@
 #include <map>
 #include <allegro5/allegro_font.h>
 
+class Font;
+
 class Hardcoded_skin: public Skin
 {
 public:
@@ -14,7 +16,8 @@ public:
 	virtual bool Load();
 	virtual void Save();
 private:
-	ALLEGRO_FONT* font;
+	Font* font2;
+	//ALLEGRO_FONT* font;
 };
 
 #endif

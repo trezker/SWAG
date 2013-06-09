@@ -3,6 +3,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <widget.h>
+#include "font.h"
 
 Vector2 Size_mode_view::Request_size(const Widget& widget) const
 {
@@ -21,15 +22,15 @@ void Size_mode_view::Render(const Widget& widget) const
 	al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
 	al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color, 0);
 
-	int font_h = al_get_font_line_height(font);
+	int font_h = al_get_font_line_height(font->Afont());
 	int y = p.y + (s.y - font_h)/2;
 	int x = p.x + s.x/2;
 	if(fw && fh)
-		al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Fixed");
+		al_draw_text(font->Afont(), text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Fixed");
 	else if(fh)
-		al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Dynamic width");
+		al_draw_text(font->Afont(), text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Dynamic width");
 	else if(fw)
-		al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Dynamic height");
+		al_draw_text(font->Afont(), text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Dynamic height");
 	else
-		al_draw_text(font, text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Fully dynamic");
+		al_draw_text(font->Afont(), text_color, x, y, ALLEGRO_ALIGN_CENTRE, "Fully dynamic");
 }

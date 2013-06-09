@@ -1,5 +1,5 @@
 #include <widget_view.h>
-struct ALLEGRO_FONT;
+class Font;
 
 class Menu_view: public Widget_view
 {
@@ -8,5 +8,5 @@ public:
 	virtual float Get_value(int id, const Widget& widget) const;
 	virtual void Render(const Widget& widget) const;
 public:
-	ALLEGRO_FONT* font;
+	Font* font;
 };

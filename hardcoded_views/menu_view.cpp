@@ -3,17 +3,18 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <menu.h>
+#include <font.h>
 
 Vector2 Menu_view::Request_size(const Widget& widget) const
 {
 	const Menu& menu = dynamic_cast<const Menu&>(widget);
 	int oc = menu.Get_option_count();
 	Vector2 size;
-	size.y = al_get_font_line_height(font) * oc + 6;
+	size.y = al_get_font_line_height(font->Afont()) * oc + 6;
 	for(int i = 0; i<oc; ++i)
 	{
 		Ustring o = menu.Get_option(i);
-		int w = al_get_text_width(font, o.Cstring());
+		int w = al_get_text_width(font->Afont(), o.Cstring());
 		if(w > size.x)
 			size.x = w;
 	}
@@ -25,7 +26,7 @@ float Menu_view::Get_value(int id, const Widget& widget) const
 {
 	if(id == Menu::OPTION_HEIGHT)
 	{
-		return al_get_font_line_height(font);
+		return al_get_font_line_height(font->Afont());
 	}
 	if(id == Menu::PADDING_TOP)
 	{
@@ -49,7 +50,7 @@ void Menu_view::Render(const Widget& widget) const
 	al_draw_filled_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, bg_color);
 	al_draw_rectangle(p.x, p.y+1, p.x+s.x-1, p.y+s.y, edge_color, 0);
 
-	int font_h = al_get_font_line_height(font);
+	int font_h = al_get_font_line_height(font->Afont());
 	int y = p.y + 3;
 	int x = p.x + 3;
 
@@ -65,7 +66,7 @@ void Menu_view::Render(const Widget& widget) const
 			al_draw_filled_rectangle(p.x, y, p.x+s.x-1, y+font_h, selected_color);
 		}
 		Ustring o = menu.Get_option(i);
-		al_draw_text(font, text_color, x, y, 0, o.Cstring());
+		al_draw_text(font->Afont(), text_color, x, y, 0, o.Cstring());
 		y += font_h;
 	}
 }
