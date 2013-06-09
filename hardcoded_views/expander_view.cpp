@@ -3,14 +3,14 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <expander.h>
-#include "font.h"
+#include <font.h>
 
 Vector2 Expander_view::Request_size(const Widget& widget) const
 {
 	const Expander& expander = dynamic_cast<const Expander&>(widget);
 	Vector2 size;
 	const Ustring& text = expander.Get_text();
-	size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	size.x = font->Get_ustr_width(text.Astring()) + 6;
 	size.y = al_get_font_line_height(font->Afont()) + 6;
 	float lh = size.y/4+6;
 
@@ -37,7 +37,7 @@ float Expander_view::Get_value(int id, const Widget& widget) const
 	{
 		const Expander& expander = dynamic_cast<const Expander&>(widget);
 		const Ustring& text = expander.Get_text();
-		float x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+		float x = font->Get_ustr_width(text.Astring()) + 6;
 		float y = al_get_font_line_height(font->Afont()) + 6;
 		x += y/2;
 		return x;
@@ -69,7 +69,7 @@ void Expander_view::Render(const Widget& widget) const
 	const Ustring& text = expander.Get_text();
 	float h = al_get_font_line_height(font->Afont());
 
-	float text_width = al_get_ustr_width(font->Afont(), text.Astring());
+	float text_width = font->Get_ustr_width(text.Astring());
 
 	al_draw_ustr(font->Afont(), text_color, p.x+6+h/2, p.y+3, 0, text.Astring());
 	float top = h*0.25;

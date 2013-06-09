@@ -12,8 +12,8 @@ Vector2 Button_view::Request_size(const Widget& widget) const
 	Vector2 size;
 	//int minwidth = 50;
 	//size.x = 50;
-	int minwidth = al_get_text_width(font->Afont(), "Button") + 6;
-	size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	int minwidth = font->Get_ustr_width("Button") + 6;
+	size.x = font->Get_ustr_width(text.Astring()) + 6;
 	if(size.x<minwidth)
 		size.x = minwidth;
 	size.y = al_get_font_line_height(font->Afont()) + 6;

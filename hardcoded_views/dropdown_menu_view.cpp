@@ -14,7 +14,7 @@ Vector2 Dropdown_menu_view::Request_size(const Widget& widget) const
 	Menu *child = dynamic_cast<Menu*>(dropdown_menu.Get_child());
 	if(child){
 		const Ustring& text = child->Get_option(child->Get_selected_option());
-		size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+		size.x = font->Get_ustr_width(text.Astring()) + 6;
 	}
 	size.y = al_get_font_line_height(font->Afont()) + 6;
 	float lh = size.y/4+6;
@@ -49,7 +49,7 @@ void Dropdown_menu_view::Render(const Widget& widget) const
 	Menu *child = dynamic_cast<Menu*>(dropdown_menu.Get_child());
 	if(child){
 		const Ustring& text = child->Get_option(child->Get_selected_option());
-		float text_width = al_get_ustr_width(font->Afont(), text.Astring());
+		float text_width = font->Get_ustr_width(text.Astring());
 		al_draw_ustr(font->Afont(), text_color, p.x+6+h/2, p.y+3, 0, text.Astring());
 	}
 

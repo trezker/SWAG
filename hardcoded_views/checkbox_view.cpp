@@ -12,7 +12,7 @@ Vector2 Checkbox_view::Request_size(const Widget& widget) const
 	Vector2 size;
 	int font_h = al_get_font_line_height(font->Afont());
 	size.y = font_h + 6;
-	size.x = size.y + al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	size.x = size.y + font->Get_ustr_width(text.Astring()) + 6;
 	return size;
 }
 

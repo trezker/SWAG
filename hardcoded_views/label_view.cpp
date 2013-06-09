@@ -10,7 +10,7 @@ Vector2 Label_view::Request_size(const Widget& widget) const
 	const Label& label = dynamic_cast<const Label&>(widget);
 	const Ustring& text = label.Get_text();
 	Vector2 size;
-	size.x = al_get_ustr_width(font->Afont(), text.Astring()) + 6;
+	size.x = font->Get_ustr_width(text.Astring()) + 6;
 	size.y = al_get_font_line_height(font->Afont()) + 6;
 	return size;
 }

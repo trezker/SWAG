@@ -3,7 +3,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 #include <widget.h>
-#include "font.h"
+#include <font.h>
 
 Vector2 Size_mode_view::Request_size(const Widget& widget) const
 {

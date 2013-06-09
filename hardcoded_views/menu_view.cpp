@@ -14,7 +14,8 @@ Vector2 Menu_view::Request_size(const Widget& widget) const
 	for(int i = 0; i<oc; ++i)
 	{
 		Ustring o = menu.Get_option(i);
-		int w = al_get_text_width(font->Afont(), o.Cstring());
+		//int w = al_get_text_width(font->Afont(), o.Cstring());
+		int w = font->Get_ustr_width(o.Astring());
 		if(w > size.x)
 			size.x = w;
 	}
