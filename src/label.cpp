@@ -40,4 +40,5 @@ void Label::From_yaml(const YAML::Node& in)
 	doc["text"] >> text;
 
 	std::cout<<"Loaded Label: "<<text<<std::endl;
+	Calculate_request_size();
 }

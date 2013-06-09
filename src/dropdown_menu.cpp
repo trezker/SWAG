@@ -26,6 +26,7 @@ void Dropdown_menu::Open(){
 	Desktop* desktop = Get_desktop();
 	desktop->Push_top(child);
 	open = true;
+	Calculate_request_size();
 }
 
 void Dropdown_menu::Close(){
@@ -34,6 +35,7 @@ void Dropdown_menu::Close(){
 	Desktop* desktop = Get_desktop();
 	desktop->Pop_top();
 	open = false;
+	Calculate_request_size();
 }
 
 void Dropdown_menu::Close_child(Widget* c){
@@ -78,6 +80,7 @@ void Dropdown_menu::Organise()
 	{
 		child->Set_position(p);
 	}
+	Calculate_request_size();
 }
 
 void Dropdown_menu::Resized()
@@ -122,4 +125,5 @@ void Dropdown_menu::From_yaml(const YAML::Node& in)
 {
 	Container::From_yaml(in);
 //	const YAML::Node& doc = in["Dropdown_menu"];
+	Calculate_request_size();
 }

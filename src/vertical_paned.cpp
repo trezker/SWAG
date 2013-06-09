@@ -86,6 +86,7 @@ void Vertical_paned::Organise()
 		bottom->Set_position(Vector2(position.x, position.y+topsize+pane_size));
 		bottom->Set_size(Vector2(size.x, bottomsize));
 	}
+	Calculate_request_size();
 }
 
 void Vertical_paned::Handle_event(const ALLEGRO_EVENT& event)

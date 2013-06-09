@@ -33,4 +33,5 @@ void Vertical_box::Organise()
 		(*i)->Set_position(position);
 		position.y += size.y;
 	}
+	Calculate_request_size();
 }

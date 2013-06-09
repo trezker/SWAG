@@ -27,6 +27,7 @@ void Tree::Open()
 	if(!open)
 	{
 		open = true;
+		Calculate_request_size();
 		Child_resized();
 	}
 }
@@ -36,6 +37,7 @@ void Tree::Close()
 	if(open)
 	{
 		open = false;
+		Calculate_request_size();
 		Child_resized();
 	}
 }
@@ -43,6 +45,7 @@ void Tree::Close()
 void Tree::Set_text(const Ustring& t)
 {
 	text = t;
+	Calculate_request_size();
 }
 
 const Ustring& Tree::Get_text() const
@@ -130,6 +133,7 @@ void Tree::Organise()
 		(*i)->Set_position(Vector2(x, y));
 		y += size.y;
 	}
+	Calculate_request_size();
 }
 
 void Tree::Handle_event(const ALLEGRO_EVENT& event)
@@ -155,7 +159,7 @@ void Tree::Handle_event(const ALLEGRO_EVENT& event)
 					Close();
 				else
 					Open();
-				Child_resized();
+				//Child_resized();
 			}
 			else
 			{
@@ -248,4 +252,5 @@ void Tree::From_yaml(const YAML::Node& in)
 	const YAML::Node& doc = in["Tree"];
 	doc["text"] >> text;
 	std::cout<<"Loaded Tree: "<<text<<std::endl;
+	Calculate_request_size();
 }

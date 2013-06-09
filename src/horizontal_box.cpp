@@ -33,4 +33,5 @@ void Horizontal_box::Organise()
 		(*i)->Set_position(position);
 		position.x += size.x;
 	}
+	Calculate_request_size();
 }

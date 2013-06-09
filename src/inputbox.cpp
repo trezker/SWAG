@@ -35,6 +35,7 @@ Widget* Inputbox::Clone() const
 void Inputbox::Set_text(const Ustring& t)
 {
 	text = t;
+	Calculate_request_size();
 }
 
 const Ustring& Inputbox::Get_text() const
@@ -255,4 +256,5 @@ void Inputbox::From_yaml(const YAML::Node& in)
 	doc["text"] >> text;
 
 	std::cout<<"Loaded Inputbox: "<<text<<std::endl;
+	Calculate_request_size();
 }

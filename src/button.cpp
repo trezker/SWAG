@@ -20,6 +20,7 @@ Widget* Button::Clone() const
 void Button::Set_text(const Ustring& t)
 {
 	text = t;
+	Calculate_request_size();
 	Child_resized();
 }
 
@@ -137,4 +138,5 @@ void Button::From_yaml(const YAML::Node& in)
 	doc["toggle"] >> b;
 	toggle = (b=="true");
 	std::cout<<"Loaded button: "<<text<<toggle<<std::endl;
+	Calculate_request_size();
 }

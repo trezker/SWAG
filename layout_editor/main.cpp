@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     al_set_window_position(display, 220, 0);
     
 	ALLEGRO_DISPLAY *current_display = tooldisplay;
-	ALLEGRO_TIMER* timer = al_create_timer(0.01);
+	ALLEGRO_TIMER* timer = al_create_timer(1);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 			ss>>fps_string;
 			fps_label->Set_text((std::string("FPS: ")+fps_string).c_str());
 
-			if(dt < 0.1 && event.timer.count < al_get_timer_count(timer) - 4)
+			if(dt < 1 && event.timer.count < al_get_timer_count(timer) - 4)
 			{
 				dt = dt * 1.1;
 				al_set_timer_speed(timer, dt);

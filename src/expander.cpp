@@ -24,6 +24,7 @@ void Expander::Open()
 	if(!open)
 	{
 		open = true;
+		Calculate_request_size();
 		Child_resized();
 	}
 }
@@ -33,6 +34,7 @@ void Expander::Close()
 	if(open)
 	{
 		open = false;
+		Calculate_request_size();
 		Child_resized();
 	}
 }
@@ -40,6 +42,7 @@ void Expander::Close()
 void Expander::Set_text(const Ustring& t)
 {
 	text = t;
+	Calculate_request_size();
 }
 
 const Ustring& Expander::Get_text() const
@@ -65,6 +68,7 @@ void Expander::Organise()
 		child->Set_size(s);
 		child->Set_position(p);
 	}
+	Calculate_request_size();
 }
 
 void Expander::Handle_event(const ALLEGRO_EVENT& event)
@@ -85,7 +89,7 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 					Close();
 				else
 					Open();
-				Child_resized();
+				//Child_resized();
 			}
 		}
 	}
@@ -161,4 +165,5 @@ void Expander::From_yaml(const YAML::Node& in)
 	const YAML::Node& doc = in["Expander"];
 	doc["text"] >> text;
 	std::cout<<"Loaded Expander: "<<text<<std::endl;
+	Calculate_request_size();
 }

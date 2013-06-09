@@ -20,12 +20,14 @@ Widget* Menu::Clone() const
 void Menu::Add_option(const Ustring& t)
 {
 	options.push_back(t);
+	Calculate_request_size();
 	Set_size(Request_size());
 }
 
 void Menu::Remove_option(int i){
 	if(i>=0 && i<options.size()) {
 		options.erase(options.begin()+i);
+		Calculate_request_size();
 		Set_size(Request_size());
 	}
 }

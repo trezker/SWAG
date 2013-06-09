@@ -32,6 +32,7 @@ public:
 
 	void Set_view(Widget_view* view);
 //	Widget_view* Get_view() const;
+	void Calculate_request_size();
 	Vector2 Request_size() const;
 	void Render() const;
 	
@@ -77,6 +78,7 @@ private:
 	virtual void Resized();
 	Vector2 position;
 	Vector2 size;
+	Vector2 request_size;
 	bool fixed_height;
 	bool fixed_width;
 	Widget_view* view;

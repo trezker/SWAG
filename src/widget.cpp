@@ -52,11 +52,16 @@ void Widget::Set_value(int id, float v)
 		view->Set_value(id, v);
 }
 
+void Widget::Calculate_request_size() {
+	if(view)
+		request_size = view->Request_size(*this);
+	else
+		request_size = Vector2();
+}
+
 Vector2 Widget::Request_size() const
 {
-	if(view)
-		return view->Request_size(*this);
-	return Vector2();
+	return request_size;
 }
 
 void Widget::Render() const
