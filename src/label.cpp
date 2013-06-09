@@ -15,6 +15,7 @@ Widget* Label::Clone() const
 void Label::Set_text(const Ustring& t)
 {
 	text = t;
+	Calculate_request_size();
 	Child_resized();
 }
 
