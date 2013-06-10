@@ -28,7 +28,6 @@ void Tree::Open()
 	{
 		open = true;
 		Calculate_request_size();
-		Child_resized();
 	}
 }
 
@@ -38,7 +37,6 @@ void Tree::Close()
 	{
 		open = false;
 		Calculate_request_size();
-		Child_resized();
 	}
 }
 
@@ -60,7 +58,6 @@ void Tree::Add_child(Tree* c)
 	children.push_back(c);
 	c->Set_parent(this);
 	Organise();
-	Child_resized();
 }
 
 void Tree::Remove_child(Tree* c)
@@ -69,7 +66,6 @@ void Tree::Remove_child(Tree* c)
 	if(i!=children.end())
 		children.erase(i);
 	Organise();
-	Child_resized();
 }
 
 const Trees& Tree::Get_childtrees() const
@@ -159,7 +155,6 @@ void Tree::Handle_event(const ALLEGRO_EVENT& event)
 					Close();
 				else
 					Open();
-				//Child_resized();
 			}
 			else
 			{
@@ -179,7 +174,6 @@ void Tree::Resized()
 void Tree::Handle_child_resize()
 {
 	Resized();
-	Child_resized();
 }
 
 bool Tree::Add_child(Widget* c)

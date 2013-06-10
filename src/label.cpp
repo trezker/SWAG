@@ -16,7 +16,6 @@ void Label::Set_text(const Ustring& t)
 {
 	text = t;
 	Calculate_request_size();
-	Child_resized();
 }
 
 Ustring Label::Get_text() const

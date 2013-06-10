@@ -10,7 +10,6 @@ void Box::Add(Widget* widget)
 	widgets.push_back(widget);
 	widget->Set_parent(this);
 	Organise();
-	Child_resized();
 }
 
 const Widgets& Box::Get_widgets() const
@@ -34,7 +33,6 @@ void Box::Handle_event(const ALLEGRO_EVENT& event)
 void Box::Handle_child_resize()
 {
 	Organise();
-	Child_resized();
 }
 
 bool Box::Add_child(Widget* c)

@@ -143,7 +143,7 @@ void Slider_box::Handle_child_resize()
 	if(child)
 	{
 		child->Set_size(child->Request_size());
-		Child_resized();
+		//Child_resized();
 		
 		Vector2 cs = child->Get_size();
 		if(cs.x<=s.x)

@@ -21,7 +21,6 @@ void Button::Set_text(const Ustring& t)
 {
 	text = t;
 	Calculate_request_size();
-	Child_resized();
 }
 
 const Ustring& Button::Get_text() const

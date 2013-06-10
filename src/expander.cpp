@@ -25,7 +25,6 @@ void Expander::Open()
 	{
 		open = true;
 		Calculate_request_size();
-		Child_resized();
 	}
 }
 
@@ -35,7 +34,6 @@ void Expander::Close()
 	{
 		open = false;
 		Calculate_request_size();
-		Child_resized();
 	}
 }
 
@@ -89,7 +87,6 @@ void Expander::Handle_event(const ALLEGRO_EVENT& event)
 					Close();
 				else
 					Open();
-				//Child_resized();
 			}
 		}
 	}
@@ -103,7 +100,6 @@ void Expander::Resized()
 void Expander::Handle_child_resize()
 {
 	Resized();
-	Child_resized();
 }
 
 bool Expander::Add_child(Widget* c)
