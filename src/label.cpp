@@ -14,6 +14,8 @@ Widget* Label::Clone() const
 
 void Label::Set_text(const Ustring& t)
 {
+	if(t.Length() == text.Length())
+		return;
 	text = t;
 	Calculate_request_size();
 }
