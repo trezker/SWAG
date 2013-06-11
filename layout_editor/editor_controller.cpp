@@ -4,6 +4,7 @@
 #include <stack>
 #include <algorithm>
 #include "button_attribute_controller.h"
+#include "label_attribute_controller.h"
 #include "widget_attribute_controller.h"
 #include "menu_attribute_controller.h"
 
@@ -39,6 +40,11 @@ bool Editor_controller::Load(Skin& skin) {
 		button_controller->Load(layout_controller->Get_skin());
 		button_controller->Set_layout_controller(*layout_controller);
 		attribute_controllers["button"] = button_controller;
+
+		Label_attribute_controller* label_controller = new Label_attribute_controller;
+		label_controller->Load(layout_controller->Get_skin());
+		label_controller->Set_layout_controller(*layout_controller);
+		attribute_controllers["label"] = label_controller;
 
 		Menu_attribute_controller* menu_controller = new Menu_attribute_controller;
 		menu_controller->Load(layout_controller->Get_skin());
